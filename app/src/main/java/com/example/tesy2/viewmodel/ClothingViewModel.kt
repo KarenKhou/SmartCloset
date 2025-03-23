@@ -1,0 +1,29 @@
+package com.example.tesy2.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.tesy2.data.models.ClothingItem
+import com.example.tesy2.data.repository.ClothingRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+class ClothingViewModel : ViewModel() {
+
+    private val repository = ClothingRepository()
+
+    private val _clothingItems = MutableStateFlow<List<ClothingItem>>(emptyList())
+    val clothingItems: StateFlow<List<ClothingItem>> = _clothingItems.asStateFlow()
+
+    fun loadClothes(closetId: Int) {
+        viewModelScope.launch {
+            try {
+                val result = repository.getClothesForCloset(closetId)
+                _clothingItems.value = result
+            } catch (e: Exception) {
+                println("❌ Erreur de chargement des vêtements : ${e.message}")
+            }
+        }
+    }
+}

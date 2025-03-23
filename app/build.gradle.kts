@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.0.21"
 }
-
+//https://supabase.com/docs/reference/kotlin/installing
 android {
     namespace = "com.example.tesy2"
     compileSdk = 35
@@ -64,6 +64,9 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:auth-kt")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
+
 
 
 
