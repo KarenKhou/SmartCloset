@@ -21,7 +21,7 @@ fun ClothingCard(item: ClothingItem) {
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Row(modifier = Modifier.padding(12.dp)) {
-            AsyncImage(
+            AsyncImage( //https://github.com/coil-kt/coil
                 model = item.image_url,
                 contentDescription = null,
                 modifier = Modifier
