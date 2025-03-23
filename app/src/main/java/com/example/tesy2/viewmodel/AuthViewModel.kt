@@ -6,6 +6,7 @@ import com.example.tesy2.data.models.AppUser
 import com.example.tesy2.data.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
@@ -36,13 +37,33 @@ class AuthViewModel : ViewModel() {
     private val _signUpSuccess = MutableStateFlow(false)
     val signUpSuccess: StateFlow<Boolean> = _signUpSuccess
 
-    fun onEmailChange(value: String) { _email.value = value }
-    fun onPasswordChange(value: String) { _password.value = value }
-    fun onNameChange(value: String) { _name.value = value }
-    fun onGenderChange(value: String) { _gender.value = value }
-    fun onJobChange(value: String) { _job.value = value }
-    fun onLocationChange(value: String) { _location.value = value }
-    fun onBirthDateChange(value: String) { _birthDate.value = value }
+    fun onEmailChange(value: String) {
+        _email.value = value
+    }
+
+    fun onPasswordChange(value: String) {
+        _password.value = value
+    }
+
+    fun onNameChange(value: String) {
+        _name.value = value
+    }
+
+    fun onGenderChange(value: String) {
+        _gender.value = value
+    }
+
+    fun onJobChange(value: String) {
+        _job.value = value
+    }
+
+    fun onLocationChange(value: String) {
+        _location.value = value
+    }
+
+    fun onBirthDateChange(value: String) {
+        _birthDate.value = value
+    }
 
     fun signUp() {
         viewModelScope.launch {
@@ -60,4 +81,18 @@ class AuthViewModel : ViewModel() {
             _signUpSuccess.value = success
         }
     }
+
+
+    private val _signInSuccess = MutableStateFlow<Boolean?>(null)
+    val signInSuccess: StateFlow<Boolean?> = _signInSuccess
+
+    fun signIn() {
+        println("📤 Appel de signIn() dans ViewModel")
+        viewModelScope.launch {
+            val success = repository.signIn(email.value, password.value)
+            println("✅ Résultat connexion: $success")
+            _signInSuccess.value = success
+        }
+    }
 }
+

@@ -28,4 +28,21 @@ class AuthRepository {
             false
         }
     }
+    suspend fun signIn(email: String, password: String): Boolean {
+        println("📤 Appel de signIn() dans AuthRepository")
+        return try {
+            supabase.auth.signInWith(Email) {
+                this.email = email
+                this.password = password
+            }
+
+            val user = supabase.auth.currentUserOrNull()
+            println("✅ Utilisateur connecté : ${user?.id}")
+            user != null
+        } catch (e: Exception) {
+            println("❌ Erreur de connexion : ${e.message}")
+            false
+        }
+    }
+
 }

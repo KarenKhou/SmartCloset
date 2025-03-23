@@ -6,15 +6,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.tesy2.viewmodel.AuthViewModel
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
-    viewModel: AuthViewModel = viewModel()
+    viewModel: AuthViewModel = viewModel(),
+    navController: NavController
+
 ) {
     val context = LocalContext.current
 
@@ -30,6 +34,7 @@ fun SignUpScreen(
     // Affiche un Toast si inscription réussie
     LaunchedEffect(signUpSuccess) {
         if (signUpSuccess) {
+            navController.navigate("sign_in")
             Toast.makeText(context, "✅ Inscription réussie !", Toast.LENGTH_LONG).show()
             // Tu peux rediriger ici si tu veux
         }
@@ -41,13 +46,14 @@ fun SignUpScreen(
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        OutlinedTextField(value = email, onValueChange = viewModel::onEmailChange, label = { Text("Email") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = password, onValueChange = viewModel::onPasswordChange, label = { Text("Password") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = name, onValueChange = viewModel::onNameChange, label = { Text("Name") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = gender, onValueChange = viewModel::onGenderChange, label = { Text("Gender") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = job, onValueChange = viewModel::onJobChange, label = { Text("Job") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = location, onValueChange = viewModel::onLocationChange, label = { Text("Home Location") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = birthDate, onValueChange = viewModel::onBirthDateChange, label = { Text("Birth Date (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth())
+        Text(text="SignUpScreen",modifier= Modifier.size(20.dp).padding(12.dp))
+        OutlinedTextField(value = email, onValueChange = viewModel::onEmailChange, label = { Text("Email") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
+        OutlinedTextField(value = password, onValueChange = viewModel::onPasswordChange, label = { Text("Password") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
+        OutlinedTextField(value = name, onValueChange = viewModel::onNameChange, label = { Text("Name") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
+        OutlinedTextField(value = gender, onValueChange = viewModel::onGenderChange, label = { Text("Gender") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
+        OutlinedTextField(value = job, onValueChange = viewModel::onJobChange, label = { Text("Job") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
+        OutlinedTextField(value = location, onValueChange = viewModel::onLocationChange, label = { Text("Home Location") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
+        OutlinedTextField(value = birthDate, onValueChange = viewModel::onBirthDateChange, label = { Text("Birth Date (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
 
         Button(
             onClick = { println("📤 Click du boutton")

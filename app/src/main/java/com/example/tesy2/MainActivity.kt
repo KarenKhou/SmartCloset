@@ -37,7 +37,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import com.example.tesy2.data.models.AppUser
+import com.example.tesy2.ui.navigation.AppNavHost
+import com.example.tesy2.ui.screens.SignInScreen
 import com.example.tesy2.ui.screens.SignUpScreen
 import io.github.jan.supabase.BuildConfig
 import io.github.jan.supabase.SupabaseClient
@@ -65,7 +68,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Tesy2Theme {
-                SignUpScreen()
+                val navController = rememberNavController()
+                AppNavHost(navController = navController)
             }
         }
     }
