@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tesy2.data.models.ClothingItem
 import com.example.tesy2.viewmodel.ClothingViewModel
 import java.io.ByteArrayOutputStream
 
@@ -22,7 +23,7 @@ fun AddClothingScreen(
     viewModel: ClothingViewModel = viewModel()
 ) {
     var name by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("") }
+    var material by remember { mutableStateOf("") }
     var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     val context = LocalContext.current
@@ -40,6 +41,7 @@ fun AddClothingScreen(
             viewModel.uploadImageToSupabase(byteArray, "photo_${System.currentTimeMillis()}.png")
         }
     }
+    val imageUrl by viewModel.imageUrl.collectAsState()
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -55,9 +57,9 @@ fun AddClothingScreen(
         )
 
         OutlinedTextField(
-            value = category,
-            onValueChange = { category = it },
-            label = { Text("Catégorie") },
+            value = material,
+            onValueChange = { material = it },
+            label = { Text("Materiel") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp),
@@ -83,12 +85,24 @@ fun AddClothingScreen(
             )
         }
 
-        Button(
-            onClick = {
-                // ici tu peux appeler une fonction pour enregistrer le vêtement
-            },
-            modifier = Modifier.padding(top = 16.dp)
-        ) {
+        Button(onClick = {
+            val newItem = ClothingItem(
+                item_id = 99, // sera auto-généré si SERIAL //TO CORRECT
+                closet_id = 1, // à adapter
+                name = name,
+                category = null, //hole l AI MODEL B HOTON
+                color = null,
+                material = material,
+                season = null,
+                last_worn = null,
+                image_url = imageUrl ?: "",
+                style = null
+            )
+
+
+
+            viewModel.addClothingItem(newItem)
+        }){
             Text("✅ Enregistrer le vêtement")
         }
     }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.tesy2.data.models.ClothingItem
 import com.example.tesy2.data.repository.ClothingRepository
 import com.example.tesy2.data.supabase.supabase
+import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -51,5 +52,21 @@ class ClothingViewModel : ViewModel() {
             }
         }
     }
+
+
+    private val _imageUrl = MutableStateFlow<String?>(null)
+    val imageUrl: StateFlow<String?> = _imageUrl
+
+    fun addClothingItem(item: ClothingItem) {
+        viewModelScope.launch {
+            try {
+                supabase.from("clothingitem").insert(item)
+                println("✅ Vêtement inséré avec succès")
+            } catch (e: Exception) {
+                println("❌ Erreur d'insertion : ${e.message}")
+            }
+        }
+    }
+
 
 }

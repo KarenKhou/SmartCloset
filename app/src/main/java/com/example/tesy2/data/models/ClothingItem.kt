@@ -7,7 +7,7 @@ data class ClothingItem(
     val item_id: Int,
     val closet_id: Int,
     val name: String,
-    val category: String,
+    val category: String?,
     val color: String? = null,
     val material: String? = null,
     val season: String? = null,
