@@ -1,4 +1,4 @@
-package com.example.tesy2
+package com.example.tesy2.data.models
 
 import kotlinx.serialization.Serializable
 
@@ -11,4 +11,3 @@ data class AppUser(
     val home_location: String? = null,
     val birth_date: String? = null
 )
-
