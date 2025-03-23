@@ -1,6 +1,7 @@
 package com.example.tesy2
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -33,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import io.github.jan.supabase.BuildConfig
@@ -74,65 +76,79 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Tesy2Theme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    content = { paddingValues ->
-
-                        var email by remember { mutableStateOf("") }
-                        var password by remember { mutableStateOf("") }
-                        val scope = rememberCoroutineScope()
-
-                        Column(
-                            modifier = Modifier
-                                .padding(paddingValues) // 👈 applies Scaffold's padding
-                                .padding(16.dp)         // 👈 additional padding inside the screen
-                                .fillMaxSize()
-                        ) {
-                            OutlinedTextField(
-                                value = email,
-                                onValueChange = { email = it },
-                                label = { Text("Email") },
-                                modifier = Modifier.fillMaxWidth()
-                            )
-
-                            OutlinedTextField(
-                                value = password,
-                                onValueChange = { password = it },
-                                label = { Text("Password") },
-                                modifier = Modifier
-                                    .padding(top = 16.dp)
-                                    .fillMaxWidth()
-                            )
-
-                            Button(
-                                onClick = {
-                                    scope.launch {
-                                        try {
-                                            val user = supabase.auth.signUpWith(Email) {
-                                                this.email = email
-                                                this.password = password
-                                            }
-                                            println("✅ Sign up successful:")
-                                        } catch (e: Exception) {
-                                            println("❌ Sign up failed: ${e.message}")
-                                        }
-                                    }
-                                },
-                                modifier = Modifier.padding(top = 16.dp)
-                            ) {
-                                Text("Sign Up")
-                            }
-                        }
-                    }
-                )
+                SignUpScreen()
             }
         }
-
-
     }
 
-
 }
+
+
+@Composable
+fun SignUpScreen(modifier: Modifier = Modifier) {
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var gender by remember { mutableStateOf("") }
+    var job by remember { mutableStateOf("") }
+    var location by remember { mutableStateOf("") }
+    var birthDate by remember { mutableStateOf("") }
+
+    Column(
+        modifier = modifier
+            .padding(24.dp)
+            .fillMaxSize()
+    ) {
+        OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Password") }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp))
+        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Name") }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp))
+        OutlinedTextField(value = gender, onValueChange = { gender = it }, label = { Text("Gender (M / F)") }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp))
+        OutlinedTextField(value = job, onValueChange = { job = it }, label = { Text("Job") }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp))
+        OutlinedTextField(value = location, onValueChange = { location = it }, label = { Text("Home Location") }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp))
+        OutlinedTextField(value = birthDate, onValueChange = { birthDate = it }, label = { Text("Birth Date (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp))
+
+        Button(
+            onClick = {
+                scope.launch {
+                    try {
+                        val result = supabase.auth.signUpWith(Email) {
+                            this.email = email
+                            this.password = password
+                        }
+
+                        val uid = supabase.auth.currentUserOrNull()?.id ?: return@launch
+
+
+                        val userRow = AppUser(
+                            user_id = uid,
+                            name = name,
+                            gender = gender,
+                            job = job,
+                            home_location = location,
+                            birth_date = birthDate
+                        )
+
+                        supabase.from("User").insert(userRow)
+
+                        Toast.makeText(context, "✅ Inscription réussie !", Toast.LENGTH_LONG).show()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(context, "❌ Erreur: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
+            Text("Sign Up")
+        }
+    }
+}
+
 
 
 
