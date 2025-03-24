@@ -41,7 +41,7 @@ fun AddClothingScreen(
             viewModel.uploadImageToSupabase(byteArray, "photo_${System.currentTimeMillis()}.png")
         }
     }
-    val imageUrl by viewModel.imageUrl.collectAsState()
+
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -84,10 +84,12 @@ fun AddClothingScreen(
                     .padding(top = 16.dp)
             )
         }
+        val viewModel: ClothingViewModel = viewModel()
+        val publicUrl by viewModel.publicUrl.collectAsState()
 
         Button(onClick = {
             val newItem = ClothingItem(
-                item_id = 99, // sera auto-généré si SERIAL //TO CORRECT
+                 // id item sera auto-généré
                 closet_id = 1, // à adapter
                 name = name,
                 category = null, //hole l AI MODEL B HOTON
@@ -95,7 +97,7 @@ fun AddClothingScreen(
                 material = material,
                 season = null,
                 last_worn = null,
-                image_url = imageUrl ?: "",
+                image_url = publicUrl ?: "",
                 style = null
             )
 

@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClothingItem(
-    val item_id: Int,
+    val item_id: Int? = null,
     val closet_id: Int,
     val name: String,
     val category: String?,

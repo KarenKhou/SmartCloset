@@ -44,6 +44,7 @@ import com.example.tesy2.ui.screens.AddClothingScreen
 import com.example.tesy2.ui.screens.ClothingScreen
 import com.example.tesy2.ui.screens.SignInScreen
 import com.example.tesy2.ui.screens.SignUpScreen
+import com.example.tesy2.ui.screens.SuggScreen
 import io.github.jan.supabase.BuildConfig
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
@@ -71,9 +72,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             Tesy2Theme {
                val navController = rememberNavController()
-//                AppNavHost(navController = navController)
+               //AppNavHost(navController = navController)
                 //ClothingScreen(navController = navController)
-                AddClothingScreen()
+                //AddClothingScreen()
+                SuggScreen(navController = navController)
             }
         }
     }
