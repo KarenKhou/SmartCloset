@@ -9,9 +9,11 @@ import os
 app = FastAPI()
 
 # Load the YOLOv8 model
-MODEL_PATH = "model/best.pt"
+MODEL_PATH = r"C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\MachineLearning\api\predictionmodel\best.pt"
 model = YOLO(MODEL_PATH)
+print("Loading model from:", MODEL_PATH)
 
+print("Model classes:", model.names)
 # Ensure upload dir exists
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -20,6 +22,8 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 async def predict(file: UploadFile = File(...)):
     try:
         # Read image file
+        
+
         image_bytes = await file.read()
         image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
 
@@ -29,7 +33,7 @@ async def predict(file: UploadFile = File(...)):
         image.save(input_path)
 
         # Run prediction
-        results = model(image)
+        results = model(image, conf=0.1)
         result = results[0]
 
         # Extract predictions
@@ -40,6 +44,12 @@ async def predict(file: UploadFile = File(...)):
                 "confidence": float(box.conf[0]),
                 "bbox": box.xyxy[0].tolist()
             })
+        print("Raw boxes:", result.boxes)
+
+        print("YOLO detections:")
+        for box in result.boxes:
+            print(f"→ class: {int(box.cls[0])}, conf: {float(box.conf[0])}, bbox: {box.xyxy[0].tolist()}")
+
 
         return {"detections": detections}
 
