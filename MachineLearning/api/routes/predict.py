@@ -11,8 +11,8 @@ app = FastAPI()
 import requests
 
 
-#uvicorn mainApiDef:app --reload
-#cd C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\MachineLearning\api
+#uvicorn MachineLearning.api.routes.predict:app --reload
+#cd C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\
 
 # Load the YOLOv8 model
 MODEL_PATH = r"C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\MachineLearning\api\predictionmodel\best.pt"
@@ -61,3 +61,19 @@ async def predict(file: UploadFile = File(...)):
 
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+
+
+from MachineLearning.core.config import supabase
+
+@app.get("/testinsert")
+def test_insert():
+    try:
+        result = supabase.table("karentestytb").insert({
+            "id": "python",
+            "text": "test",
+        }).execute()
+        return {"status": "success", "data": result.data}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
