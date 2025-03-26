@@ -11,8 +11,9 @@ app = FastAPI()
 import requests
 
 
-#uvicorn MachineLearning.api.routes.predict:app --reload
 #cd C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\
+#uvicorn MachineLearning.api.routes.predict:app --reload
+
 
 # Load the YOLOv8 model
 MODEL_PATH = r"C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\MachineLearning\api\predictionmodel\best.pt"
@@ -71,7 +72,7 @@ from MachineLearning.core.config import supabase
 def test_insert():
     try:
         result = supabase.table("karentestytb").insert({
-            "id": "python",
+            "id": "60",
             "text": "test",
         }).execute()
         return {"status": "success", "data": result.data}
