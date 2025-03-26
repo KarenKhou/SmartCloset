@@ -8,77 +8,28 @@ import tempfile
 import requests
 from fastapi import FastAPI, Request
 from fastapi import BackgroundTasks
+from ultralytics import YOLO
+import os
 
 app = FastAPI()
 
 
 
-from MachineLearning.core.config import supabase , url,bucket
+from MachineLearning.core.config import supabase ,url ,bucket
 
 
 @app.get("/")
 def ping():
     return {"message": "pongg"}
 
-# @app.post("/webhook/clothingitemmmm")
-# async def handle_insert_webhook(request: Request):
-#     payload = await request.json()
-#     record = payload.get("record", {})  # Supabase envoie le nouvel objet ici
-#     print(record)
+MODEL_PATH = r"C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\MachineLearning\api\predictionmodel\best.pt"
+model = YOLO(MODEL_PATH)
+print("Loading model from:", MODEL_PATH)
+print("Model classes:", model.names)
 
-#     image_url = record.get("image_url")
-#     item_id = record.get("id")
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-#     print(image_url)
-#     if not image_url or not item_id:
-#         return {"error": "Missing image_url or id"}
-#     print("hi")
-#     response = requests.get(image_url)
-#     print("hii")
-#     image = Image.open(BytesIO(response.content)).convert("RGBA")
-#     image.show() 
-#     print("Image opened successfully!")
-        
-    
-    
-    
-    
-#     try:
-#         result = remove(image)
-#         print("Background removed successfully!")
-#     except Exception as e:
-#         print(f"Error during background removal: {e}")
-
-
-#     # Uploader sur Supabase Storage
-#     buffer = BytesIO()
-#     result.save(buffer, format="PNG")
-#     buffer.seek(0)
-#     filename = f"rembg_{uuid.uuid4()}.png"
-#     print(filename)
-
-#     supabase.storage.from_(bucket).upload(filename, buffer, {"content-type": "image/png"})
-#     print("upload reussit")
-#     # Générer l'URL publique
-#     new_url = f"{url}/storage/v1/object/public/{bucket}/{filename}"
-#     print(new_url)
-#     # Mettre à jour l'enregistrement
-#     supabase.table("clothingitem").update({
-#          "image_url": new_url
-#      }).eq("id", item_id).execute()
-
-#     return {"status": "success", "new_url": new_url}
-
-    
-
-
-
-#cd "C:\Users\User\Downloads\
-#ngrok http 8000
-
-
-#cd C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\
-#uvicorn MachineLearning.api.routes.testpublicapi:app --reload
 
 
 def process_image(image_url: str, item_id: int):
@@ -100,19 +51,18 @@ def process_image(image_url: str, item_id: int):
             print("Image ouverte avec succès !")
 
             
-            # Convertir l'image PIL en bytes
+            #appliquer le moder et get la categorie
+            results = model(image, conf=0.1)
+            result = results[0]
+
+            # Extract the top prediction (we assume the first detection is the main label)
+            category = model.names[int(result.boxes.cls[0])]
             
 
             # Appliquer rembg sur les bytes de l'image
             result = remove(image)
             print("removed bg")
-            # Upload to Supabase Storage
-            # buffer = BytesIO()
-            # print("test")
-            # result.save(buffer, format="PNG")
-            # print("test2")
-            # buffer.seek(0)
-            # print("Test3")
+            
             with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp:
                 result.save(tmp, format="PNG")
                 tmp_path = tmp.name
@@ -129,7 +79,8 @@ def process_image(image_url: str, item_id: int):
             
             print("new url")
             # Update the record with the new image URL
-            supabase.table("clothingitem").update({"image_url": newurl}).eq("item_id", item_id).execute()
+            supabase.table("clothingitem").update({"image_url": newurl,
+                                                   "category": category}).eq("item_id", item_id).execute()
             print(f"✅ Image processed and updated for item {item_id}")
         else:
             print(f"❌ Failed to download image. Status code: {response.status_code}")
@@ -154,3 +105,16 @@ async def handle_insert_webhook(request: Request, background_tasks: BackgroundTa
 
     # Return immediately to Supabase
     return {"status": "success", "message": "Image processing started in the background."}
+
+
+#cd "C:\Users\User\Downloads\
+#ngrok http 8000
+
+
+#cd C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\
+#uvicorn MachineLearning.api.routes.testpublicapi:app --reload
+
+
+
+#Attention lezem zid dans la colone:
+#category = ANY (ARRAY['top'::text, 'bottom'::text, 'hijabi wear'::text, 'other'::text])
