@@ -73,9 +73,9 @@ class MainActivity : ComponentActivity() {
             Tesy2Theme {
                val navController = rememberNavController()
                //AppNavHost(navController = navController)
-                //ClothingScreen(navController = navController)
+                ClothingScreen(navController = navController)
                 //AddClothingScreen()
-                SuggScreen(navController = navController)
+                //SuggScreen(navController = navController)
             }
         }
     }
