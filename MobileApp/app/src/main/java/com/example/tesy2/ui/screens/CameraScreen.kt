@@ -20,6 +20,7 @@ import com.example.tesy2.viewmodel.CameraViewModel
 import android.Manifest
 
 
+
 @Composable
 fun CameraScreen() {
     val context = LocalContext.current  // Get the context
