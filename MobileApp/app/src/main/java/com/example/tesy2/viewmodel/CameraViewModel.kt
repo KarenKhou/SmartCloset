@@ -1,10 +1,12 @@
 package com.example.tesy2.viewmodel
 
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.YuvImage
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -80,9 +82,10 @@ class CameraViewModel : ViewModel() {
                 // Upload to Supabase
                 val fileName = "twosec/${photoFile.name}"
                 CoroutineScope(Dispatchers.IO).launch {
-                    delay(10000)
-                   uploadImageToSupabase(imageBytes, fileName)  // Upload image concurrently
-                }           }
+                   //uploadImageToSupabase(imageBytes, fileName)  // Upload image concurrently
+                    saveImageToMediaStore(context,imageBytes,fileName)
+                }
+            }
 
             override fun onError(exception: ImageCaptureException) {
                 Log.e("Camera", "Error capturing photo: ${exception.message}")
@@ -135,4 +138,35 @@ class CameraViewModel : ViewModel() {
         // Return the byte array of the image
         return byteArrayOutputStream.toByteArray()
     }
+
+
+    fun saveImageToMediaStore(context: Context, imageBytes: ByteArray, imageName: String) {
+        // Get the content resolver
+        val contentResolver = context.contentResolver
+
+        // Create the image content values
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, imageName)  // File name
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")  // MIME type
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/YourAppName")  // Save to the Pictures folder
+        }
+
+        // Insert the image into the MediaStore
+        val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+
+        // Write the image bytes to the output stream of the MediaStore
+        uri?.let { imageUri ->
+            try {
+                val outputStream = contentResolver.openOutputStream(imageUri)
+                outputStream?.write(imageBytes)
+                outputStream?.close()
+
+                Log.d("Image", "Photo saved to MediaStore: $imageUri")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("Image", "Error saving photo to MediaStore: ${e.message}")
+            }
+        }
+    }
+
 }
