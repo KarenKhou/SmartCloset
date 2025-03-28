@@ -148,7 +148,7 @@ class CameraViewModel : ViewModel() {
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, imageName)  // File name
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")  // MIME type
-            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/YourAppName")  // Save to the Pictures folder
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/SmartCloset")  // Save to the Pictures folder
         }
 
         // Insert the image into the MediaStore
