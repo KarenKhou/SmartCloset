@@ -57,7 +57,13 @@ def find_similar_clothing(input_image_url, threshold=0.3):
 
         sim = orb_sim(input_img, other_img)
         print(f"Comparaison avec {item['item_id']} → Similarité : {sim:.2f}")
-        if sim >= threshold:
+
+        if sim > best_similarity:
+            best_similarity = sim
+            best_match_id = item["id"]
+
+        print(f"Meilleure similarité : {best_similarity:.2f} avec l’ID {best_match_id}")
+        if best_similarity >= threshold:
             return item["item_id"]
 
     return None  # Aucun match trouvé
