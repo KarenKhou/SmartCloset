@@ -47,7 +47,7 @@ class ClothingViewModel : ViewModel() {
                 val result = repository.getClothesForCloset(closetId)
                 _clothingItems.value = result
             } catch (e: Exception) {
-                println("❌ Erreur de chargement des vêtements : ${e.message}")
+                println("❌ Erreur de chargement des vêtements! : ${e.message}")
             }
         }
     }
