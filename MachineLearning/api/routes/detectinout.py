@@ -18,6 +18,6 @@ async def detect_clothes(file: UploadFile = File(...)):
     
     # Traitement avec le modèle ML (à adapter selon ton modèle)
     # result = model.predict(image)  # Exemple d'utilisation du modèle
-    result = {"clothes_detected": ["T-shirt", "Pantalon"]}  # Remplace avec les résultats de ton modèle
-    
+    #result = {"clothes_detected": ["T-shirt", "Pantalon"]}  # Remplace avec les résultats de ton modèle
+    result={"test in out"}
     return JSONResponse(content=result)
