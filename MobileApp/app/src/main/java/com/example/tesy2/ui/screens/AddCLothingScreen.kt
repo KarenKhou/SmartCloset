@@ -98,7 +98,8 @@ fun AddClothingScreen(
                 season = null,
                 last_worn = null,
                 image_url = publicUrl ?: "",
-                style = null
+                style = null,
+                availability = 1
             )
 
 

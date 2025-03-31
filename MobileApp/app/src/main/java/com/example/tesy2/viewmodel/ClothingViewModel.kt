@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tesy2.data.ClothingAvailability
 import com.example.tesy2.data.models.ApiResponse
 import com.example.tesy2.data.models.ClothingItem
 import com.example.tesy2.data.models.CompareRequest
@@ -12,6 +13,7 @@ import com.example.tesy2.data.models.OutfitRecommendationItem
 import com.example.tesy2.data.repository.ClothingRepository
 import com.example.tesy2.data.supabase.supabase
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.storage.storage
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -137,12 +139,47 @@ class ClothingViewModel : ViewModel() {
                 } else {
                     println("⚠️ Server error: ${response.message}")
                 }
+                toggleAvailability(response.match_id)
+
 
             } catch (e: Exception) {
                 println("❌ API Error: ${e.message}")
             }
         }
     }
+
+    fun toggleAvailability(itemId: Int) {
+        viewModelScope.launch {
+            try {
+                // 🔍 Récupère l'élément pour connaître sa disponibilité actuelle
+                val item = supabase.from("clothingitem")
+                    .select(columns = Columns.list("availability")) {
+                        filter {
+                            eq("item_id", itemId)
+                        }
+                    }
+                    .decodeSingle<ClothingAvailability>()
+
+                val newAvailability = if (item.availability == 1) 0 else 1
+
+                // ✏️ Mise à jour de la colonne availability
+                val response = supabase.from("clothingitem")
+                    .update(mapOf("availability" to newAvailability)) {
+                        filter{
+                            eq("item_id", itemId)
+                        }
+
+                    }
+
+
+                println("✅ Availability updated to $newAvailability for item $itemId")
+
+            } catch (e: Exception) {
+                println("❌ Error updating availability: ${e.message}")
+            }
+        }
+    }
+
 
 
 

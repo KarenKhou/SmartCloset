@@ -17,6 +17,7 @@ class ClothingRepository {
             .select {
                 filter {
                     eq("closet_id", closetId)
+                    eq("availability", 1)
                 }
             }
             .decodeList<ClothingItem>()
@@ -50,7 +51,8 @@ class ClothingRepository {
                     season = null,
                     last_worn = null,
                     image_url = it.image_url,
-                    style = null
+                    style = null,
+                    availability = 1
                 )
             }
         }
