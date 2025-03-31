@@ -48,20 +48,20 @@ class MainActivity : ComponentActivity() {
                 //AlertScreen(navController = navController)
 
 
-//                androidx.navigation.compose.NavHost(
-//                    navController = navController,
-//                    startDestination = "alert"
-//                ) {
-//                    composable("alert") {
-//                        AlertScreen(navController = navController)
-//                    }
-//
-//                    composable("removeOutfit") {
-//                        RemoveOutfitScreen()
-//                    }
-//
-//            }
-        }
+                androidx.navigation.compose.NavHost(
+                    navController = navController,
+                    startDestination = "alert"
+                ) {
+                    composable("alert") {
+                        AlertScreen(navController = navController)
+                    }
+
+                    composable("removeOutfit") {
+                        RemoveOutfitScreen()
+                    }
+
+            }
+      }
     }
 
 }}

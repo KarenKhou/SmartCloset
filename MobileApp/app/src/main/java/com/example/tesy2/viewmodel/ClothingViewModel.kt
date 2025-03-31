@@ -4,16 +4,28 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tesy2.data.models.ApiResponse
 import com.example.tesy2.data.models.ClothingItem
+import com.example.tesy2.data.models.CompareRequest
+import com.example.tesy2.data.models.CompareResponse
 import com.example.tesy2.data.models.OutfitRecommendationItem
 import com.example.tesy2.data.repository.ClothingRepository
 import com.example.tesy2.data.supabase.supabase
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.storage.storage
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 
 
 class ClothingViewModel : ViewModel() {
@@ -56,10 +68,10 @@ class ClothingViewModel : ViewModel() {
 
 
 
-    fun uploadImageToSupabase(imageBytes: ByteArray, fileName: String) {
+    fun uploadImageToSupabase(imageBytes: ByteArray, fileName: String, bucket : String) {
         viewModelScope.launch {
             try {
-                val bucket = supabase.storage.from("picture-clothes")
+                val bucket = supabase.storage.from(bucket)
 
                 // 1. Upload de l'image
                 bucket.upload(
@@ -94,6 +106,45 @@ class ClothingViewModel : ViewModel() {
             }
         }
     }
+
+
+
+
+    fun sendToBackend(imageUrl: String) {
+        viewModelScope.launch {
+            try {
+                val client = HttpClient() {
+                    install(ContentNegotiation) {
+                        json(Json {
+                            ignoreUnknownKeys = true
+                            prettyPrint = true
+                        })
+                    }
+                }
+
+                val request = CompareRequest(image_url = imageUrl)
+
+                val response: CompareResponse = client.post("https://6a1e-94-187-3-125.ngrok-free.app/compare") {
+                    contentType(ContentType.Application.Json)
+                    setBody(request)
+                }.body()
+
+
+                if (response.status == "ok") {
+                    println("🟢 Match found: ${response.match_found}")
+                    println("🪪 Best match ID: ${response.match_id}")
+                    println("📏 Similarity: ${response.similarity}")
+                } else {
+                    println("⚠️ Server error: ${response.message}")
+                }
+
+            } catch (e: Exception) {
+                println("❌ API Error: ${e.message}")
+            }
+        }
+    }
+
+
 
 
 }
