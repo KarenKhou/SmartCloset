@@ -20,7 +20,9 @@ fun AppNavHost(navController: NavHostController) {
         composable("sign_up") {
             SignUpScreen(navController = navController)
         }
-
+        composable("main") {
+            MainScreenWithBottomNav(navController)
+        }
         // Tu pourras ajouter ici d'autres routes plus tard (home, profil, etc.)
     }
 }

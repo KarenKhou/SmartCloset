@@ -17,7 +17,6 @@ import com.example.tesy2.viewmodel.ClothingViewModel
 @Composable
 fun SuggScreen(
     modifier: Modifier = Modifier,
-    navController: NavController,
     viewModel: ClothingViewModel = viewModel()
 ) {
     val suggList = viewModel.suggestions.collectAsState().value

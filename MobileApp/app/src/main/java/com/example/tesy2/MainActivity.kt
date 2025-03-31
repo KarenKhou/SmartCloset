@@ -53,6 +53,8 @@ import io.github.jan.supabase.auth.FlowType
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
+import com.example.tesy2.ui.navigation.AppNavHost
+
 
 
 
@@ -73,14 +75,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             Tesy2Theme {
                val navController = rememberNavController()
-               //AppNavHost(navController = navController)
+              AppNavHost(navController = navController)
                 //ClothingScreen(navController = navController)
                 //AddClothingScreen()
                 //SuggScreen(navController = navController)
-                CameraScreen()
+                //CameraScreen()
+//                Surface(color = MaterialTheme.colors.background) {
+
+               // }
+
             }
         }
     }
 
 }
-

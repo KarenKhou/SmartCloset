@@ -76,7 +76,8 @@ dependencies {
     implementation ("androidx.camera:camera-lifecycle:1.4.2")
     // CameraX View library
     implementation ("androidx.camera:camera-view:1.4.2")
-
+    implementation ("androidx.compose.material:material-icons-extended:1.4.0")
+    implementation ("io.coil-kt:coil-compose:2.1.0")
 
 
 

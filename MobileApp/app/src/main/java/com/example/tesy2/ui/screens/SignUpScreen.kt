@@ -1,24 +1,30 @@
 package com.example.tesy2.ui.screens
 
-
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.tesy2.viewmodel.AuthViewModel
+import com.example.tesy2.ui.theme.pinkColor
+import com.example.tesy2.ui.theme.lightPink
+
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     viewModel: AuthViewModel = viewModel(),
     navController: NavController
-
 ) {
     val context = LocalContext.current
 
@@ -31,36 +37,66 @@ fun SignUpScreen(
     val birthDate by viewModel.birthDate.collectAsState()
     val signUpSuccess by viewModel.signUpSuccess.collectAsState()
 
-    // Affiche un Toast si inscription réussie
+
+
     LaunchedEffect(signUpSuccess) {
         if (signUpSuccess) {
             navController.navigate("sign_in")
             Toast.makeText(context, "✅ Inscription réussie !", Toast.LENGTH_LONG).show()
-            // Tu peux rediriger ici si tu veux
         }
     }
 
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .background(lightPink),
+        contentAlignment = Alignment.Center
     ) {
-        Text(text="SignUpScreen",modifier= Modifier.size(20.dp).padding(12.dp))
-        OutlinedTextField(value = email, onValueChange = viewModel::onEmailChange, label = { Text("Email") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
-        OutlinedTextField(value = password, onValueChange = viewModel::onPasswordChange, label = { Text("Password") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
-        OutlinedTextField(value = name, onValueChange = viewModel::onNameChange, label = { Text("Name") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
-        OutlinedTextField(value = gender, onValueChange = viewModel::onGenderChange, label = { Text("Gender") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
-        OutlinedTextField(value = job, onValueChange = viewModel::onJobChange, label = { Text("Job") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
-        OutlinedTextField(value = location, onValueChange = viewModel::onLocationChange, label = { Text("Home Location") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
-        OutlinedTextField(value = birthDate, onValueChange = viewModel::onBirthDateChange, label = { Text("Birth Date (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth(),colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black))
-
-        Button(
-            onClick = { println("📤 Click du boutton")
-                        viewModel.signUp() },
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp)
+                .background(Color.White, shape = RoundedCornerShape(24.dp))
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Sign Up")
+            Text(
+                text = "Créer un compte",
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = pinkColor
+                )
+            )
+
+            OutlinedTextField(value = email, onValueChange = viewModel::onEmailChange, label = { Text("Email") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black, focusedBorderColor = pinkColor, cursorColor = pinkColor))
+            OutlinedTextField(value = password, onValueChange = viewModel::onPasswordChange, label = { Text("Mot de passe") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black, focusedBorderColor = pinkColor, cursorColor = pinkColor))
+            OutlinedTextField(value = name, onValueChange = viewModel::onNameChange, label = { Text("Nom") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black, focusedBorderColor = pinkColor, cursorColor = pinkColor))
+            OutlinedTextField(value = gender, onValueChange = viewModel::onGenderChange, label = { Text("Genre") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black, focusedBorderColor = pinkColor, cursorColor = pinkColor))
+            OutlinedTextField(value = job, onValueChange = viewModel::onJobChange, label = { Text("Profession") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black, focusedBorderColor = pinkColor, cursorColor = pinkColor))
+            OutlinedTextField(value = location, onValueChange = viewModel::onLocationChange, label = { Text("Lieu de résidence") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black, focusedBorderColor = pinkColor, cursorColor = pinkColor))
+            OutlinedTextField(value = birthDate, onValueChange = viewModel::onBirthDateChange, label = { Text("Date de naissance (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black, focusedBorderColor = pinkColor, cursorColor = pinkColor))
+
+            Button(
+                onClick = {
+                    println("📤 Click du bouton")
+                    viewModel.signUp()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = pinkColor)
+            ) {
+                Text("S'inscrire", color = Color.White)
+            }
+
+            Text("ou", color = Color.Gray)
+
+            TextButton(
+                onClick = { navController.navigate("sign_in") },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("J'ai déjà un compte", color = pinkColor)
+            }
         }
     }
 }

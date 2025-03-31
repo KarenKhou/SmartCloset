@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.items
 @Composable
 fun ClothingScreen(
     modifier: Modifier = Modifier,
-    navController: NavController,
     viewModel: ClothingViewModel = viewModel()
 ) {
     val clothingList = viewModel.clothingItems.collectAsState().value
