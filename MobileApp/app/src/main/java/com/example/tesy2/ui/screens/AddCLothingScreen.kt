@@ -38,7 +38,7 @@ fun AddClothingScreen(
             it.compress(Bitmap.CompressFormat.PNG, 100, stream)
             val byteArray = stream.toByteArray()
 
-            viewModel.uploadImageToSupabase(byteArray, "photo_${System.currentTimeMillis()}.png")
+            viewModel.uploadImageToSupabase(byteArray, "photo_${System.currentTimeMillis()}.png","picture-clothes")
         }
     }
 

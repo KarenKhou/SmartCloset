@@ -45,7 +45,7 @@ def find_similar_clothing(input_image_url, threshold=0.3):
         raise Exception("Image de départ non chargée.")
 
     clothing_items = supabase.table("clothingitem").select("item_id, image_url").execute().data
-
+    best_similarity=0.0
     for item in clothing_items:
         image_url = item.get("image_url")
         if not image_url or not image_url.startswith("http"):
@@ -60,22 +60,24 @@ def find_similar_clothing(input_image_url, threshold=0.3):
 
         if sim > best_similarity:
             best_similarity = sim
-            best_match_id = item["id"]
+            best_match_id = item["item_id"]
+
+    
 
         print(f"Meilleure similarité : {best_similarity:.2f} avec l’ID {best_match_id}")
-        if best_similarity >= threshold:
-            return item["item_id"]
+        #if best_similarity >= threshold:
+         #   return item["item_id"]
 
-    return None  # Aucun match trouvé
+    return best_match_id,best_similarity  # Aucun match trouvé
 
 
 
-input_url = "https://rnjccfpgdpzkoptzvcgr.supabase.co/storage/v1/object/public/picture-clothes//rembg_a99c3374-e93d-4d8e-bc07-c8009ee79ea4.png"
+#input_url = "https://rnjccfpgdpzkoptzvcgr.supabase.co/storage/v1/object/public/twosecpic//photo_1743413239333.png"
 
-matched_id = find_similar_clothing(input_url)
+#matched_id = find_similar_clothing(input_url)
 
-if matched_id:
-    print("Same clothing item found! ID:", matched_id)
-else:
-    print("No similar item found.")
+#if matched_id:
+#    print("Same clothing item found! ID:", matched_id)
+#else:
+#    print("No similar item found.")
 

@@ -34,7 +34,7 @@ fun RemoveOutfitScreen(
             it.compress(Bitmap.CompressFormat.PNG, 100, stream)
             val byteArray = stream.toByteArray()
 
-            viewModel.uploadImageToSupabase(byteArray, "photo_${System.currentTimeMillis()}.png")
+            viewModel.uploadImageToSupabase(byteArray, "photo_${System.currentTimeMillis()}.png","twosecpic")
         }
     }
 
@@ -45,6 +45,19 @@ fun RemoveOutfitScreen(
             cameraLauncher.launch(null)
         }
     }
+
+    val publicUrl by viewModel.publicUrl.collectAsState()
+
+    LaunchedEffect(publicUrl) {
+        publicUrl?.let { imageUrl ->
+            // Ici, tu peux appeler ton API avec cette URL
+            println("URL publique = $imageUrl")
+
+            // Ex: envoyer vers ton FastAPI backend
+            viewModel.sendToBackend(imageUrl)
+        }
+    }
+
 
     Box(
         modifier = Modifier
