@@ -4,11 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.navigation.compose.composable
 import com.example.tesy2.ui.theme.Tesy2Theme
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import androidx.navigation.compose.rememberNavController
+import com.example.tesy2.ui.navigation.AppNavHost
+import com.example.tesy2.ui.screens.AddClothingScreen
+import com.example.tesy2.ui.screens.AlertScreen
 import com.example.tesy2.ui.screens.CameraINOUTScreenPreview
+import com.example.tesy2.ui.screens.CameraScreen
+import com.example.tesy2.ui.screens.ClothingScreen
+import com.example.tesy2.ui.screens.RemoveOutfitScreen
+import com.example.tesy2.ui.screens.SuggScreen
 import io.github.jan.supabase.auth.Auth
 
 
@@ -36,11 +44,25 @@ class MainActivity : ComponentActivity() {
                 //AddClothingScreen()
                 //SuggScreen(navController = navController)
                 //CameraScreen()
-                CameraINOUTScreenPreview()
+                //CameraINOUTScreenPreview()
+                //AlertScreen(navController = navController)
 
-            }
+
+//                androidx.navigation.compose.NavHost(
+//                    navController = navController,
+//                    startDestination = "alert"
+//                ) {
+//                    composable("alert") {
+//                        AlertScreen(navController = navController)
+//                    }
+//
+//                    composable("removeOutfit") {
+//                        RemoveOutfitScreen()
+//                    }
+//
+//            }
         }
     }
 
-}
+}}
 

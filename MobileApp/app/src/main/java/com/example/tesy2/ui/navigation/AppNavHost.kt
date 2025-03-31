@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.tesy2.ui.screens.AlertScreen
+import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SignInScreen
 import com.example.tesy2.ui.screens.SignUpScreen
 
@@ -20,6 +22,16 @@ fun AppNavHost(navController: NavHostController) {
         composable("sign_up") {
             SignUpScreen(navController = navController)
         }
+
+        composable("alert") {
+            AlertScreen(navController = navController)
+        }
+
+        composable("removeOutfit") {
+            RemoveOutfitScreen()
+        }
+
+
 
         // Tu pourras ajouter ici d'autres routes plus tard (home, profil, etc.)
     }
