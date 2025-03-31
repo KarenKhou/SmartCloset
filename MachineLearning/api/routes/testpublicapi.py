@@ -118,3 +118,34 @@ async def handle_insert_webhook(request: Request, background_tasks: BackgroundTa
 
 #Attention lezem zid dans la colone:
 #category = ANY (ARRAY['top'::text, 'bottom'::text, 'hijabi wear'::text, 'other'::text])
+
+
+
+from fastapi import FastAPI, Query
+from pydantic import BaseModel
+from MachineLearning.imageSimilarity import compdeshabits
+
+app = FastAPI()
+
+class CompareRequest(BaseModel):
+    image_url: str
+    threshold: float = 0.3
+
+@app.post("/compare")
+def compare_image(req: CompareRequest):
+    try:
+        print("received")
+        result = compdeshabits.find_similar_clothing(req.image_url, threshold=req.threshold)
+        match_id, similarity = result
+
+        return {
+            "status": "ok",
+    "match_id": match_id,
+    "similarity": similarity,
+    "match_found": True
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
