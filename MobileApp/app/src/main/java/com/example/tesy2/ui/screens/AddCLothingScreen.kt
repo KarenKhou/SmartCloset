@@ -2,12 +2,18 @@ package com.example.tesy2.ui.screens
 
 import android.graphics.Bitmap
 import android.util.Base64
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+//import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.background
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
@@ -15,6 +21,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tesy2.data.models.ClothingItem
+import com.example.tesy2.ui.theme.lightPink
+import com.example.tesy2.ui.theme.pinkColor
 import com.example.tesy2.viewmodel.ClothingViewModel
 import java.io.ByteArrayOutputStream
 
@@ -26,12 +34,17 @@ fun AddClothingScreen(
     var material by remember { mutableStateOf("") }
     var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
+    var nameError by remember { mutableStateOf(false) }
+    var materialError by remember { mutableStateOf(false) }
+    var photoError by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
 
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview()
     ) { bitmap ->
         photoBitmap = bitmap
+        photoError = false // reset error if picture taken
 
         bitmap?.let {
             val stream = ByteArrayOutputStream()
@@ -42,71 +55,122 @@ fun AddClothingScreen(
         }
     }
 
-
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Nom du vêtement") },
-            modifier = Modifier.fillMaxWidth(),
-            colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black)
-
-        )
-
-        OutlinedTextField(
-            value = material,
-            onValueChange = { material = it },
-            label = { Text("Materiel") },
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(lightPink)
+            .padding(24.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp),
-            colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black)
-
-        )
-
-        Button(
-            onClick = { cameraLauncher.launch(null) },
-            modifier = Modifier.padding(top = 16.dp)
+                .padding(8.dp),
+            elevation = CardDefaults.cardElevation(8.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            shape = RoundedCornerShape(16.dp)
         ) {
-            Text("📷 Prendre une photo")
-        }
-
-        photoBitmap?.let {
-            Image(
-                bitmap = it.asImageBitmap(),
-                contentDescription = null,
+            Column(
                 modifier = Modifier
-                    .height(200.dp)
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
-        }
-        val viewModel: ClothingViewModel = viewModel()
-        val publicUrl by viewModel.publicUrl.collectAsState()
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-        Button(onClick = {
-            val newItem = ClothingItem(
-                 // id item sera auto-généré
-                closet_id = 1, // à adapter
-                name = name,
-                category = null, //hole l AI MODEL B HOTON
-                color = null,
-                material = material,
-                season = null,
-                last_worn = null,
-                image_url = publicUrl ?: "",
-                style = null,
-                availability = 1
-            )
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = {
+                        name = it
+                        nameError = false
+                    },
+                    label = { Text("Nom du vêtement") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(focusedTextColor = MaterialTheme.colorScheme.onSurface,focusedBorderColor = pinkColor),
+                    isError = nameError
+                )
 
+                OutlinedTextField(
+                    value = material,
+                    onValueChange = {
+                        material = it
+                        materialError = false
+                    },
+                    label = { Text("Materiel") },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(focusedTextColor = MaterialTheme.colorScheme.onSurface,focusedBorderColor = pinkColor),
+                    isError = materialError
+                )
 
+                Button(
+                    onClick = { cameraLauncher.launch(null) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor =lightPink
+                    )
+                ) {
+                    Text("📷 Prendre une photo")
+                }
 
-            viewModel.addClothingItem(newItem)
-        }){
-            Text("✅ Enregistrer le vêtement")
+                photoBitmap?.let {
+                    Image(
+                        bitmap = it.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .height(180.dp)
+                            .fillMaxWidth()
+                            .border(
+                                width = 2.dp,
+                                color = if (photoError) MaterialTheme.colorScheme.error else Color.Transparent,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                    )
+                }
+
+                val viewModel: ClothingViewModel = viewModel()
+                val publicUrl by viewModel.publicUrl.collectAsState()
+
+                Button(
+                    onClick = {
+                        nameError = name.isBlank()
+                        materialError = material.isBlank()
+                        photoError = photoBitmap == null
+
+                        if (nameError || materialError || photoError) {
+                            Toast.makeText(context, "Veuillez remplir tous les champs et prendre une photo.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val newItem = ClothingItem(
+                                // id item sera auto-généré
+                                closet_id = 1, // à adapter
+                                name = name,
+                                category = null, //hole l AI MODEL B HOTON
+                                color = null,
+                                material = material,
+                                season = null,
+                                last_worn = null,
+                                image_url = publicUrl ?: "",
+                                style = null,
+                                availability = 1
+                            )
+
+                            viewModel.addClothingItem(newItem)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = pinkColor
+                    )
+                ) {
+                    Text("✅ Enregistrer le vêtement")
+                }
+            }
         }
     }
 }

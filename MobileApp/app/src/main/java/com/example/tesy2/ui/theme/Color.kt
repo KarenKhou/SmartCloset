@@ -15,3 +15,5 @@ val Gray1=Color(0xFFD3D3D3)
 
 val pinkColor = Color(0xFFFF69B4)
 val lightPink = Color(0xFFFFB6C1)
+
+val containerPink=Color(0xFFEFDBDE)

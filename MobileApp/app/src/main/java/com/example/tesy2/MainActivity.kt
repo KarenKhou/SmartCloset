@@ -45,28 +45,28 @@ class MainActivity : ComponentActivity() {
         setContent {
             Tesy2Theme {
                 val navController = rememberNavController()
-                //AppNavHost(navController = navController)
+                AppNavHost(navController = navController)
                 //ClothingScreen(navController = navController)
                 //AddClothingScreen()
                 //SuggScreen(navController = navController)
                 //CameraScreen()
-                //CameraINOUTScreenPreview()
-                //AlertScreen(navController = navController)
+//                CameraINOUTScreenPreview()
+//                AlertScreen(navController = navController)
 
 
-                androidx.navigation.compose.NavHost(
-                    navController = navController,
-                    startDestination = "alert"
-                ) {
-                    composable("alert") {
-                        AlertScreen(navController = navController)
-                    }
-
-                    composable("removeOutfit") {
-                        RemoveOutfitScreen()
-                    }
-
-                }
+//                androidx.navigation.compose.NavHost(
+//                    navController = navController,
+//                    startDestination = "alert"
+//                ) {
+//                    composable("alert") {
+//                        AlertScreen(navController = navController)
+//                    }
+//
+//                    composable("removeOutfit") {
+//                        RemoveOutfitScreen()
+//                    }
+//
+//                }
             }
         }
     }
