@@ -30,7 +30,7 @@ void loop() {
   Serial.print("Distance: ");
   Serial.println(distance);
 
-  if (distance < 50) {
+  if (distance > 50) {
     Serial.println("ALERT"); // C’est cette info que tu peux capter sur ton app
     BTSerial.println("ALERT");
   }
