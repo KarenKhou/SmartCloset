@@ -39,9 +39,15 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.tesy2.R
 import androidx.compose.foundation.Image
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.ColorFilter
-
-
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tesy2.ui.screens.AlertScreen
+import com.example.tesy2.ui.screens.RemoveOutfitScreen
+import com.example.tesy2.ui.screens.RequestBluetoothPermissions
+import com.example.tesy2.viewmodel.MainViewModel
 
 
 sealed class Screen(val route: String, val icon: Any, val title: String) {
@@ -151,6 +157,24 @@ fun BottomBar(navController: NavController) {
 @Composable
 fun MainScreenWithBottomNav(navController:NavHostController) {
     val bottomNavController = rememberNavController()
+    val viewModel: com.example.tesy2.viewmodel.MainViewModel = viewModel()
+    val alertText by viewModel.alertText.collectAsState()
+
+    val context = LocalContext.current  // Get the context
+
+    RequestBluetoothPermissions(context) {
+
+        viewModel.connectBluetooth()
+    }
+
+
+    // Écoute de l'alerte
+    LaunchedEffect(alertText) {
+        if (alertText == "ALERT") {
+            bottomNavController.navigate("alert")
+            viewModel.clearAlert()
+        }
+    }
 
     Scaffold(
         bottomBar = {
@@ -176,6 +200,9 @@ fun MainScreenWithBottomNav(navController:NavHostController) {
                 }
                 composable(Screen.Profile.route) {
 
+                }
+                composable("alert") {
+                    RemoveOutfitScreen()
                 }
             }
         }

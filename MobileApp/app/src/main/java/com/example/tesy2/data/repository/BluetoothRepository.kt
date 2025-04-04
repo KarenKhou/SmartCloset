@@ -67,6 +67,10 @@ class BluetoothRepository {
             }
         }
     }
+    fun clearAlert() {
+        _alertFlow.value = ""
+    }
+
 
     fun disconnect() {
         inputStream?.close()

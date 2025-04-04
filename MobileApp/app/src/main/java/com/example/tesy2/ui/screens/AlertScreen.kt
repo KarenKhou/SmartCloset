@@ -99,6 +99,7 @@ fun AlertScreen(
     val context = LocalContext.current  // Get the context
 
     // Request Camera and Storage Permissions before opening the camera
+
     RequestBluetoothPermissions(context)
         {
             viewModel.connectBluetooth()
