@@ -2,13 +2,18 @@ package com.example.tesy2.data.repository
 
 
 
+import android.content.Context
 import com.example.tesy2.data.models.AppUser
 import com.example.tesy2.data.supabase.supabase
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.OAuthProvider
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+
+
+
 
 class AuthRepository {
     suspend fun signUp(email: String, password: String, user: AppUser): Boolean {
@@ -30,6 +35,7 @@ class AuthRepository {
             false
         }
     }
+
     suspend fun signIn(email: String, password: String): Boolean {
         println("📤 Appel de signIn() dans AuthRepository")
         return try {
@@ -47,4 +53,4 @@ class AuthRepository {
         }
     }
 
-}
+    }

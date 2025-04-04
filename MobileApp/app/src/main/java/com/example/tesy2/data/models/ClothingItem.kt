@@ -14,5 +14,7 @@ data class ClothingItem(
     val last_worn: String? = null, // Ou LocalDate si tu veux être plus strict
     val image_url: String? = null,
     val style: String? = null,
-    val availability : Int
+    val availability : Int,
+    //val user_id: String? = null
+
 )

@@ -158,6 +158,7 @@ fun AddClothingScreen(
                             )
 
                             viewModel.addClothingItem(newItem)
+
                         }
                     },
                     modifier = Modifier

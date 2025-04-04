@@ -1,5 +1,7 @@
 package com.example.tesy2.viewmodel
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
@@ -12,6 +14,7 @@ import com.example.tesy2.data.models.CompareResponse
 import com.example.tesy2.data.models.OutfitRecommendationItem
 import com.example.tesy2.data.repository.ClothingRepository
 import com.example.tesy2.data.supabase.supabase
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.storage.storage
@@ -74,7 +77,7 @@ class ClothingViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val bucket = supabase.storage.from(bucket)
-
+                Log.d("Supabase", "Session: ${supabase.auth.currentSessionOrNull()}")
                 // 1. Upload de l'image
                 bucket.upload(
                     path = fileName,
@@ -87,6 +90,7 @@ class ClothingViewModel : ViewModel() {
                 val url = bucket.publicUrl(fileName)
                 _publicUrl.value = url
                 println("📸 URL publique : $publicUrl")
+                
 
             } catch (e: Exception) {
                 println("❌ Upload failed: ${e.message}")
