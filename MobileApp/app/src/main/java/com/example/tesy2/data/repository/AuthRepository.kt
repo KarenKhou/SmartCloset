@@ -25,6 +25,8 @@ class AuthRepository {
             println("📥 Insertion dans la table User faite !")
             true
         } catch (e: Exception) {
+
+            println(e)
             false
         }
     }

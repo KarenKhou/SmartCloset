@@ -22,7 +22,7 @@ from MachineLearning.core.config import supabase ,url ,bucket
 def ping():
     return {"message": "pongg"}
 
-MODEL_PATH = r"C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\MachineLearning\api\predictionmodel\best.pt"
+MODEL_PATH = r"C:\Users\User\Desktop\best.pt"
 model = YOLO(MODEL_PATH)
 print("Loading model from:", MODEL_PATH)
 print("Model classes:", model.names)
@@ -107,7 +107,7 @@ async def handle_insert_webhook(request: Request, background_tasks: BackgroundTa
     return {"status": "success", "message": "Image processing started in the background."}
 
 
-#cd "C:\Users\User\Downloads\
+#cd C:\Users\User\Downloads\
 #ngrok http 8000
 
 
@@ -125,7 +125,7 @@ from fastapi import FastAPI, Query
 from pydantic import BaseModel
 from MachineLearning.imageSimilarity import compdeshabits
 
-app = FastAPI()
+
 
 class CompareRequest(BaseModel):
     image_url: str

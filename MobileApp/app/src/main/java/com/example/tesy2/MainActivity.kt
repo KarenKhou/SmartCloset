@@ -18,12 +18,6 @@ import com.example.tesy2.ui.screens.ClothingScreen
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SuggScreen
 import io.github.jan.supabase.auth.Auth
-import io.github.jan.supabase.auth.FlowType
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
-import kotlinx.coroutines.launch
-import com.example.tesy2.ui.navigation.AppNavHost
-
 
 
 
@@ -44,14 +38,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Tesy2Theme {
-                val navController = rememberNavController()
-                AppNavHost(navController = navController)
+               val navController = rememberNavController()
+               AppNavHost(navController = navController)
                 //ClothingScreen(navController = navController)
                 //AddClothingScreen()
                 //SuggScreen(navController = navController)
                 //CameraScreen()
-//                CameraINOUTScreenPreview()
-//                AlertScreen(navController = navController)
+                //CameraINOUTScreenPreview()
+                //AlertScreen(navController = navController)
 
 
 //                androidx.navigation.compose.NavHost(
@@ -65,11 +59,10 @@ class MainActivity : ComponentActivity() {
 //                    composable("removeOutfit") {
 //                        RemoveOutfitScreen()
 //                    }
-//
-//                }
-            }
-        }
+
+ //           }
+      }
     }
 
-}
+}}
 
