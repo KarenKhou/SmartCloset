@@ -19,7 +19,10 @@ import com.example.tesy2.ui.theme.pinkColor
 
 
 @Composable
-fun ClothingCard(item: ClothingItem) {
+fun ClothingCard(
+    item: ClothingItem,
+    onEditClick: (ClothingItem) -> Unit // 🔧 Ajout du callback
+) {
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -60,22 +63,80 @@ fun ClothingCard(item: ClothingItem) {
                     color = pinkColor,
                     maxLines = 1
                 )
-//                Text(
-//                    text = "Category: ${item.category ?: "-"}",
-//                    style = MaterialTheme.typography.bodySmall,
-//                    maxLines = 1
-//                )
-//                Text(
-//                    text = "Color: ${item.color ?: "-"}",
-//                    style = MaterialTheme.typography.bodySmall,
-//                    maxLines = 1
-//                )
-//                Text(
-//                    text = "Style: ${item.style ?: "-"}",
-//                    style = MaterialTheme.typography.bodySmall,
-//                    maxLines = 1
-//                )
+
+                // ✅ Bouton "Edit"
+                Button(
+                    onClick = { onEditClick(item) },
+                    modifier = Modifier
+                        .padding(top = 6.dp)
+                        .align(Alignment.End)
+                ) {
+                    Text(text = "Edit")
+                }
             }
         }
     }
 }
+
+//
+//@Composable
+//fun ClothingCard(item: ClothingItem) {
+//    Card(
+//        modifier = Modifier
+//            .padding(8.dp)
+//            .fillMaxWidth(),
+//        shape = RoundedCornerShape(16.dp),
+//        elevation = CardDefaults.cardElevation(6.dp),
+//        colors = CardDefaults.cardColors(
+//            containerColor = containerPink
+//        )
+//    ) {
+//        Column(
+//            modifier = Modifier
+//                .padding(12.dp)
+//                .fillMaxWidth(),
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            verticalArrangement = Arrangement.SpaceBetween
+//        ) {
+//            AsyncImage(
+//                model = item.image_url,
+//                contentDescription = null,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .aspectRatio(1f)
+//                    .clip(RoundedCornerShape(12.dp))
+//            )
+//
+//            Spacer(modifier = Modifier.height(8.dp))
+//
+//            Column(
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                verticalArrangement = Arrangement.spacedBy(2.dp),
+//                modifier = Modifier.fillMaxWidth()
+//            ) {
+//                Text(
+//                    text = item.name,
+//                    style = MaterialTheme.typography.titleLarge,
+//                    fontWeight = FontWeight.Bold,
+//                    color = pinkColor,
+//                    maxLines = 1
+//                )
+////                Text(
+////                    text = "Category: ${item.category ?: "-"}",
+////                    style = MaterialTheme.typography.bodySmall,
+////                    maxLines = 1
+////                )
+////                Text(
+////                    text = "Color: ${item.color ?: "-"}",
+////                    style = MaterialTheme.typography.bodySmall,
+////                    maxLines = 1
+////                )
+////                Text(
+////                    text = "Style: ${item.style ?: "-"}",
+////                    style = MaterialTheme.typography.bodySmall,
+////                    maxLines = 1
+////                )
+//            }
+//        }
+//    }
+//}

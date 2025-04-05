@@ -25,11 +25,11 @@ fun SuggScreen(
     LaunchedEffect(Unit) {
         viewModel.loadSuggestion(closetId = 1, recommendationId = 3)
     }
-
-    LazyColumn(modifier = modifier.padding(16.dp)) {
-        items(suggList) { item ->
-            ClothingCard(item)
-
-        }
-    }
+        //lezem zabeta
+//    LazyColumn(modifier = modifier.padding(16.dp)) {
+//        items(suggList) { item ->
+//            ClothingCard(item,)
+//
+//        }
+//    }
 }

@@ -31,12 +31,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavController
 
 
 @Composable
 fun ClothingScreen(
     modifier: Modifier = Modifier,
     viewModel: ClothingViewModel = viewModel() ,
+    navController: NavController
 ) {
 
     val clothingList = viewModel.clothingItems.collectAsState().value
@@ -142,16 +144,20 @@ fun ClothingScreen(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal=2.dp),
+                    .padding(horizontal = 2.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
                 horizontalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 items(filteredClothingList) { item ->
-                    ClothingCard(item)
+                    ClothingCard(item, onEditClick = { selectedItem ->
+                        // 👉 Navigue vers un écran d'édition ou ouvre un Dialog
+                        navController.navigate("edit_clothing/${selectedItem.item_id}")
+
+                    })
                 }
+
+
             }
-
-
         }
     }
 }

@@ -45,8 +45,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tesy2.ui.screens.AlertScreen
+import com.example.tesy2.ui.screens.EditClothingScreen
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.RequestBluetoothPermissions
+import com.example.tesy2.viewmodel.ClothingViewModel
 import com.example.tesy2.viewmodel.MainViewModel
 
 
@@ -164,7 +166,7 @@ fun MainScreenWithBottomNav(navController:NavHostController) {
 
     RequestBluetoothPermissions(context) {
 
-        viewModel.connectBluetooth()
+        viewModel.connectBluetooth() //naymo lal error, byemche
     }
 
 
@@ -187,7 +189,7 @@ fun MainScreenWithBottomNav(navController:NavHostController) {
                 startDestination = Screen.MyCloset.route
             ) {
                 composable(Screen.MyCloset.route) {
-                    ClothingScreen()
+                    ClothingScreen(navController = navController)
                 }
                 composable(Screen.PastOutfits.route) {
 
@@ -204,6 +206,10 @@ fun MainScreenWithBottomNav(navController:NavHostController) {
                 composable("alert") {
                     RemoveOutfitScreen()
                 }
+
+
+
+
             }
         }
     }

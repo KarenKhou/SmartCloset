@@ -32,10 +32,14 @@ fun AddClothingScreen(
 ) {
     var name by remember { mutableStateOf("") }
     var material by remember { mutableStateOf("") }
+    var  season by remember { mutableStateOf("")}
+    var stylee by remember { mutableStateOf("")}
     var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     var nameError by remember { mutableStateOf(false) }
     var materialError by remember { mutableStateOf(false) }
+    var seasonError by remember { mutableStateOf(false) }
+    var styleeError by remember { mutableStateOf(false) }
     var photoError by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
@@ -103,6 +107,32 @@ fun AddClothingScreen(
                     isError = materialError
                 )
 
+                OutlinedTextField(
+                    value = season,
+                    onValueChange = {
+                        season = it
+                        seasonError = false
+                    },
+                    label = { Text("Season : Winter - Spring - Summer") }, //iza fina naamela drop down
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(focusedTextColor = MaterialTheme.colorScheme.onSurface,focusedBorderColor = pinkColor),
+                    isError = seasonError
+                )
+
+                OutlinedTextField(
+                    value = stylee,
+                    onValueChange = {
+                        stylee = it
+                        styleeError = false
+                    },
+                    label = { Text("Style : Formal - Casual - Both") }, //drop down
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(focusedTextColor = MaterialTheme.colorScheme.onSurface,focusedBorderColor = pinkColor),
+                    isError = styleeError
+                )
+
                 Button(
                     onClick = { cameraLauncher.launch(null) },
                     modifier = Modifier
@@ -148,12 +178,12 @@ fun AddClothingScreen(
                                 closet_id = 1, // à adapter
                                 name = name,
                                 category = null, //hole l AI MODEL B HOTON
-                                color = null,
+                                color = null, //ai
                                 material = material,
-                                season = null,
-                                last_worn = null,
+                                season = season,
+                                last_worn = null, // a changer lors de remove item
                                 image_url = publicUrl ?: "",
-                                style = null,
+                                style = stylee,
                                 availability = 1
                             )
 

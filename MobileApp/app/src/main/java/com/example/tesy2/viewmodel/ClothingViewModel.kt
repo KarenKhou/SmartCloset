@@ -14,6 +14,7 @@ import com.example.tesy2.data.models.CompareResponse
 import com.example.tesy2.data.models.OutfitRecommendationItem
 import com.example.tesy2.data.repository.ClothingRepository
 import com.example.tesy2.data.supabase.supabase
+import com.example.tesy2.ui.screens.ClothingScreen
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
@@ -26,9 +27,12 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
@@ -184,8 +188,38 @@ class ClothingViewModel : ViewModel() {
         }
     }
 
+    fun getClothingItemById(itemId: String): Flow<ClothingItem?> {
+        val idInt = itemId.toIntOrNull() ?: return flowOf(null) // en cas d'erreur de parsing
+        return clothingItems.map { list -> list.find { it.item_id == idInt } }
+    }
+
+
+    fun updateClothingItem(
+        itemId: String,
+        name: String,
+        category: String,
+        color: String,
+        style: String
+    ) {
+        viewModelScope.launch {
+            supabase.from("clothingitem").update(
+                mapOf(
+                    "name" to name,
+                    "category" to category,
+                    "color" to color,
+                    "style" to style
+                )){filter {
+                        eq("item_id", itemId)
+                    }
+                }
+        }
+
+        }
+    }
 
 
 
 
-}
+
+
+
