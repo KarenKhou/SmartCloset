@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import androidx.compose.runtime.State
 
 
 class ClothingViewModel : ViewModel() {
@@ -215,6 +216,29 @@ class ClothingViewModel : ViewModel() {
         }
 
         }
+
+
+    private val _selectedItem = mutableStateOf<ClothingItem?>(null)
+    val selectedItem: State<ClothingItem?> = _selectedItem
+
+    fun fetchClothingItemByIdFromSupabase(itemId: String) {
+        viewModelScope.launch {
+            val response = supabase
+                .from("clothingitem").select(){
+                        filter{
+                            eq("item_id", itemId)
+                        }
+                    }.decodeSingle<ClothingItem>()
+
+
+            try {
+                _selectedItem.value = response
+
+            } catch (e : Exception) {
+                println("❌ error: ${e}")
+            }
+        }
+    }
     }
 
 

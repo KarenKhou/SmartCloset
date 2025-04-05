@@ -30,8 +30,15 @@ fun EditClothingScreen(
     navController: NavController,
     viewModel: ClothingViewModel
 ) {
-    // 1. Charger l'item depuis le ViewModel
-    val item by viewModel.getClothingItemById(itemId).collectAsState(initial = null)
+    val item by viewModel.selectedItem
+
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchClothingItemByIdFromSupabase(itemId)
+    }
+
+//    // 1. Charger l'item depuis le ViewModel
+//    val item by viewModel.getClothingItemById(itemId).collectAsState(initial = null)
 
     // 2. États locaux pour l'édition
     var name by remember { mutableStateOf("") }
