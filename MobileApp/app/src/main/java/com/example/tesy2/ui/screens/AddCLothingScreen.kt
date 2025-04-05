@@ -30,6 +30,8 @@ import java.io.ByteArrayOutputStream
 fun AddClothingScreen(
     viewModel: ClothingViewModel = viewModel()
 ) {
+    var closetId by remember { mutableStateOf<Int?>(null) }
+
     var name by remember { mutableStateOf("") }
     var material by remember { mutableStateOf("") }
     var  season by remember { mutableStateOf("")}
@@ -56,6 +58,14 @@ fun AddClothingScreen(
             val byteArray = stream.toByteArray()
 
             viewModel.uploadImageToSupabase(byteArray, "photo_${System.currentTimeMillis()}.png","picture-clothes")
+        }
+    }
+    LaunchedEffect(Unit) {
+        closetId = getCurrentUserClosetIdSuspend()
+        if (closetId != null) {
+            println("closetid = ${closetId}")
+        } else {
+            println("❌ Aucun closet_id trouvé pour l'utilisateur")
         }
     }
 
@@ -175,7 +185,7 @@ fun AddClothingScreen(
                         } else {
                             val newItem = ClothingItem(
                                 // id item sera auto-généré
-                                closet_id = 1, // à adapter
+                                closet_id = closetId!!, // à adapter
                                 name = name,
                                 category = null, //hole l AI MODEL B HOTON
                                 color = null, //ai
