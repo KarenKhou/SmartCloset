@@ -239,7 +239,31 @@ class ClothingViewModel : ViewModel() {
             }
         }
     }
+
+
+
+    fun deleteClothingItem(itemId: String) {
+        viewModelScope.launch {
+            try {
+                val response = supabase
+                    .from("clothingitem")
+                    .delete(){
+                        filter{
+                            eq("item_id", itemId.toInt())
+                        }
+                    }
+
+
+                    println("✅ Item supprimé")
+
+
+            } catch (e: Exception) {
+                println("❌ Exception while deleting item: $e")
+            }
+        }
     }
+
+}
 
 
 
