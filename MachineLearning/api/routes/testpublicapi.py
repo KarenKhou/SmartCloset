@@ -10,12 +10,18 @@ from fastapi import FastAPI, Request
 from fastapi import BackgroundTasks
 from ultralytics import YOLO
 import os
+from pydantic import BaseModel
+from MachineLearning.core.config import supabase ,url ,bucket
+from MachineLearning.imageSimilarity import compdeshabits
+from MachineLearning.colors import color
+
+
 
 app = FastAPI()
 
 
 
-from MachineLearning.core.config import supabase ,url ,bucket
+
 
 
 @app.get("/")
@@ -57,11 +63,17 @@ def process_image(image_url: str, item_id: int):
 
             # Extract the top prediction (we assume the first detection is the main label)
             category = model.names[int(result.boxes.cls[0])]
+            print("category:" , category)
+
+            colorr = color.detect_dominant_color(image_data.getvalue())
+            print("color: ", colorr)
             
 
             # Appliquer rembg sur les bytes de l'image
             result = remove(image)
             print("removed bg")
+
+
             
             with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp:
                 result.save(tmp, format="PNG")
@@ -80,7 +92,8 @@ def process_image(image_url: str, item_id: int):
             print("new url")
             # Update the record with the new image URL
             supabase.table("clothingitem").update({"image_url": newurl,
-                                                   "category": category}).eq("item_id", item_id).execute()
+                                                   "category": category,
+                                                   "color": colorr}).eq("item_id", item_id).execute()
             print(f"✅ Image processed and updated for item {item_id}")
         else:
             print(f"❌ Failed to download image. Status code: {response.status_code}")
@@ -107,25 +120,6 @@ async def handle_insert_webhook(request: Request, background_tasks: BackgroundTa
     return {"status": "success", "message": "Image processing started in the background."}
 
 
-#cd C:\Users\User\Downloads\
-#ngrok http 8000
-
-
-#cd C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\
-#uvicorn MachineLearning.api.routes.testpublicapi:app --reload
-
-
-
-#Attention lezem zid dans la colone:
-#category = ANY (ARRAY['top'::text, 'bottom'::text, 'hijabi wear'::text, 'other'::text])
-
-
-
-from fastapi import FastAPI, Query
-from pydantic import BaseModel
-from MachineLearning.imageSimilarity import compdeshabits
-
-
 
 class CompareRequest(BaseModel):
     image_url: str
@@ -149,3 +143,25 @@ def compare_image(req: CompareRequest):
             "status": "error",
             "message": str(e)
         }
+
+@app.post("/detect-dominant-color")
+def detect_color(file: UploadFile = File(...)):
+    try:
+        contents = file.read()
+        dominant_color = color.detect_dominant_color(contents)
+        return {"dominant_color": dominant_color}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+#cd C:\Users\User\Downloads\
+#ngrok http 8000
+
+
+#cd C:\Users\User\Desktop\mdp\smartcloset-api\SmartCloset\
+#uvicorn MachineLearning.api.routes.testpublicapi:app --reload
+
+
+
+#Attention lezem zid dans la colone:
+#category = ANY (ARRAY['top'::text, 'bottom'::text, 'hijabi wear'::text, 'other'::text])

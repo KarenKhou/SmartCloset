@@ -102,13 +102,15 @@ fun AlertScreen(
 
     RequestBluetoothPermissions(context)
         {
-            viewModel.connectBluetooth()
+            viewModel.connectBluetooth() //naymo lal error
         }
 
 
     LaunchedEffect(alertText) {
         if (alertText == "ALERT") {
             navController.navigate("removeOutfit")
+
+
         }
     }
 
