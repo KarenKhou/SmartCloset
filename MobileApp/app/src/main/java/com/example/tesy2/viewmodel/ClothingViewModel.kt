@@ -36,6 +36,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import androidx.compose.runtime.State
+import com.example.tesy2.data.models.Closet
 
 
 class ClothingViewModel : ViewModel() {
@@ -259,6 +260,26 @@ class ClothingViewModel : ViewModel() {
 
             } catch (e: Exception) {
                 println("❌ Exception while deleting item: $e")
+            }
+        }
+    }
+    private val _closets = mutableStateOf<List<Closet>>(emptyList())
+    val closets: State<List<Closet>> = _closets
+
+    fun loadUserClosets() {
+        val userId = supabase.auth.currentUserOrNull()?.id ?: return
+        viewModelScope.launch {
+            try {
+                val result = supabase.from("closet")
+                    .select()
+                    {filter{
+                        eq("user_id", userId)
+                    }}
+                    .decodeList<Closet>()
+
+                _closets.value = result
+            } catch (e: Exception) {
+                println("❌ Erreur chargement closets: ${e.message}")
             }
         }
     }

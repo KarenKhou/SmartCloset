@@ -44,6 +44,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tesy2.ui.screens.AddClosetScreen
 import com.example.tesy2.ui.screens.AlertScreen
 import com.example.tesy2.ui.screens.EditClothingScreen
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
@@ -201,7 +202,7 @@ fun MainScreenWithBottomNav(navController:NavHostController) {
                     SuggScreen()
                 }
                 composable(Screen.Profile.route) {
-
+                    AddClosetScreen(navController = navController)
                 }
                 composable("alert") {
                     RemoveOutfitScreen()

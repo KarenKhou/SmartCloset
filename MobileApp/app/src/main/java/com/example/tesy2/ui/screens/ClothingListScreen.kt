@@ -29,9 +29,13 @@ import com.example.tesy2.ui.theme.pinkColor
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
+import com.example.tesy2.data.models.Closet
 import com.example.tesy2.data.models.UserData
 import com.example.tesy2.data.supabase.supabase
 import com.example.tesy2.ui.screens.getCurrentUserClosetIdSuspend
@@ -137,12 +141,36 @@ fun ClothingScreen(
                 Text("No items found matching \"$searchQuery\"")
             }
         } else {
-            Text(
-                text = if (searchQuery.isEmpty()) "Your Closet" else "Search Results",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+
+            val closetList by viewModel.closets
+            var expanded by remember { mutableStateOf(false) }
+            var selectedCloset by remember { mutableStateOf<Closet?>(null) }
+
+            LaunchedEffect(Unit) {
+                viewModel.loadUserClosets()
+            }
+
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Box {
+                Button(onClick = { expanded = true }) {
+                    Text(selectedCloset?.closet_name ?: "Your Closet")
+                }
+
+                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                    closetList.forEach { closet ->
+                        DropdownMenuItem(
+                            text = { Text(closet.closet_name) },
+                            onClick = {
+                                selectedCloset = closet
+                                expanded = false
+                                viewModel.loadClothes(closet.closet_id!!)
+                            }
+                        )
+                    }
+                }
+            }
 
 //            LazyColumn(
 //                modifier = Modifier.fillMaxSize(),
@@ -172,6 +200,9 @@ fun ClothingScreen(
             }
         }
     }
+
+
+
 }
 
 
