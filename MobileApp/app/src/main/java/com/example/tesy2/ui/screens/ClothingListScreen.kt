@@ -32,6 +32,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
+import com.example.tesy2.data.models.UserData
+import com.example.tesy2.data.supabase.supabase
+import com.example.tesy2.ui.screens.getCurrentUserClosetIdSuspend
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
+import kotlinx.coroutines.runBlocking
 
 
 @Composable
@@ -55,7 +62,12 @@ fun ClothingScreen(
 
     // Load the clothes (for example from closet 1)
     LaunchedEffect(Unit) {
-        viewModel.loadClothes(closetId = 1)
+        val closetId = getCurrentUserClosetIdSuspend()
+        if (closetId != null) {
+            viewModel.loadClothes(closetId = closetId)
+        } else {
+            println("❌ Aucun closet_id trouvé pour l'utilisateur")
+        }
     }
 
     Column(
@@ -161,3 +173,69 @@ fun ClothingScreen(
         }
     }
 }
+
+
+
+//private fun ClothingViewModel.getCurrentUserClosetId(): Int? {
+//    val user = supabase.auth.currentUserOrNull() ?: return null
+//    val userId = user.id
+//    println("test1")
+//
+//    val userData = runBlocking {
+//        try {
+//            supabase
+//                .from("closet")
+//                .select(columns = Columns.list("closet_id")) {
+//                    filter {
+//                        eq("user_id", userId)
+//                    }
+//                }.decodeSingle<UserData>() // ✅ on récupère un UserData
+//        } catch (e: Exception) {
+//            println("❌ Supabase error: ${e.message}")
+//            null
+//        }
+//    }
+//
+//    val closetId = userData?.closet_id // ✅ on récupère l'int depuis l'objet
+//
+//    if (closetId != null) {
+//        println("✅ closet_id: $closetId")
+//    } else {
+//        println("❌ Aucun utilisateur trouvé ou closet_id manquant")
+//    }
+//
+//    return closetId
+//}
+
+suspend fun getCurrentUserClosetIdSuspend(): Int? {
+    val user = supabase.auth.currentUserOrNull() ?: return null
+    val userId = user.id
+
+    println("🧪 userId: $userId")
+
+    val response = runBlocking {
+        try {
+            val raw = supabase
+                .from("closet")
+                .select(columns = Columns.list("closet_id")) {
+                    filter {
+                        eq("user_id", userId )
+                    }
+                }
+            println("📥 RAW JSON: ${raw.data}") // ajoute ça temporairement pour debug
+
+            val result = raw.decodeList<UserData>()
+            result
+        } catch (e: Exception) {
+            println("❌ Supabase error: ${e.message}")
+            emptyList()
+        }
+    }
+
+    val closetId = response.firstOrNull()?.closet_id
+    println("📦 Final closet_id: $closetId")
+    return closetId
+
+}
+
+

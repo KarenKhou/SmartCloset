@@ -15,9 +15,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.tesy2.data.supabase.supabase
 import com.example.tesy2.viewmodel.AuthViewModel
 import com.example.tesy2.ui.theme.pinkColor
 import com.example.tesy2.ui.theme.lightPink
+import io.github.jan.supabase.auth.auth
+
 
 @Composable
 fun SignInScreen(
@@ -25,6 +28,19 @@ fun SignInScreen(
     navController: NavController,
     viewModel: AuthViewModel = viewModel()
 ) {
+
+    LaunchedEffect(Unit) {
+        try {
+            supabase.auth.signOut()
+            println("✅ Déconnecté avec succès")
+        } catch (e: Exception) {
+            println("❌ Erreur logout: ${e.message}")
+        }
+    }
+
+
+
+
     val context = LocalContext.current
 
     val email by viewModel.email.collectAsState()

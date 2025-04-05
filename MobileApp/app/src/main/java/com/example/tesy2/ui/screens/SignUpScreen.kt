@@ -15,9 +15,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.tesy2.data.supabase.supabase
 import com.example.tesy2.viewmodel.AuthViewModel
 import com.example.tesy2.ui.theme.pinkColor
 import com.example.tesy2.ui.theme.lightPink
+import io.github.jan.supabase.auth.auth
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -37,10 +40,18 @@ fun SignUpScreen(
     val birthDate by viewModel.birthDate.collectAsState()
     val signUpSuccess by viewModel.signUpSuccess.collectAsState()
 
-
+    LaunchedEffect(Unit) {
+        try {
+            supabase.auth.signOut()
+            println("✅ Déconnecté avec succès")
+        } catch (e: Exception) {
+            println("❌ Erreur logout: ${e.message}")
+        }
+    }
 
     LaunchedEffect(signUpSuccess) {
         if (signUpSuccess) {
+            delay(200L)
             navController.navigate("sign_in")
             Toast.makeText(context, "✅ Inscription réussie !", Toast.LENGTH_LONG).show()
         }
