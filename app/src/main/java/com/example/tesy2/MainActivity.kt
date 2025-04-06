@@ -21,6 +21,7 @@ import com.example.tesy2.ui.screens.ClothingScreen
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SuggScreen
 import com.example.tesy2.ui.theme.AppThemeColor
+import com.example.tesy2.ui.theme.MyAppTheme
 import io.github.jan.supabase.auth.Auth
 
 
@@ -43,9 +44,11 @@ class MainActivity : ComponentActivity() {
         val themeName = prefs.getString("userTheme", "pink") ?: "pink"
         val selectedTheme = AppThemeColor.fromName(themeName)
         setContent {
-            Tesy2Theme {
-               val navController = rememberNavController()
-                AppNavHost(navController = navController)
+//            Tesy2Theme {
+                MyAppTheme(selectedTheme = selectedTheme) { // 👈 use your dynamic theme here
+                    val navController = rememberNavController()
+                    AppNavHost(navController = navController)
+                }
                 //ClothingScreen(navController = navController)
                 //AddClothingScreen()
                 //SuggScreen(navController = navController)
@@ -68,7 +71,7 @@ class MainActivity : ComponentActivity() {
 //                    }
 //
 //            }
-      }
+//      }
     }
 
 }}

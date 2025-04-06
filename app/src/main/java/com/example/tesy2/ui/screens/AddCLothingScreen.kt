@@ -32,6 +32,9 @@ import com.example.tesy2.ui.theme.lightPink
 import com.example.tesy2.ui.theme.pinkColor
 import com.example.tesy2.viewmodel.ClothingViewModel
 import java.io.ByteArrayOutputStream
+import com.example.tesy2.ui.composable.SeasonDropdown
+import com.example.tesy2.ui.composable.StyleDropdown
+
 
 @Composable
 fun AddClothingScreen(
@@ -114,8 +117,8 @@ fun AddClothingScreen(
                         label = { Text("Nom du vêtement") },
                         modifier = Modifier.fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            focusedBorderColor = pinkColor
+                            focusedTextColor = MaterialTheme.colorScheme.primary,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary
                         ),
                         isError = nameError
                     )
@@ -130,43 +133,61 @@ fun AddClothingScreen(
                         modifier = Modifier
                             .fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            focusedBorderColor = pinkColor
+                            focusedTextColor = MaterialTheme.colorScheme.primary,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary
                         ),
                         isError = materialError
                     )
 
-                    OutlinedTextField(
-                        value = season,
-                        onValueChange = {
+//                    OutlinedTextField(
+//                        value = season,
+//                        onValueChange = {
+//                            season = it
+//                            seasonError = false
+//                        },
+//                        label = { Text("Season : Winter - Spring - Summer") }, //iza fina naamela drop down
+//                        modifier = Modifier
+//                            .fillMaxWidth(),
+//                        colors = OutlinedTextFieldDefaults.colors(
+//                            focusedTextColor = MaterialTheme.colorScheme.primary,
+//                            focusedBorderColor = MaterialTheme.colorScheme.primary
+//                        ),
+//                        isError = seasonError
+//                    )
+                    SeasonDropdown(
+                        season = season,
+                        onSeasonSelected = {
                             season = it
                             seasonError = false
                         },
-                        label = { Text("Season : Winter - Spring - Summer") }, //iza fina naamela drop down
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            focusedBorderColor = pinkColor
-                        ),
-                        isError = seasonError
+                        seasonError = seasonError
                     )
 
-                    OutlinedTextField(
-                        value = stylee,
-                        onValueChange = {
+
+//                    OutlinedTextField(
+//                        value = stylee,
+//                        onValueChange = {
+//                            stylee = it
+//                            styleeError = false
+//                        },
+//                        label = { Text("Style : Formal - Casual - Both") }, //drop down
+//                        modifier = Modifier
+//                            .fillMaxWidth(),
+//                        colors = OutlinedTextFieldDefaults.colors(
+//                            focusedTextColor = MaterialTheme.colorScheme.primary,
+//                            focusedBorderColor = MaterialTheme.colorScheme.primary
+//                        ),
+//                        isError = styleeError
+//                    )
+                    StyleDropdown(
+                        style = stylee,
+                        onStyleSelected = {
                             stylee = it
                             styleeError = false
                         },
-                        label = { Text("Style : Formal - Casual - Both") }, //drop down
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            focusedBorderColor = pinkColor
-                        ),
-                        isError = styleeError
+                        styleError = styleeError
                     )
+
 
                     Button(
                         onClick = { cameraLauncher.launch(null) },
@@ -175,7 +196,7 @@ fun AddClothingScreen(
                             .height(50.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = lightPink
+                            containerColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
                         Text("📷 Prendre une photo")
@@ -190,7 +211,7 @@ fun AddClothingScreen(
                                 .fillMaxWidth()
                                 .border(
                                     width = 2.dp,
-                                    color = if (photoError) MaterialTheme.colorScheme.error else Color.Transparent,
+                                    color = if (photoError) MaterialTheme.colorScheme.error else Color.Gray,
                                     shape = RoundedCornerShape(8.dp)
                                 )
                         )
@@ -212,7 +233,15 @@ fun AddClothingScreen(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Box {
-                        Button(onClick = { expanded = true }) {
+                        Button(onClick = { expanded = true },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary
+                            )
+                        ) {
                             Text(selectedCloset?.closet_name ?: "Your Closet")
                         }
 
@@ -268,7 +297,7 @@ fun AddClothingScreen(
                             .height(50.dp),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = pinkColor
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
                         )
                     ) {
                         Text("✅ Enregistrer le vêtement")

@@ -1,6 +1,7 @@
 package com.example.tesy2.ui.screens
 
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.tesy2.MainActivity
 import com.example.tesy2.data.supabase.supabase
 import com.example.tesy2.viewmodel.AuthViewModel
 import com.example.tesy2.ui.theme.pinkColor
@@ -70,6 +72,10 @@ fun SignUpScreen(
             delay(200L)
             navController.navigate("sign_in")
             Toast.makeText(context, "✅ Inscription réussie !", Toast.LENGTH_LONG).show()
+
+            val intent = Intent(context, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            context.startActivity(intent)
         }
     }
 

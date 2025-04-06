@@ -25,7 +25,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import com.example.tesy2.ui.composable.ClothingCard
 import com.example.tesy2.viewmodel.ClothingViewModel
-import com.example.tesy2.ui.theme.pinkColor
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -100,7 +99,7 @@ fun ClothingScreen(
                 },
             shape = RoundedCornerShape(16.dp),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = pinkColor,
+                focusedContainerColor = MaterialTheme.colorScheme.primary,
                 unfocusedContainerColor = Color.White,
                 disabledContainerColor = Color.White,
                 cursorColor = Color.White,
