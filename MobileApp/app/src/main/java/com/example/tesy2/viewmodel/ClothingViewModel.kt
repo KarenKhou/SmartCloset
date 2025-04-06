@@ -37,6 +37,8 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import androidx.compose.runtime.State
 import com.example.tesy2.data.models.Closet
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 
 class ClothingViewModel : ViewModel() {
@@ -96,7 +98,11 @@ class ClothingViewModel : ViewModel() {
                 val url = bucket.publicUrl(fileName)
                 _publicUrl.value = url
                 println("📸 URL publique : $publicUrl")
-                
+                viewModelScope.launch {
+                    showToast("Upload terminé !")
+                }
+
+
 
             } catch (e: Exception) {
                 println("❌ Upload failed: ${e.message}")
@@ -118,6 +124,13 @@ class ClothingViewModel : ViewModel() {
             }
         }
     }
+    private val _toastMessage = MutableSharedFlow<String>()
+    val toastMessage = _toastMessage.asSharedFlow()
+
+    suspend fun showToast(message: String) {
+        _toastMessage.emit(message)
+    }
+
 
 
 
@@ -136,7 +149,7 @@ class ClothingViewModel : ViewModel() {
 
                 val request = CompareRequest(image_url = imageUrl)
                 //ktor tunnel
-                val response: CompareResponse = client.post("https://71fb-94-187-2-135.ngrok-free.app/compare") {
+                val response: CompareResponse = client.post("https://fe49-94-187-2-31.ngrok-free.app/compare") {
                     contentType(ContentType.Application.Json)
                     setBody(request)
                 }.body()

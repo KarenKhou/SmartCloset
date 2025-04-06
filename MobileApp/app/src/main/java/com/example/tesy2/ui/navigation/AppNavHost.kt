@@ -29,13 +29,7 @@ fun AppNavHost(navController: NavHostController) {
             MainScreenWithBottomNav(navController)
         }
 
-        composable("alert") {
-            AlertScreen(navController = navController)
-        }
 
-        composable("removeOutfit") {
-            RemoveOutfitScreen()
-        }
 
         composable("edit_clothing/{itemId}") { backStackEntry ->
             val itemId = backStackEntry.arguments?.getString("itemId") ?: return@composable

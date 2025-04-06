@@ -158,8 +158,9 @@ fun BottomBar(navController: NavController) {
 
 
 @Composable
-fun MainScreenWithBottomNav(navController:NavHostController) {
+fun MainScreenWithBottomNav(navController: NavController) {
     val bottomNavController = rememberNavController()
+    //val bottomNavController = navController
     val viewModel: com.example.tesy2.viewmodel.MainViewModel = viewModel()
     val alertText by viewModel.alertText.collectAsState()
 
@@ -174,10 +175,11 @@ fun MainScreenWithBottomNav(navController:NavHostController) {
     // Écoute de l'alerte
     LaunchedEffect(alertText) {
         if (alertText == "ALERT") {
-            bottomNavController.navigate("alert")
+            bottomNavController.navigate("removeOutfit")
             viewModel.clearAlert()
         }
     }
+
 
     Scaffold(
         bottomBar = {
@@ -190,7 +192,7 @@ fun MainScreenWithBottomNav(navController:NavHostController) {
                 startDestination = Screen.MyCloset.route
             ) {
                 composable(Screen.MyCloset.route) {
-                    ClothingScreen(navController = navController)
+                    ClothingScreen(navController = bottomNavController)
                 }
                 composable(Screen.PastOutfits.route) {
 
@@ -202,10 +204,17 @@ fun MainScreenWithBottomNav(navController:NavHostController) {
                     SuggScreen()
                 }
                 composable(Screen.Profile.route) {
-                    AddClosetScreen(navController = navController)
+                    AddClosetScreen(navController = bottomNavController)
                 }
+//                composable("alert") {
+//                    RemoveOutfitScreen()
+//                }
                 composable("alert") {
-                    RemoveOutfitScreen()
+                    AlertScreen(bottomNavController)
+                }
+
+                composable("removeOutfit") {
+                    RemoveOutfitScreen(navController = bottomNavController)
                 }
 
 

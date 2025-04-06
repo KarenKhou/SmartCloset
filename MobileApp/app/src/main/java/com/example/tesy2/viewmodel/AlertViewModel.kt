@@ -41,4 +41,5 @@ class AlertViewModel : ViewModel() {
         super.onCleared()
         repository.disconnect()
     }
+
 }

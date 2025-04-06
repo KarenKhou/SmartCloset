@@ -92,7 +92,7 @@ fun RequestBluetoothPermissions(context: Context, onGranted: () -> Unit = {}) {
 
 @Composable
 fun AlertScreen(
-    navController: NavController,
+    bottomnavController: NavController,
     viewModel: AlertViewModel = viewModel()
 ) {
     val alertText by viewModel.alertText.collectAsState()
@@ -108,7 +108,8 @@ fun AlertScreen(
 
     LaunchedEffect(alertText) {
         if (alertText == "ALERT") {
-            navController.navigate("removeOutfit")
+            bottomnavController.navigate("removeOutfit")
+
 
 
         }

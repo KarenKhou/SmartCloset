@@ -1,6 +1,7 @@
 package com.example.tesy2.ui.screens
 
 import android.graphics.Bitmap
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -10,14 +11,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.tesy2.viewmodel.ClothingViewModel
 import java.io.ByteArrayOutputStream
 
 @Composable
 fun RemoveOutfitScreen(
-    viewModel: ClothingViewModel = viewModel()
+    viewModel: ClothingViewModel = viewModel(),
+            navController: NavController
 ) {
     var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
     var hasLaunchedCamera by remember { mutableStateOf(false) }
@@ -35,6 +39,15 @@ fun RemoveOutfitScreen(
             val byteArray = stream.toByteArray()
 
             viewModel.uploadImageToSupabase(byteArray, "photo_${System.currentTimeMillis()}.png","twosecpic")
+        }
+    }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val toastMessage = viewModel.toastMessage.collectAsState(initial = null)
+
+    LaunchedEffect(Unit) {
+        viewModel.toastMessage.collect { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -58,6 +71,8 @@ fun RemoveOutfitScreen(
         }
     }
 
+    Column{
+
 
     Box(
         modifier = Modifier
@@ -74,9 +89,26 @@ fun RemoveOutfitScreen(
                     contentDescription = null,
                     modifier = Modifier.size(250.dp)
                 )
+                Button(onClick = { navController.navigate("my_closet") }) {
+                    Text("Retour au closet")
+                }
+                Button(onClick = {
+
+                    cameraLauncher.launch(null)
+                }) {
+                    Text("Ajouter une autre photo")
+                }
             }
         } else {
-            Text("Ouverture de la caméra...", style = MaterialTheme.typography.bodyLarge)
+            Column {
+                Text("Ouverture de la caméra...", style = MaterialTheme.typography.bodyLarge)
+                Button(onClick = { navController.navigate("my_closet") }) {
+                    Text("Retour au closet")
+                }
+
+            }
+
         }
+    }
     }
 }
