@@ -51,6 +51,9 @@ class ClothingViewModel : ViewModel() {
 
     private val _publicUrl = MutableStateFlow<String?>(null)
     val publicUrl: StateFlow<String?> = _publicUrl
+    private val _matchedItem = mutableStateOf<ClothingItem?>(null)
+    val matchedItem: State<ClothingItem?> = _matchedItem
+
 
     fun loadClothes(closetId: Int) {
         viewModelScope.launch {
@@ -149,20 +152,33 @@ class ClothingViewModel : ViewModel() {
 
                 val request = CompareRequest(image_url = imageUrl)
                 //ktor tunnel
-                val response: CompareResponse = client.post("https://fe49-94-187-2-31.ngrok-free.app/compare") {
+                println("hi1")
+                val response: CompareResponse = client.post("https://6e57-94-187-2-31.ngrok-free.app/compare") {
                     contentType(ContentType.Application.Json)
                     setBody(request)
                 }.body()
+                println("hi2")
 
 
                 if (response.status == "ok") {
                     println("🟢 Match found: ${response.match_found}")
                     println("🪪 Best match ID: ${response.match_id}")
+
+                    _matchedItem.value =supabase.from("clothingitem").select(){
+                        filter{
+                            eq("item_id",response.match_id)
+                        }
+                    }.decodeSingle<ClothingItem>()
+
+                    println("📏 Name: ${(_matchedItem.value)!!.name}")
                     println("📏 Similarity: ${response.similarity}")
+                    _matchItemId.value = response.match_id
+
+                    _showConfirmDialog.value = true
                 } else {
                     println("⚠️ Server error: ${response.message}")
                 }
-                toggleAvailability(response.match_id)
+                //toggleAvailability(response.match_id)
 
 
             } catch (e: Exception) {
@@ -170,6 +186,19 @@ class ClothingViewModel : ViewModel() {
             }
         }
     }
+
+    private val _matchItemId = MutableStateFlow<Int?>(null)
+    val matchItemId: StateFlow<Int?> = _matchItemId
+
+    private val _showConfirmDialog = MutableStateFlow(false)
+    val showConfirmDialog: StateFlow<Boolean> = _showConfirmDialog
+
+    fun dismissDialog() {
+        _showConfirmDialog.value = false
+        _matchItemId.value = null
+    }
+
+
 
     fun toggleAvailability(itemId: Int) {
         viewModelScope.launch {

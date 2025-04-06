@@ -46,6 +46,8 @@ def find_similar_clothing(input_image_url, threshold=0.3):
 
     clothing_items = supabase.table("clothingitem").select("item_id, image_url").execute().data
     best_similarity=0.0
+    best_match_id = None
+
     for item in clothing_items:
         image_url = item.get("image_url")
         if not image_url or not image_url.startswith("http"):

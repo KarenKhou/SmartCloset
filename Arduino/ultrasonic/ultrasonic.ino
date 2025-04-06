@@ -34,12 +34,7 @@ void loop() {
   if (distance > 50 and closetclosed) {
     Serial.println("ALERT");
     BTSerial.println("ALERT");
-    delay(500);
-    Serial.println("ALERT");
-    BTSerial.println("ALERT");
-    delay(500);
-    Serial.println("ALERT");
-    BTSerial.println("ALERT");
+    
     closetclosed = false;
   }else if (distance<=50){
     closetclosed = true;

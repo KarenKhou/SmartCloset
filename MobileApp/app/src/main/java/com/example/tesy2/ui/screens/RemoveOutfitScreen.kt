@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.tesy2.data.models.ClothingItem
 import com.example.tesy2.viewmodel.ClothingViewModel
 import java.io.ByteArrayOutputStream
 
@@ -25,6 +26,12 @@ fun RemoveOutfitScreen(
 ) {
     var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
     var hasLaunchedCamera by remember { mutableStateOf(false) }
+
+    val showDialog by viewModel.showConfirmDialog.collectAsState()
+    val matchItemId by viewModel.matchItemId.collectAsState()
+    val matchedItem = viewModel.matchedItem.value
+
+
 
 
 
@@ -71,6 +78,7 @@ fun RemoveOutfitScreen(
         }
     }
 
+
     Column{
 
 
@@ -109,6 +117,36 @@ fun RemoveOutfitScreen(
             }
 
         }
+
+        if (showDialog && matchItemId != null) {
+            AlertDialog(
+                onDismissRequest = {
+                    viewModel.dismissDialog()
+                },
+                title = {
+                    Text("Changer disponibilité ?")
+                },
+                text = {
+                    Text("Souhaites-tu vraiment changer la disponibilité de l’item  ${matchedItem!!.name}?")
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        viewModel.toggleAvailability(matchItemId!!)
+                        viewModel.dismissDialog()
+                    }) {
+                        Text("Oui")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        viewModel.dismissDialog()
+                    }) {
+                        Text("Annuler")
+                    }
+                }
+            )
+        }
+
     }
     }
 }
