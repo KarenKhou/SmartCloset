@@ -5,6 +5,7 @@ const int trigPin = 9;
 const int echoPin = 7;
 long duration;
 int distance;
+bool closetclosed=true;
 
 
 void setup() {
@@ -30,9 +31,18 @@ void loop() {
   Serial.print("Distance: ");
   Serial.println(distance);
 
-  if (distance > 50) {
-    Serial.println("ALERT"); // C’est cette info que tu peux capter sur ton app
+  if (distance > 50 and closetclosed) {
+    Serial.println("ALERT");
     BTSerial.println("ALERT");
+    delay(500);
+    Serial.println("ALERT");
+    BTSerial.println("ALERT");
+    delay(500);
+    Serial.println("ALERT");
+    BTSerial.println("ALERT");
+    closetclosed = false;
+  }else if (distance<=50){
+    closetclosed = true;
   }
   
 
