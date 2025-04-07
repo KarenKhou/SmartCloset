@@ -4,22 +4,28 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.Text
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.composable
 import com.example.tesy2.ui.theme.Tesy2Theme
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import androidx.navigation.compose.rememberNavController
+import com.example.tesy2.data.supabase.supabase
 import com.example.tesy2.ui.navigation.AppNavHost
 import com.example.tesy2.ui.screens.AddClothingScreen
 import com.example.tesy2.ui.screens.AlertScreen
 import com.example.tesy2.ui.screens.CameraINOUTScreenPreview
 import com.example.tesy2.ui.screens.CameraScreen
 import com.example.tesy2.ui.screens.ClothingScreen
+import com.example.tesy2.ui.screens.RecentUsageScreen
+import com.example.tesy2.ui.screens.RecentUsageScreenWrapper
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SuggScreen
+import com.example.tesy2.viewmodel.AuthViewModel
+
 import io.github.jan.supabase.auth.Auth
-
-
+import io.github.jan.supabase.auth.auth
 
 
 val supabase = createSupabaseClient(
@@ -38,8 +44,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Tesy2Theme {
-               val navController = rememberNavController()
-                AppNavHost(navController = navController)
+               //val navController = rememberNavController()
+                        //AppNavHost(navController = navController)
                 //ClothingScreen(navController = navController)
                 //AddClothingScreen()
                 //SuggScreen(navController = navController)
@@ -62,7 +68,18 @@ class MainActivity : ComponentActivity() {
 //                    }
 //
 //            }
-      }
+
+                setContent {
+                    val userId = "0b8d159e-d3f2-48c3-a35e-6e5d3e182f95"
+
+
+                    RecentUsageScreenWrapper(userId = userId)
+
+                }
+
+
+
+            }
     }
 
 }}

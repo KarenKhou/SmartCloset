@@ -2,6 +2,7 @@ package com.example.tesy2.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.tesy2.data.repository.BluetoothRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 //class AlertViewModel : ViewModel() {
@@ -35,6 +36,7 @@ class AlertViewModel : ViewModel() {
     fun connectBluetooth() {
         repository.connectToHC05()
     }
+
 
 
     override fun onCleared() {

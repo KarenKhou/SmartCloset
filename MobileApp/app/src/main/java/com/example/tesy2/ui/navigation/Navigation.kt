@@ -192,7 +192,7 @@ fun MainScreenWithBottomNav(navController: NavController) {
                 startDestination = Screen.MyCloset.route
             ) {
                 composable(Screen.MyCloset.route) {
-                    ClothingScreen(navController = bottomNavController)
+                    ClothingScreen(navController = navController)
                 }
                 composable(Screen.PastOutfits.route) {
 
