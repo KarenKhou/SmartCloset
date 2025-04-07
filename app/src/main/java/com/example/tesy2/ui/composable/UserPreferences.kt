@@ -16,6 +16,10 @@ object UserPreferences {
     private fun getPrefs(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
+    fun clear(context: Context) {
+        val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        prefs.edit().clear().apply()
+    }
 
     fun saveUserInfo(
         context: Context,

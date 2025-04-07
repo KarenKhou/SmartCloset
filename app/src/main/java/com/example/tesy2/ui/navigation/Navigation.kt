@@ -41,13 +41,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tesy2.ui.screens.AddClosetScreen
+//import com.example.tesy2.ui.screens.AddClosetScreen
+import com.example.tesy2.ui.screens.ProfileScreen
 import com.example.tesy2.ui.screens.AlertScreen
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.RequestBluetoothPermissions
 import android.content.res.Resources
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material3.MaterialTheme
+import androidx.navigation.NavHostController
 
 sealed class Screen(val route: String, val icon: Any,val title:String) {
     object MyCloset : Screen("my_closet", Icons.Filled.Home,"My Closet")
@@ -169,8 +171,8 @@ fun isTablet(): Boolean {
 }
 
 @Composable
-fun MainScreenWithBottomNav(navController: NavController) {
-    val bottomNavController = rememberNavController()
+fun MainScreenWithBottomNav(rootNavController: NavHostController) {
+    val navController = rememberNavController()
     //val bottomNavController = navController
     val viewModel: com.example.tesy2.viewmodel.MainViewModel = viewModel()
     val alertText by viewModel.alertText.collectAsState()
@@ -186,7 +188,7 @@ fun MainScreenWithBottomNav(navController: NavController) {
     // Écoute de l'alerte
     LaunchedEffect(alertText) {
         if (alertText == "ALERT") {
-            bottomNavController.navigate("removeOutfit")
+            navController.navigate("removeOutfit")
             viewModel.clearAlert()
         }
     }
@@ -194,16 +196,16 @@ fun MainScreenWithBottomNav(navController: NavController) {
 
     Scaffold(
         bottomBar = {
-            BottomBar(bottomNavController)
+            BottomBar(navController)
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             NavHost(
-                navController = bottomNavController,
+                navController,
                 startDestination = Screen.MyCloset.route
             ) {
                 composable(Screen.MyCloset.route) {
-                    ClothingScreen(navController = bottomNavController)
+                    ClothingScreen(navController = navController)
                 }
                 composable(Screen.DataAnalysis.route) {
 
@@ -215,17 +217,18 @@ fun MainScreenWithBottomNav(navController: NavController) {
                     SuggScreen()
                 }
                 composable(Screen.Profile.route) {
-                    AddClosetScreen(navController = bottomNavController)
+//                    AddClosetScreen(navController = navController)
+                    ProfileScreen(navController = rootNavController)
                 }
 //                composable("alert") {
 //                    RemoveOutfitScreen()
 //                }
                 composable("alert") {
-                    AlertScreen(bottomNavController)
+                    AlertScreen(navController)
                 }
 
                 composable("removeOutfit") {
-                    RemoveOutfitScreen(navController = bottomNavController)
+                    RemoveOutfitScreen(navController = navController)
                 }
 
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tesy2.data.models.AppUser
 import com.example.tesy2.data.repository.AuthRepository
+import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -89,8 +90,13 @@ class AuthViewModel : ViewModel() {
     fun signIn() {
         println("📤 Appel de signIn() dans ViewModel")
         viewModelScope.launch {
+            com.example.tesy2.data.supabase.supabase.auth.signOut()
             val success = repository.signIn(email.value, password.value)
             println("✅ Résultat connexion: $success")
+            if (success) {
+                val user = com.example.tesy2.data.supabase.supabase.auth.currentUserOrNull()
+                println("🧑 Signed in as: ${user?.email} (id: ${user?.id})")
+            }
             _signInSuccess.value = success
         }
     }

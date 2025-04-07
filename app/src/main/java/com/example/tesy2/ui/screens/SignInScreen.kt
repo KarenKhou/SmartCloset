@@ -26,6 +26,11 @@ import com.example.tesy2.ui.theme.AppThemeColor
 import com.example.tesy2.ui.theme.LocalAppTheme
 import com.example.tesy2.viewmodel.AuthViewModel
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.result.PostgrestResult
+
+
+
 
 // Define brown theme colors to match the image
 
@@ -56,6 +61,8 @@ fun SignInScreen(
         if (signInSuccess != null) {
             if (signInSuccess == true) {
                 Toast.makeText(context, "✅ Connexion réussie", Toast.LENGTH_LONG).show()
+
+
 //                val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
 //                val savedTheme = prefs.getString("userTheme", "pink") ?: "pink"
 //                themeState.value = AppThemeColor.fromName(savedTheme)
