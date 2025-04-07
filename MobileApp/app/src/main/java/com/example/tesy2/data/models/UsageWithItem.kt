@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class UsageWithItem(
     val item_id: Int,
     val worn_date: String, // tu peux parser en LocalDate si tu préfères
-    //val clothingitem: ClothingItem
+    val clothingitem: ClothingItem
 )

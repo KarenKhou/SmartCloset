@@ -12,3 +12,8 @@ data class ClothingItemPreview(
     val name: String,
     val image_url: String? = null
 )
+@Serializable
+data class UsagePreview(
+    val worn_date: String, // Or use LocalDate if you're parsing dates
+    val clothingitem: ClothingItemPreview?
+)
