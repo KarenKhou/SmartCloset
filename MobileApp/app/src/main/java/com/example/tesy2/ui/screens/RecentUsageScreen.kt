@@ -77,6 +77,7 @@ fun RecentUsageScreen(recentItems: List<UsagePreview>) {
             }
 
         }
+
     }
 }
 @Composable

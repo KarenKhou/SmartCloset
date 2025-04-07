@@ -23,6 +23,10 @@ import com.example.tesy2.ui.screens.RecentUsageScreen
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SuggScreen
 
+
+import com.example.tesy2.ui.screens.WornCalendarScreen
+
+
 import com.example.tesy2.ui.screens.WornCalendarScreen
 
 import com.example.tesy2.viewmodel.AuthViewModel
@@ -47,6 +51,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Tesy2Theme {
+
 
                val navController = rememberNavController()
                         AppNavHost(navController = navController)
@@ -86,6 +91,7 @@ class MainActivity : ComponentActivity() {
 //
 //                }
                 //WornCalendarScreen()
+
 
 //                setContent {
 //                    val userId = "0b8d159e-d3f2-48c3-a35e-6e5d3e182f95"
