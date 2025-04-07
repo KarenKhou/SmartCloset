@@ -22,6 +22,7 @@ import com.example.tesy2.ui.screens.RecentUsageScreen
 import com.example.tesy2.ui.screens.RecentUsageScreenWrapper
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SuggScreen
+import com.example.tesy2.ui.screens.WornCalendarScreen
 import com.example.tesy2.viewmodel.AuthViewModel
 
 import io.github.jan.supabase.auth.Auth
@@ -44,8 +45,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Tesy2Theme {
-               //val navController = rememberNavController()
-                        //AppNavHost(navController = navController)
+               val navController = rememberNavController()
+                        AppNavHost(navController = navController)
                 //ClothingScreen(navController = navController)
                 //AddClothingScreen()
                 //SuggScreen(navController = navController)
@@ -69,14 +70,14 @@ class MainActivity : ComponentActivity() {
 //
 //            }
 
-                setContent {
-                    val userId = "0b8d159e-d3f2-48c3-a35e-6e5d3e182f95"
-
-
-                    RecentUsageScreenWrapper(userId = userId)
-
-                }
-
+//                setContent {
+//                    val userId = "0b8d159e-d3f2-48c3-a35e-6e5d3e182f95"
+//
+//
+//                    RecentUsageScreenWrapper(userId = userId)
+//
+//                }
+                //WornCalendarScreen()
 
 
             }

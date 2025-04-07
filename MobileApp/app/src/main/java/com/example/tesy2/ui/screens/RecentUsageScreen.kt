@@ -32,6 +32,7 @@ import coil.compose.AsyncImage
 import com.example.tesy2.data.supabase.supabase
 import com.example.tesy2.viewmodel.getRecentUsage
 import com.example.tesy2.data.models.ClothingItemPreview
+import io.github.jan.supabase.auth.auth
 
 
 @Composable
@@ -74,18 +75,20 @@ fun RecentUsageScreen(recentItems: List<UsagePreview>) {
                 }
             }
         }
+
     }
 }
 }
 @Composable
-fun RecentUsageScreenWrapper(userId: String) {
+fun RecentUsageScreenWrapper() {
     var recentItems by remember { mutableStateOf<List<UsagePreview>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    val userId = supabase.auth.currentUserOrNull()?.id
 
     LaunchedEffect(userId) {
         try {
-            recentItems = getRecentUsage(userId)
+            recentItems = getRecentUsage(userId!!)
         } catch (e: Exception) {
             errorMessage = "Erreur Supabase : ${e.message}"
         } finally {

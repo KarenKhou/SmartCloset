@@ -11,7 +11,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.tesy2"
-        minSdk = 24
+        //minSdk = 24
+        minSdk=26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -96,6 +97,9 @@ dependencies {
 
     // Foundation (for LazyVerticalGrid)
     implementation("androidx.compose.foundation:foundation:1.6.0")
+
+    implementation ("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
+
 
 
 
