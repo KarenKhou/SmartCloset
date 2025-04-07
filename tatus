@@ -1,0 +1,268 @@
+[33mcommit 83eb21551ccfe85b1000790844706d4b1f3486eb[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: marilyn <marilyn.aboutayeh@net.usj.edu.lb>
+Date:   Mon Apr 7 02:26:25 2025 +0300
+
+    dropdown/color fixing on signup, needs to be fixed on sign in/navigation fixing for data analysis
+
+[33mcommit 042913711e85ce168eabea02299425f12b895b02[m
+Author: marilyn <marilyn.aboutayeh@net.usj.edu.lb>
+Date:   Mon Apr 7 00:14:09 2025 +0300
+
+    theme color change on sign-up/ responsive navbar
+
+[33mcommit eaf3d42707c4600692ea6796a2549df87e773a5a[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Sun Apr 6 21:32:04 2025 +0300
+
+    toggle availability Notif confirmation
+
+[33mcommit cd5102b9387449e3c9fdc52ba586ae94d3523fe2[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Sun Apr 6 20:12:38 2025 +0300
+
+    modif code Arduino
+
+[33mcommit 94a643b2ce3be75aa86b281ff399eb83eaf83627[m
+Merge: e5aae4a 1306148
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Sun Apr 6 19:39:22 2025 +0300
+
+    Merge remote-tracking branch 'origin/main'
+
+[33mcommit e5aae4ac77a16f7d22bf4dfeed72eea2c9be9021[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Sun Apr 6 19:39:08 2025 +0300
+
+    arduino modif
+
+[33mcommit 13061488c7ef9c0320ce4bc34b7d20c29a1ffcee[m
+Author: Fatima AlRabih <124434211+fatima275@users.noreply.github.com>
+Date:   Sun Apr 6 10:21:34 2025 +0300
+
+    Add files via upload
+
+[33mcommit d21be5e53a5461f2c14bb5a9cb7454cce8ef45cb[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Sat Apr 5 20:28:44 2025 +0300
+
+    new closet management
+
+[33mcommit 782b1e3ddd31349fa3530977feec59b8f12efb94[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Sat Apr 5 19:02:18 2025 +0300
+
+    query modif part 2
+
+[33mcommit a670c5c2304dbb0a815f5161d7a231060feb1ed2[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Sat Apr 5 18:32:49 2025 +0300
+
+    query modif part 1
+
+[33mcommit 658fb60e11d003109d4838814330011e1db513a8[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Sat Apr 5 12:27:57 2025 +0300
+
+    delete clothing items on supabase
+
+[33mcommit 08ab4aac698fd6bd1b66f7b5689b9777a4c74247[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Sat Apr 5 12:18:34 2025 +0300
+
+    editing clothing items on supabase
+
+[33mcommit 7f90d9d3a765e7719bd0dbe59ed3674b27b63e7b[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Sat Apr 5 11:49:50 2025 +0300
+
+    editing clothing items on supabase
+
+[33mcommit d7993d92ecf49309497ea101ef3e35a35a3e44c0[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Sat Apr 5 09:52:22 2025 +0300
+
+    Color api
+
+[33mcommit e0e9d8b606af262385b4b5d08329ad38e3738fd1[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Fri Apr 4 21:34:06 2025 +0300
+
+    ddetecting bt arduino in the bg
+
+[33mcommit 4e77277f077e3c3fcba7dc935f51dfdd7b22c12b[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Fri Apr 4 20:52:06 2025 +0300
+
+    update clothing availability
+
+[33mcommit a531d9cde247495bb0437cb13211c8968b84ad73[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Fri Apr 4 19:21:29 2025 +0300
+
+    ultrasonic alerts via bt
+
+[33mcommit f9b639f97d5092c55334d9117db19c826c6bbc43[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Fri Apr 4 19:10:30 2025 +0300
+
+    mv arduino init
+
+[33mcommit 250602b1ec9e6e4b7613e86d21e115b704faa24b[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Fri Apr 4 18:55:46 2025 +0300
+
+    arduino bt init
+
+[33mcommit 47289543a01cd86337591ab10fb5d007e12ef8d3[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Fri Apr 4 18:53:27 2025 +0300
+
+    logo
+
+[33mcommit 21346b131951ce534a3c9d14a689c6eefe199b6e[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Fri Apr 4 18:52:52 2025 +0300
+
+    logo
+
+[33mcommit 78732f2d4d7f2304a60049dc02fca45cc3389ae4[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Fri Apr 4 08:27:26 2025 +0300
+
+    updating api
+
+[33mcommit af16c9f7b4ab968decd364d79e5c7b28ff9c6a36[m
+Author: marilyn <marilyn.aboutayeh@net.usj.edu.lb>
+Date:   Tue Apr 1 19:58:08 2025 +0300
+
+    mycloset/add a photo/search filtering through category,color or material
+
+[33mcommit 0d2b8ddf9ef7bef0a5fac1b4cb148747b9230330[m
+Merge: 3201f40 5f99ce6
+Author: marilyn <marilyn.aboutayeh@net.usj.edu.lb>
+Date:   Mon Mar 31 22:13:26 2025 +0300
+
+    frontend changes1
+
+[33mcommit 3201f4081dab2999c5e956b74d672b34add25320[m
+Author: marilyn <marilyn.aboutayeh@net.usj.edu.lb>
+Date:   Mon Mar 31 22:00:37 2025 +0300
+
+    front-end changes1
+
+[33mcommit 5f99ce621025f770b33c859e35dbad6063167dad[m
+Merge: 1e003fa 917059e
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 21:45:51 2025 +0300
+
+    Merge remote-tracking branch 'origin/main'
+    
+    # Conflicts:
+    #       MobileApp/app/src/main/java/com/example/tesy2/viewmodel/ClothingViewModel.kt
+
+[33mcommit 1e003fa7743198e967635b607138ed638becd6fb[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 19:36:50 2025 +0300
+
+    update clothing availability
+
+[33mcommit 13123ddea96ffbb471a6b075eb3a20d241f8df0d[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 14:27:54 2025 +0300
+
+    update clothing availability
+
+[33mcommit 917059e6ee51863557058bb045590935ec054819[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 13:53:38 2025 +0300
+
+    image similarity api
+
+[33mcommit 9773bbc05eaed4e5d89daa35a75747cd8e8e63ab[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 13:53:38 2025 +0300
+
+    image similarity api
+
+[33mcommit d2063c5d63d50db7135a9abd51cd93f6c2935d28[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 13:53:14 2025 +0300
+
+    api image similarity ktor
+
+[33mcommit e8eecbcd704994298ce7adf47c98031e40d143ed[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 13:53:14 2025 +0300
+
+    api image similarity ktor
+
+[33mcommit cf030873ed3022914d43aaf67e03a02f325eeb06[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 12:18:29 2025 +0300
+
+    .
+
+[33mcommit d588f0a80155512cfa12cefe8be1d95513c7fdf5[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 12:18:29 2025 +0300
+
+    .
+
+[33mcommit f82bbae73b3f4e1b5a9bf3339a49eb1110d5812a[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 12:14:32 2025 +0300
+
+    supabase + imageSimilarity
+
+[33mcommit 02a7f4bac8f2b9af783232eb7fb7392e1569f002[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 12:14:32 2025 +0300
+
+    supabase + imageSimilarity
+
+[33mcommit d06a1fb4e17d327815c5e7ef2c749b6c30134e3f[m
+Merge: d40dd01 d1fed93
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 11:03:31 2025 +0300
+
+    Merge remote-tracking branch 'origin/main'
+
+[33mcommit c6705555f3430c170c67ea77db3ab1a07d779e7e[m
+Merge: d99afa9 481451c
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 11:03:31 2025 +0300
+
+    Merge remote-tracking branch 'origin/main'
+
+[33mcommit d40dd0168978a8f28a29f3e9fe2b97189e811564[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 10:52:00 2025 +0300
+
+    alert simulation
+
+[33mcommit d99afa9a225e97024aa029ab5c18ed5ca8284fb0[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 10:52:00 2025 +0300
+
+    alert simulation
+
+[33mcommit 1c82d4678cf862a42a797539c4b21386b22ff0fd[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 09:53:35 2025 +0300
+
+    test - twosecpic
+
+[33mcommit 6c90a22aad99f842cc1a79b59cac2f692da6969e[m
+Author: Karen Khoury <karen.khoury1@net.usj.edu.lb>
+Date:   Mon Mar 31 09:53:35 2025 +0300
+
+    test - twosecpic
+
+[33mcommit d1fed939cc61d06258d0bc41d345a82902c2e811[m
+Author: Fatima AlRabih <124434211+fatima275@users.noreply.github.com>
+Date:   Sat Mar 29 21:00:25 2025 +0200
+
+    Delete MachineLearning/imageSimilarity/readme.md
+
+[33mcommit 481451ce1ce26923f53505886e3e0a4966204ca5[m
+Author: Fatima AlRabih <124434211+fatima275@us

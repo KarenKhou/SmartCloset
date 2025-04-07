@@ -47,6 +47,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tesy2.ui.screens.AddClosetScreen
 import com.example.tesy2.ui.screens.AlertScreen
 import com.example.tesy2.ui.screens.EditClothingScreen
+import com.example.tesy2.ui.screens.RecentUsageScreenWrapper
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.RequestBluetoothPermissions
 import com.example.tesy2.viewmodel.ClothingViewModel
@@ -192,10 +193,10 @@ fun MainScreenWithBottomNav(navController: NavController) {
                 startDestination = Screen.MyCloset.route
             ) {
                 composable(Screen.MyCloset.route) {
-                    ClothingScreen(navController = bottomNavController)
+                    ClothingScreen(navController = navController)
                 }
                 composable(Screen.PastOutfits.route) {
-
+                    RecentUsageScreenWrapper()
                 }
                 composable(Screen.AddItem.route) {
                     AddClothingScreen()

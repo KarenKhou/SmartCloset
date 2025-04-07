@@ -153,7 +153,7 @@ class ClothingViewModel : ViewModel() {
                 val request = CompareRequest(image_url = imageUrl)
                 //ktor tunnel
                 println("hi1")
-                val response: CompareResponse = client.post("https://6e57-94-187-2-31.ngrok-free.app/compare") {
+                val response: CompareResponse = client.post("https://5562-94-187-3-150.ngrok-free.app/compare") {
                     contentType(ContentType.Application.Json)
                     setBody(request)
                 }.body()
