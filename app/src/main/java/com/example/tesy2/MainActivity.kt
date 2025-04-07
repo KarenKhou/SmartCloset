@@ -5,6 +5,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.compose.composable
@@ -12,6 +15,7 @@ import com.example.tesy2.ui.theme.Tesy2Theme
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import androidx.navigation.compose.rememberNavController
+import com.example.tesy2.ui.composable.UserPreferences
 import com.example.tesy2.ui.navigation.AppNavHost
 import com.example.tesy2.ui.screens.AddClothingScreen
 import com.example.tesy2.ui.screens.AlertScreen
@@ -21,6 +25,7 @@ import com.example.tesy2.ui.screens.ClothingScreen
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SuggScreen
 import com.example.tesy2.ui.theme.AppThemeColor
+import com.example.tesy2.ui.theme.LocalAppTheme
 import com.example.tesy2.ui.theme.MyAppTheme
 import io.github.jan.supabase.auth.Auth
 
@@ -40,15 +45,21 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
-        val themeName = prefs.getString("userTheme", "pink") ?: "pink"
-        val selectedTheme = AppThemeColor.fromName(themeName)
+//        val themeName = intent.getStringExtra("userTheme")
+//            ?: getSharedPreferences("settings", MODE_PRIVATE).getString("userTheme", "pink")
+//            ?: "pink"
+//        val selectedTheme = AppThemeColor.fromName(themeName)
+        val savedThemeName = UserPreferences.getUserInfo(this)["theme"] ?: "pink"
+        val selectedTheme = AppThemeColor.fromName(savedThemeName)
         setContent {
+            val themeState = remember { mutableStateOf(selectedTheme) }
 //            Tesy2Theme {
-                MyAppTheme(selectedTheme = selectedTheme) { // 👈 use your dynamic theme here
+            CompositionLocalProvider(LocalAppTheme provides themeState) {
+                MyAppTheme(selectedTheme = selectedTheme) {
                     val navController = rememberNavController()
                     AppNavHost(navController = navController)
                 }
+            }
                 //ClothingScreen(navController = navController)
                 //AddClothingScreen()
                 //SuggScreen(navController = navController)

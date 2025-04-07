@@ -23,13 +23,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.tesy2.MainActivity
 import com.example.tesy2.data.supabase.supabase
+import com.example.tesy2.ui.composable.UserPreferences
 import com.example.tesy2.viewmodel.AuthViewModel
 import com.example.tesy2.ui.theme.pinkColor
 import com.example.tesy2.ui.theme.lightPink
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.delay
 import com.example.tesy2.ui.theme.AppThemeColor
-
+import io.github.jan.supabase.postgrest.from
 
 
 @Composable
@@ -174,7 +175,16 @@ fun SignUpScreen(
                         Toast.makeText(context, "❗Choisis une couleur avant de t'inscrire", Toast.LENGTH_SHORT).show()
                         return@Button
                     }
-
+                    UserPreferences.saveUserInfo(
+                        context = context,
+                        name = name,
+                        email = email,
+                        theme = selectedTheme!!.name,
+                        gender = gender,
+                        job = job,
+                        location = location,
+                        birthDate = birthDate
+                    )
                     val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
                     prefs.edit().putString("userTheme", selectedTheme!!.name).apply()
                     viewModel.signUp()

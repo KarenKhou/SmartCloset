@@ -32,6 +32,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.example.tesy2.data.models.Closet
@@ -42,6 +43,7 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.runBlocking
+import com.example.tesy2.ui.composable.UserPreferences
 
 
 @Composable
@@ -50,6 +52,8 @@ fun ClothingScreen(
     viewModel: ClothingViewModel = viewModel() ,
     navController: NavController
 ) {
+    val context = LocalContext.current
+    val userName = UserPreferences.getUserInfo(context)["name"] ?: "👤"
 
     val clothingList = viewModel.clothingItems.collectAsState().value
     var searchQuery by remember { mutableStateOf("") }
@@ -78,6 +82,14 @@ fun ClothingScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        Text(
+            text = "Hi $userName 👋",
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            ),
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
         TextField(
             value = searchQuery,
             onValueChange = { query -> searchQuery = query },

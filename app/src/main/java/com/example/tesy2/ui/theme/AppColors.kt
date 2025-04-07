@@ -1,6 +1,12 @@
 package com.example.tesy2.ui.theme
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+val LocalAppTheme = staticCompositionLocalOf<MutableState<AppThemeColor>> {
+    error("No theme provided")
+}
 
 sealed class AppThemeColor(
     val name: String,
