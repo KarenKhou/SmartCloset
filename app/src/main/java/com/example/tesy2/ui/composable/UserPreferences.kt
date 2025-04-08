@@ -43,7 +43,7 @@ object UserPreferences {
         }
     }
 
-    fun getUserInfo(context: Context): Map<String, String> {
+     fun getUserInfo(context: Context): Map<String, String> {
         val prefs = getPrefs(context)
         return mapOf(
             "name" to (prefs.getString(KEY_NAME, "") ?: ""),

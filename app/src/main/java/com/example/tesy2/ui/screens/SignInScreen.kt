@@ -30,10 +30,6 @@ import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.result.PostgrestResult
 
 
-
-
-// Define brown theme colors to match the image
-
 val surfaceColor = Color.White
 
 @Composable
@@ -42,7 +38,7 @@ fun SignInScreen(
     navController: NavController,
     viewModel: AuthViewModel = viewModel()
 ) {
-    // Keep your existing functionality
+
     LaunchedEffect(Unit) {
         try {
             supabase.auth.signOut()
@@ -81,19 +77,16 @@ fun SignInScreen(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        // Brown background for the entire screen
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary)
         )
 
-        // Content column
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top
         ) {
-            // Header in brown area
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -145,7 +138,6 @@ fun SignInScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // Email field
                     OutlinedTextField(
                         value = email,
                         onValueChange = viewModel::onEmailChange,
@@ -170,7 +162,7 @@ fun SignInScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Password field
+
                     OutlinedTextField(
                         value = password,
                         onValueChange = viewModel::onPasswordChange,
@@ -196,7 +188,6 @@ fun SignInScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Login button
                     Button(
                         onClick = { viewModel.signIn() },
                         modifier = Modifier
@@ -210,7 +201,6 @@ fun SignInScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Sign up text
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center,
