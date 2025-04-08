@@ -10,12 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35b713ea-50e5-42b9-9b06-f124e13aebab" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MobileApp/all_my_changes.patch" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/all_my_changes.patch" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MobileApp/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/MainActivity.kt" afterDir="false" />
