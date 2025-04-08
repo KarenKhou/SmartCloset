@@ -20,16 +20,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.NavigationBar
 import androidx.compose.ui.Alignment
-import com.example.tesy2.ui.theme.pinkColor
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.Scaffold
 import androidx.compose.foundation.layout.padding
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tesy2.ui.screens.AddClothingScreen
@@ -44,21 +41,26 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tesy2.ui.screens.AddClosetScreen
+//import com.example.tesy2.ui.screens.AddClosetScreen
+import com.example.tesy2.ui.screens.ProfileScreen
 import com.example.tesy2.ui.screens.AlertScreen
+
 import com.example.tesy2.ui.screens.EditClothingScreen
 import com.example.tesy2.ui.screens.RecentUsageScreenWrapper
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.RequestBluetoothPermissions
-import com.example.tesy2.viewmodel.ClothingViewModel
-import com.example.tesy2.viewmodel.MainViewModel
+import android.content.res.Resources
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material3.MaterialTheme
+import androidx.navigation.NavHostController
 
-
-sealed class Screen(val route: String, val icon: Any, val title: String) {
-    object MyCloset : Screen("my_closet", Icons.Filled.Home, "My Closet")
+sealed class Screen(val route: String, val icon: Any,val title:String) {
+    object MyCloset : Screen("my_closet", Icons.Filled.Home,"My Closet")
     object PastOutfits : Screen("past_outfits", Icons.Filled.AccessTime, "Past Outfits")
-    object AddItem : Screen("add_item", Icons.Filled.Add, "Add Item")
-    object Suggestion : Screen("suggestion", R.drawable.wand_magic_sparkles_solid, "Suggestion")
+    object DataAnalysis: Screen("data_analysis", Icons.Filled.BarChart, "Data Analysis")
+    object AddItem : Screen("add_item", Icons.Filled.Add,  "Add Item")
+    object Suggestion : Screen("suggestion", R.drawable.wand_magic_sparkles_solid, "Suggestions")
     object Profile : Screen("profile", Icons.Filled.Person, "Profile")
 }
 
@@ -67,11 +69,18 @@ sealed class Screen(val route: String, val icon: Any, val title: String) {
 fun BottomBar(navController: NavController) {
     val items = listOf(
         Screen.MyCloset,
-        Screen.PastOutfits,
+//      Screen.PastOutfits,
+        Screen.DataAnalysis,
         Screen.AddItem,
         Screen.Suggestion,
         Screen.Profile
     )
+
+    val navBarHeight = if (isTablet()) 80.dp else 56.dp
+    val iconSize = if (isTablet()) 32.dp else 24.dp
+    val fabSize = if (isTablet()) 72.dp else 60.dp
+    val fabIconSize = if (isTablet()) 36.dp else 24.dp
+    val fabOffset = if (isTablet()) (-24).dp else (-20).dp
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -80,7 +89,7 @@ fun BottomBar(navController: NavController) {
         NavigationBar(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
+                .height(navBarHeight),
             containerColor = Color.White,
             tonalElevation = 8.dp
         ) {
@@ -95,16 +104,18 @@ fun BottomBar(navController: NavController) {
                                     Icon(
                                         imageVector = screen.icon,
                                         contentDescription = screen.title,
-                                        tint = if (selected) pinkColor else Color.Gray
+                                        tint = if (selected) MaterialTheme.colorScheme.primary
+                                        else Color.Gray,
+                                        modifier = Modifier.size(iconSize)
                                     )
                                 }
                                 is Int -> {
-                                    val painter = painterResource(id = screen.icon as Int)
                                     Image(
-                                        painter = painter,
+                                        painter = painterResource(id = screen.icon as Int),
                                         contentDescription = screen.title,
-                                        modifier = Modifier.size(24.dp),
-                                        colorFilter = if (selected) ColorFilter.tint(pinkColor) else ColorFilter.tint(Color.Gray)
+                                        modifier = Modifier.size(iconSize),
+                                        colorFilter = if (selected) ColorFilter.tint(MaterialTheme.colorScheme.primary
+                                        ) else ColorFilter.tint(Color.Gray)
                                     )
                                 }
                             }
@@ -130,7 +141,6 @@ fun BottomBar(navController: NavController) {
             }
         }
 
-        // Floating Action Button
         FloatingActionButton(
             onClick = {
                 navController.navigate(Screen.AddItem.route) {
@@ -142,25 +152,31 @@ fun BottomBar(navController: NavController) {
                 }
             },
             shape = CircleShape,
-            containerColor = pinkColor,
+            containerColor = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .offset(y = (-20).dp)
-                .size(60.dp)
+                .offset(y = fabOffset)  // Responsive offset
+                .size(fabSize)  // Responsive FAB size
         ) {
             Icon(
                 imageVector = Icons.Filled.Add,
                 contentDescription = "Add Item",
-                tint = Color.White
+                tint = Color.White,
+                modifier = Modifier.size(fabIconSize)  // Responsive FAB icon size
             )
         }
     }
 }
 
 
+fun isTablet(): Boolean {
+    val config = Resources.getSystem().configuration
+    return config.smallestScreenWidthDp >= 600
+}
+
 @Composable
-fun MainScreenWithBottomNav(navController: NavController) {
-    val bottomNavController = rememberNavController()
+fun MainScreenWithBottomNav(rootNavController: NavHostController) {
+    val navController = rememberNavController()
     //val bottomNavController = navController
     val viewModel: com.example.tesy2.viewmodel.MainViewModel = viewModel()
     val alertText by viewModel.alertText.collectAsState()
@@ -176,7 +192,7 @@ fun MainScreenWithBottomNav(navController: NavController) {
     // Écoute de l'alerte
     LaunchedEffect(alertText) {
         if (alertText == "ALERT") {
-            bottomNavController.navigate("removeOutfit")
+            navController.navigate("removeOutfit")
             viewModel.clearAlert()
         }
     }
@@ -184,19 +200,24 @@ fun MainScreenWithBottomNav(navController: NavController) {
 
     Scaffold(
         bottomBar = {
-            BottomBar(bottomNavController)
+            BottomBar(navController)
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             NavHost(
-                navController = bottomNavController,
+                navController,
                 startDestination = Screen.MyCloset.route
             ) {
                 composable(Screen.MyCloset.route) {
                     ClothingScreen(navController = navController)
                 }
+
                 composable(Screen.PastOutfits.route) {
                     RecentUsageScreenWrapper()
+
+//                composable(Screen.DataAnalysis.route) {
+//
+//
                 }
                 composable(Screen.AddItem.route) {
                     AddClothingScreen()
@@ -205,17 +226,18 @@ fun MainScreenWithBottomNav(navController: NavController) {
                     SuggScreen()
                 }
                 composable(Screen.Profile.route) {
-                    AddClosetScreen(navController = bottomNavController)
+//                    AddClosetScreen(navController = navController)
+                    ProfileScreen(navController = rootNavController)
                 }
 //                composable("alert") {
 //                    RemoveOutfitScreen()
 //                }
                 composable("alert") {
-                    AlertScreen(bottomNavController)
+                    AlertScreen(navController)
                 }
 
                 composable("removeOutfit") {
-                    RemoveOutfitScreen(navController = bottomNavController)
+                    RemoveOutfitScreen(navController = navController)
                 }
 
 

@@ -1,17 +1,24 @@
 package com.example.tesy2
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Text
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.compose.composable
 import com.example.tesy2.ui.theme.Tesy2Theme
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import androidx.navigation.compose.rememberNavController
 import com.example.tesy2.data.supabase.supabase
+import com.example.tesy2.ui.composable.UserPreferences
 import com.example.tesy2.ui.navigation.AppNavHost
 import com.example.tesy2.ui.screens.AddClothingScreen
 import com.example.tesy2.ui.screens.AlertScreen
@@ -24,12 +31,18 @@ import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SuggScreen
 
 
+
 import com.example.tesy2.ui.screens.WornCalendarScreen
 
 
 import com.example.tesy2.ui.screens.WornCalendarScreen
 
 import com.example.tesy2.viewmodel.AuthViewModel
+
+
+import com.example.tesy2.ui.theme.AppThemeColor
+import com.example.tesy2.ui.theme.LocalAppTheme
+import com.example.tesy2.ui.theme.MyAppTheme
 
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.auth
@@ -48,16 +61,31 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
+//        val themeName = intent.getStringExtra("userTheme")
+//            ?: getSharedPreferences("settings", MODE_PRIVATE).getString("userTheme", "pink")
+//            ?: "pink"
+//        val selectedTheme = AppThemeColor.fromName(themeName)
+        val savedThemeName = UserPreferences.getUserInfo(this)["theme"] ?: "pink"
+        val selectedTheme = AppThemeColor.fromName(savedThemeName)
         setContent {
-            Tesy2Theme {
 
+//            Tesy2Theme {
+//
+//
+//               val navController = rememberNavController()
+//                        AppNavHost(navController = navController)
+//
+//               //val navController = rememberNavController()
+//                        //AppNavHost(navController = navController)
 
-               val navController = rememberNavController()
-                        AppNavHost(navController = navController)
-
-               //val navController = rememberNavController()
-                        //AppNavHost(navController = navController)
+            val themeState = remember { mutableStateOf(selectedTheme) }
+//            Tesy2Theme {
+            CompositionLocalProvider(LocalAppTheme provides themeState) {
+                MyAppTheme(selectedTheme = selectedTheme) {
+                    val navController = rememberNavController()
+                    AppNavHost(navController = navController)
+                }
+            }
 
                 //ClothingScreen(navController = navController)
                 //AddClothingScreen()
@@ -83,6 +111,7 @@ class MainActivity : ComponentActivity() {
 //            }
 
 
+
 //                setContent {
 //                    val userId = "0b8d159e-d3f2-48c3-a35e-6e5d3e182f95"
 //
@@ -105,7 +134,11 @@ class MainActivity : ComponentActivity() {
 
 
             }
+
+//      }
+
     }
 
-}}
+}
+//}
 

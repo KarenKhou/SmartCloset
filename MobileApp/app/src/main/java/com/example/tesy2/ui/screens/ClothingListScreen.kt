@@ -25,7 +25,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import com.example.tesy2.ui.composable.ClothingCard
 import com.example.tesy2.viewmodel.ClothingViewModel
-import com.example.tesy2.ui.theme.pinkColor
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -33,6 +32,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.example.tesy2.data.models.Closet
@@ -43,6 +43,7 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.runBlocking
+import com.example.tesy2.ui.composable.UserPreferences
 
 
 @Composable
@@ -51,6 +52,8 @@ fun ClothingScreen(
     viewModel: ClothingViewModel = viewModel() ,
     navController: NavController
 ) {
+    val context = LocalContext.current
+    val userName = UserPreferences.getUserInfo(context)["name"] ?: "👤"
 
     val clothingList = viewModel.clothingItems.collectAsState().value
     var searchQuery by remember { mutableStateOf("") }
@@ -79,6 +82,14 @@ fun ClothingScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        Text(
+            text = "Hi $userName 👋",
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            ),
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
         TextField(
             value = searchQuery,
             onValueChange = { query -> searchQuery = query },
@@ -100,7 +111,7 @@ fun ClothingScreen(
                 },
             shape = RoundedCornerShape(16.dp),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = pinkColor,
+                focusedContainerColor = MaterialTheme.colorScheme.primary,
                 unfocusedContainerColor = Color.White,
                 disabledContainerColor = Color.White,
                 cursorColor = Color.White,

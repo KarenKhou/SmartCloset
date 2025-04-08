@@ -33,8 +33,7 @@ fun ClothingCard(
             containerColor = containerPink
         )
     ) {
-        Column(
-            modifier = Modifier
+        Column(modifier = Modifier
                 .padding(12.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,

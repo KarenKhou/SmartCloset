@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tesy2.ui.screens.AlertScreen
 import com.example.tesy2.ui.screens.EditClothingScreen
+import com.example.tesy2.ui.screens.ProfileScreen
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SignInScreen
 import com.example.tesy2.ui.screens.SignUpScreen
@@ -26,8 +27,13 @@ fun AppNavHost(navController: NavHostController) {
             SignUpScreen(navController = navController)
         }
         composable("main") {
-            MainScreenWithBottomNav(navController)
+            MainScreenWithBottomNav(rootNavController =navController)
+//            MainScreenWithBottomNav()
         }
+        composable("profile") {
+            ProfileScreen(navController = navController)
+        }
+
 
 
 

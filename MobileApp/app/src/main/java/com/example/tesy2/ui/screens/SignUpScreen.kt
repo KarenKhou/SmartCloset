@@ -1,7 +1,12 @@
 package com.example.tesy2.ui.screens
 
+import android.content.Context
+import android.content.Intent
 import android.widget.Toast
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -9,18 +14,23 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.tesy2.MainActivity
 import com.example.tesy2.data.supabase.supabase
+import com.example.tesy2.ui.composable.UserPreferences
 import com.example.tesy2.viewmodel.AuthViewModel
 import com.example.tesy2.ui.theme.pinkColor
 import com.example.tesy2.ui.theme.lightPink
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.delay
+import com.example.tesy2.ui.theme.AppThemeColor
+import io.github.jan.supabase.postgrest.from
 
 
 @Composable
@@ -29,7 +39,16 @@ fun SignUpScreen(
     viewModel: AuthViewModel = viewModel(),
     navController: NavController
 ) {
+    val defaultWidth = 120.dp
+    val defaultHeight = 45.dp
+    val selectedWidth = 150.dp
+    val selectedHeight = 60.dp
+
+
     val context = LocalContext.current
+    var selectedTheme by remember { mutableStateOf<AppThemeColor?>(null) }
+
+
 
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
@@ -54,6 +73,10 @@ fun SignUpScreen(
             delay(200L)
             navController.navigate("sign_in")
             Toast.makeText(context, "✅ Inscription réussie !", Toast.LENGTH_LONG).show()
+
+            val intent = Intent(context, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            context.startActivity(intent)
         }
     }
 
@@ -88,13 +111,86 @@ fun SignUpScreen(
             OutlinedTextField(value = job, onValueChange = viewModel::onJobChange, label = { Text("Profession") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black, focusedBorderColor = pinkColor, cursorColor = pinkColor))
             OutlinedTextField(value = location, onValueChange = viewModel::onLocationChange, label = { Text("Lieu de résidence") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black, focusedBorderColor = pinkColor, cursorColor = pinkColor))
             OutlinedTextField(value = birthDate, onValueChange = viewModel::onBirthDateChange, label = { Text("Date de naissance (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(focusedTextColor = Color.Black, focusedBorderColor = pinkColor, cursorColor = pinkColor))
+            val defaultWidth = 120.dp
+            val defaultHeight = 45.dp
+            val selectedWidth = 150.dp
+            val selectedHeight = 60.dp
 
+            Text("Choisis ta couleur de thème :", color = MaterialTheme.colorScheme.primary)
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                listOf(AppThemeColor.Pink, AppThemeColor.Blue).forEach { theme ->
+                    val isSelected = theme == selectedTheme
+
+                    val animatedWidth by animateDpAsState(
+                        targetValue = if (isSelected) 150.dp else 120.dp,
+                        label = "buttonWidth"
+                    )
+
+                    val animatedHeight by animateDpAsState(
+                        targetValue = if (isSelected) 60.dp else 45.dp,
+                        label = "buttonHeight"
+                    )
+
+
+                    Button(
+                        onClick = { selectedTheme = theme },
+                        colors = ButtonDefaults.buttonColors(containerColor = theme.primary),
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .width(animatedWidth)
+                            .height(animatedHeight)
+                    ) {
+                        Text(
+                            text = if (theme.name == "pink") "Rose" else "Bleu",
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+
+
+
+
+//            Button(
+//                onClick = {
+//                    println("📤 Click du bouton")
+//                    val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+//                    prefs.edit().putString("userTheme", selectedTheme.name).apply()
+//                    viewModel.signUp()
+//                },
+//                modifier = Modifier.fillMaxWidth(),
+//                colors = ButtonDefaults.buttonColors(containerColor = pinkColor)
+//            ) {
+//                Text("S'inscrire", color = Color.White)
+//            }
             Button(
                 onClick = {
                     println("📤 Click du bouton")
+
+                    if (selectedTheme == null) {
+                        Toast.makeText(context, "❗Choisis une couleur avant de t'inscrire", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+                    UserPreferences.saveUserInfo(
+                        context = context,
+                        name = name,
+                        email = email,
+                        theme = selectedTheme!!.name,
+                        gender = gender,
+                        job = job,
+                        location = location,
+                        birthDate = birthDate
+                    )
+                    val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+                    prefs.edit().putString("userTheme", selectedTheme!!.name).apply()
                     viewModel.signUp()
                 },
                 modifier = Modifier.fillMaxWidth(),
+                enabled = selectedTheme != null, // 👈 optional
                 colors = ButtonDefaults.buttonColors(containerColor = pinkColor)
             ) {
                 Text("S'inscrire", color = Color.White)

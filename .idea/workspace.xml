@@ -10,14 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="35b713ea-50e5-42b9-9b06-f124e13aebab" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MobileApp/all_my_changes.patch" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/all_my_changes.patch" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MobileApp/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/navigation/AppNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/navigation/AppNavHost.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/screens/ClothingListScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/screens/ClothingListScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/screens/SignInScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/screens/SignInScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/screens/SignUpScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/screens/SignUpScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/screens/SuggestionListScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/screens/SuggestionListScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/theme/Color.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/theme/Color.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/data/models/ClothingItemPreview.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/data/models/ClothingItemPreview.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/navigation/Navigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/navigation/Navigation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/screens/RemoveOutfitScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/ui/screens/RemoveOutfitScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/viewmodel/AlertViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/viewmodel/AlertViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/viewmodel/ClothingViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/MobileApp/app/src/main/java/com/example/tesy2/viewmodel/ClothingViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +58,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/MobileApp" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
