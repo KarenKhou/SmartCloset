@@ -45,8 +45,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tesy2.ui.screens.ProfileScreen
 import com.example.tesy2.ui.screens.AlertScreen
 
+import com.example.tesy2.ui.screens.ClosetAnalyticsScreen
+
 import com.example.tesy2.ui.screens.EditClothingScreen
-import com.example.tesy2.ui.screens.RecentUsageScreenWrapper
+//import com.example.tesy2.ui.screens.RecentUsageScreenWrapper
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.RequestBluetoothPermissions
 import android.content.res.Resources
@@ -213,11 +215,9 @@ fun MainScreenWithBottomNav(rootNavController: NavHostController) {
                 }
 
                 composable(Screen.PastOutfits.route) {
-                    RecentUsageScreenWrapper()
 
-//                composable(Screen.DataAnalysis.route) {
-//
-//
+                    ClosetAnalyticsScreen()
+
                 }
                 composable(Screen.AddItem.route) {
                     AddClothingScreen()

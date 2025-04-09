@@ -69,7 +69,7 @@ dependencies {
 
     implementation(platform("io.github.jan-tennert.supabase:bom:3.1.3"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
-    implementation("io.ktor:ktor-client-android:3.1.1")
+    implementation("io.ktor:ktor-client-android:3.1.1") //karen
     implementation("io.github.jan-tennert.supabase:auth-kt")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.navigation:navigation-compose:2.7.7")
@@ -99,6 +99,15 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.6.0")
 
     implementation ("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
+
+    //implementation("io.ktor:ktor-client-okhttp:2.3.9")
+    //implementation("io.ktor:ktor-serialization-gson:2.3.9") // adapte la version à ton projet
+//    implementation("io.ktor:ktor-client-core:3.1.1")
+//    implementation("io.ktor:ktor-client-okhttp:3.1.1")
+//    implementation("io.ktor:ktor-client-content-negotiation:3.1.1")
+//    implementation("io.ktor:ktor-serialization-gson:3.1.1")
+//    implementation("io.ktor:ktor-client-plugins:3.1.1")
+
 
 
 

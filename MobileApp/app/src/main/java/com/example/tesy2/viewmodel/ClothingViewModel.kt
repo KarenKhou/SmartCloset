@@ -37,6 +37,8 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import androidx.compose.runtime.State
 import com.example.tesy2.data.models.Closet
+//import com.example.tesy2.data.repository.createUnsafeKtorClient
+//import io.ktor.websocket.WebSocketDeflateExtension.Companion.install
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
@@ -142,7 +144,9 @@ class ClothingViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val client = HttpClient() {
-                    install(ContentNegotiation) {
+                //val client = createUnsafeKtorClient()
+
+                install(ContentNegotiation) {
                         json(Json {
                             ignoreUnknownKeys = true
                             prettyPrint = true
@@ -153,7 +157,7 @@ class ClothingViewModel : ViewModel() {
                 val request = CompareRequest(image_url = imageUrl)
                 //ktor tunnel
                 println("hi1")
-                val response: CompareResponse = client.post("https://5562-94-187-3-150.ngrok-free.app/compare") {
+                val response: CompareResponse = client.post("https://b3ab-94-187-1-238.ngrok-free.app/compare") {
                     contentType(ContentType.Application.Json)
                     setBody(request)
                 }.body()
@@ -327,10 +331,5 @@ class ClothingViewModel : ViewModel() {
     }
 
 }
-
-
-
-
-
 
 

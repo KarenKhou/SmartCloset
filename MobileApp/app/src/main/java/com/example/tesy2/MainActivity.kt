@@ -24,8 +24,9 @@ import com.example.tesy2.ui.screens.AddClothingScreen
 import com.example.tesy2.ui.screens.AlertScreen
 import com.example.tesy2.ui.screens.CameraINOUTScreenPreview
 import com.example.tesy2.ui.screens.CameraScreen
+import com.example.tesy2.ui.screens.ClosetAnalyticsScreen
 import com.example.tesy2.ui.screens.ClothingScreen
-import com.example.tesy2.ui.screens.RecentUsageScreen
+//import com.example.tesy2.ui.screens.RecentUsageScreen
 //import com.example.tesy2.ui.screens.RecentUsageScreenWrapper
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SuggScreen
@@ -129,6 +130,7 @@ class MainActivity : ComponentActivity() {
 //                    RecentUsageScreenWrapper(userId = userId)
 //
 //                }
+
 
 
 
