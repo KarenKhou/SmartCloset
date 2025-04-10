@@ -1,0 +1,74 @@
+from fastapi import FastAPI, Form
+from fastapi.responses import JSONResponse
+from recom_screenshot import RecOutfit
+import random
+app = FastAPI()
+
+
+@app.post('/get_recommendations')
+async def get_recommendations(
+    outfit_type: str = Form(...),
+    gender: str = Form(...),
+    season: str = Form(...),
+    occasion: str = Form(...),
+    randomize: bool = Form(False)  # New parameter for randomization
+):
+    outfit_type = outfit_type.replace(" ", "").lower()
+    print(f"Backend received outfit_type: {outfit_type}")
+    try:
+        input_tags = {
+            'gender': gender.strip().lower(),
+            'season': season.strip().lower(),
+            'occasion': occasion.strip().lower()
+        }
+
+        recommender = RecOutfit(wardrobe_path='Wardrobe')
+        matches = recommender.get_recommendation_by_metadata_only(input_tags)
+
+        if not matches:
+            return JSONResponse(
+                status_code=200,
+                content={"message": "No matches found", "results": {}}
+            )
+
+        # Group results by category
+        categorized = {
+            'tops': [m for m in matches if m['metadata']['category'] == 'top'],
+            'bottoms': [m for m in matches if m['metadata']['category'] == 'bottom'],
+            'dresses': [m for m in matches if m['metadata']['category'] == 'dress']
+        }
+
+        # For randomization, shuffle the lists
+        if randomize:
+            random.shuffle(categorized['tops'])
+            random.shuffle(categorized['bottoms'])
+            random.shuffle(categorized['dresses'])
+
+        if outfit_type == "top+bottom":
+            if not categorized['tops']:
+                print("DEBUG: No tops found for criteria")
+            if not categorized['bottoms']:
+                print("DEBUG: No bottoms found for criteria")
+
+            return JSONResponse(content={
+                "results": {
+                    'tops': categorized['tops'][:1] if categorized['tops'] else [],
+                    'bottoms': categorized['bottoms'][:1] if categorized['bottoms'] else []
+                }
+            })
+        elif outfit_type == "dress":
+            return JSONResponse(content={
+                "results": {
+                    'dresses': categorized['dresses'][:1] if categorized['dresses'] else []
+                }
+            })
+
+    except Exception as e:
+        return JSONResponse(
+            status_code=400,
+            content={"error": str(e)}
+        )
+    print(f"Filtered results - Tops: {len(categorized['tops'])}, Bottoms: {len(categorized['bottoms'])}, Dresses: {len(categorized['dresses'])}")
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
