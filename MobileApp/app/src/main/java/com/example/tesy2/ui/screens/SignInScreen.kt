@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.tesy2.data.supabase.supabase
-import com.example.tesy2.ui.composable.UserPreferences
 import com.example.tesy2.ui.theme.AppThemeColor
 import com.example.tesy2.ui.theme.LocalAppTheme
 import com.example.tesy2.viewmodel.AuthViewModel
@@ -31,8 +30,9 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.result.PostgrestResult
 import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.graphicsLayer
 import com.example.tesy2.R
-
+import com.example.tesy2.data.models.AppUser
 
 
 val surfaceColor = Color.White
@@ -58,25 +58,65 @@ fun SignInScreen(
     val password by viewModel.password.collectAsState()
     val signInSuccess by viewModel.signInSuccess.collectAsState()
     val themeState = LocalAppTheme.current
+//    LaunchedEffect(signInSuccess) {
+//        if (signInSuccess != null) {
+//            if (signInSuccess == true) {
+//                Toast.makeText(context, "✅ Connexion réussie", Toast.LENGTH_LONG).show()
+//
+//
+////                val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+////                val savedTheme = prefs.getString("userTheme", "pink") ?: "pink"
+////                themeState.value = AppThemeColor.fromName(savedTheme)
+////                val savedTheme = UserPreferences.getUserInfo(context)["theme"] ?: "pink"
+////                themeState.value = AppThemeColor.fromName(savedTheme)
+//                println("🌈 Current App Theme: ${themeState.value}")
+//
+//                navController.navigate("main") {
+//                    popUpTo("sign_in") { inclusive = true }
+//                }
+//
+//            } else {
+//                Toast.makeText(context, "❌ Connexion échouée", Toast.LENGTH_LONG).show()
+//            }
+//        }
     LaunchedEffect(signInSuccess) {
         if (signInSuccess != null) {
             if (signInSuccess == true) {
                 Toast.makeText(context, "✅ Connexion réussie", Toast.LENGTH_LONG).show()
 
+                val user = supabase.auth.currentUserOrNull()
+                val userId = user?.id
 
-//                val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-//                val savedTheme = prefs.getString("userTheme", "pink") ?: "pink"
-//                themeState.value = AppThemeColor.fromName(savedTheme)
-                val savedTheme = UserPreferences.getUserInfo(context)["theme"] ?: "pink"
-                themeState.value = AppThemeColor.fromName(savedTheme)
+                if (userId != null) {
+                    try {
+                        val response = supabase
+                            .from("User")
+                            .select {
+                                filter { eq("user_id", userId) }
+                            }
+                            .decodeSingle<AppUser>()
+
+                        val themeFromDb = response.theme
+                        println("🎨 Theme from DB: $themeFromDb")
+
+                        themeState.value = AppThemeColor.fromName(themeFromDb)
+                        println("🌈 Applied theme: ${themeState.value.name}")
+                    } catch (e: Exception) {
+                        println("❌ Failed to fetch theme: ${e.message}")
+                    }
+                } else {
+                    println("⚠️ userId is null")
+                }
+
                 navController.navigate("main") {
                     popUpTo("sign_in") { inclusive = true }
                 }
-
             } else {
                 Toast.makeText(context, "❌ Connexion échouée", Toast.LENGTH_LONG).show()
             }
         }
+
+
     }
 
     Box(
@@ -137,12 +177,16 @@ fun SignInScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(top = 10.dp)
                 ) {
                     Image(
                         painter = image,
                         contentDescription = "Smart Closet Background",
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.matchParentSize()
+
+                        modifier = Modifier
+                            .matchParentSize()
+                            .offset(y = (-100).dp)
                     )
 
                     Column(
@@ -242,7 +286,7 @@ fun SignInScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    "Je n’ai pas de compte?",
+                                    "Don't have an account?",
                                     color = Color.Gray,
                                     style = MaterialTheme.typography.bodyMedium
                                 )
@@ -251,7 +295,7 @@ fun SignInScreen(
                                     contentPadding = PaddingValues(start = 4.dp)
                                 ) {
                                     Text(
-                                        "S'enregistrer",
+                                        "Sign up",
                                         color = MaterialTheme.colorScheme.primary,
                                         fontWeight = FontWeight.Bold,
                                         style = MaterialTheme.typography.bodyMedium

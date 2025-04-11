@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.tesy2.data.supabase.supabase
-import com.example.tesy2.ui.composable.UserPreferences
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
 
@@ -26,7 +25,7 @@ fun ProfileScreen(navController: NavController) {
             TopAppBar(
                 title = { Text("My Profile") },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                    containerColor = MaterialTheme.colorScheme.primary
                 )
             )
         }
@@ -52,7 +51,7 @@ fun ProfileScreen(navController: NavController) {
                     contentColor = MaterialTheme.colorScheme.onErrorContainer
                 )
             ) {
-                Text(text = "Complete Your Profile") // <- Button content goes here
+                Text(text = "Complete Your Profile")
             }
 
 
@@ -61,7 +60,6 @@ fun ProfileScreen(navController: NavController) {
                     coroutineScope.launch {
                         try {
                             supabase.auth.signOut()
-                            UserPreferences.clear(context)
                             Toast.makeText(context, "✅ Déconnexion réussie", Toast.LENGTH_LONG).show()
                             navController.navigate("sign_in") {
                                 popUpTo(0) { inclusive = true }

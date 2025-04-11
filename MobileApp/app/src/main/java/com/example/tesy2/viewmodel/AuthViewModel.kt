@@ -35,6 +35,9 @@ class AuthViewModel : ViewModel() {
     private val _birthDate = MutableStateFlow("")
     val birthDate: StateFlow<String> = _birthDate
 
+    private val _theme = MutableStateFlow("")
+    val theme: StateFlow<String> = _theme
+
     private val _signUpSuccess = MutableStateFlow(false)
     val signUpSuccess: StateFlow<Boolean> = _signUpSuccess
 
@@ -68,6 +71,9 @@ class AuthViewModel : ViewModel() {
     fun onBirthDateChange(value: String) {
         _birthDate.value = value
     }
+    fun onthemeChange(value: String) {
+        _theme.value = value
+    }
 
     fun signUp() {
         viewModelScope.launch {
@@ -78,7 +84,8 @@ class AuthViewModel : ViewModel() {
 //                gender = gender.value,
 //                job = job.value,
 //                home_location = location.value,
-//                birth_date = birthDate.value
+//                birth_date = birthDate.value,
+                theme=theme.value
             )
 
             val success = repository.signUp(email.value, password.value, user)
@@ -98,7 +105,8 @@ class AuthViewModel : ViewModel() {
                     gender = gender.value,
                     job = job.value,
                     home_location = location.value,
-                    birth_date = birthDate.value
+                    birth_date = birthDate.value,
+                    theme="-"
                 )
                 val success = repository.updateUserProfile(user)
                 _completeProfileSuccess.value = success
