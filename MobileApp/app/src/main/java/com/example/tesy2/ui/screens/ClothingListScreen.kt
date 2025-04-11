@@ -55,34 +55,12 @@ fun ClothingScreen(
     viewModel: ClothingViewModel = viewModel() ,
     navController: NavController
 ) {
-//    val user = supabase.auth.currentUserOrNull()
-//
-//    val email="\uD83D\uDC64"
-//    if (user != null) {
-//        val email = user.email
-//    }
+
     val user = supabase.auth.currentUserOrNull()
     val userId = user?.id
 
     var userName by remember { mutableStateOf<String?>(null) }
 
-    // Load the user's name from the Supabase "users" table
-//    LaunchedEffect(userId) {
-//        if (userId != null) {
-//            try {
-//                val response = supabase
-//                    .from("users")
-//                    .select {
-//                        filter { eq("user_id", userId) }
-//                    }
-//                    .decodeSingle<AppUser>()
-//
-//                userName = response.name
-//            } catch (e: Exception) {
-//                println("❌ Failed to fetch user name: ${e.message}")
-//            }
-//        }
-//    }
     LaunchedEffect(userId) {
         if (userId != null) {
             println("🔍 Attempting to fetch user info for ID: $userId")
@@ -94,15 +72,6 @@ fun ClothingScreen(
                     }
 
                     .decodeSingle<AppUser>()
-//                val raw = supabase
-//                    .from("User")
-//                    .select {
-//                        filter { eq("user_id", userId) }
-//                    }
-//
-//                println("📦 Raw response: ${raw.data}")
-
-
                 println("✅ Successfully fetched user: ${response.name}")
                 userName = response.name
             } catch (e: Exception) {
@@ -115,13 +84,11 @@ fun ClothingScreen(
 
 
     val context = LocalContext.current
-//    val userName = UserPreferences.getUserInfo(context)["name"] ?: "👤"
 
     val clothingList = viewModel.clothingItems.collectAsState().value
     var searchQuery by remember { mutableStateOf("") }
     var isSearchFocused by remember { mutableStateOf(false) }
 
-    // Filter clothing items based on the search query
     val filteredClothingList = clothingList.filter { item ->
         item.name?.contains(searchQuery, ignoreCase = true) == true ||
                 item.category?.contains(searchQuery, ignoreCase = true) == true ||

@@ -28,7 +28,11 @@ import com.example.tesy2.ui.composable.UserPreferences
 import com.example.tesy2.viewmodel.AuthViewModel
 import com.example.tesy2.ui.theme.AppThemeColor
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -270,7 +274,7 @@ fun SignUpScreen(
                         )
 
                         Spacer(modifier = Modifier.height(8.dp))
-
+                        var selectedTheme by remember { mutableStateOf<AppThemeColor?>(null) }
                         Row(
                             horizontalArrangement = Arrangement.SpaceEvenly,
                             modifier = Modifier.fillMaxWidth()
@@ -298,7 +302,7 @@ fun SignUpScreen(
                                     shape = RoundedCornerShape(8.dp)
                                 ) {
                                     Text(
-                                        text = if (theme.name == "pink") "Rose" else "Bleu",
+                                        text = if (theme.name == "pink") "Pink" else "Blue",
                                         color = Color.White
                                     )
                                 }
@@ -315,18 +319,8 @@ fun SignUpScreen(
                                     Toast.makeText(context, "❗Choisis une couleur avant de t'inscrire", Toast.LENGTH_SHORT).show()
                                     return@Button
                                 }
-//                                UserPreferences.saveUserInfo(
-//                                    context = context,
-//                                    name = name,
-//                                    email = email,
-//                                    theme = selectedTheme!!.name
-////                                    gender = gender,
-////                                    job = job,
-////                                    location = location,
-////                                    birthDate = birthDate
-//                                )
-                                val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-                                prefs.edit().putString("userTheme", selectedTheme!!.name).apply()
+                                viewModel.onthemeChange(selectedTheme!!.name)
+
                                 viewModel.signUp()
                             },
                             modifier = Modifier

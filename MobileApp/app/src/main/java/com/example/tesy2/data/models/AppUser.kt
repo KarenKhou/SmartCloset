@@ -9,5 +9,6 @@ data class AppUser(
     val gender: String? = null,
     val job: String? = null,
     val home_location: String? = null,
-    val birth_date: String? = null
+    val birth_date: String? = null,
+    val theme:String
 )
