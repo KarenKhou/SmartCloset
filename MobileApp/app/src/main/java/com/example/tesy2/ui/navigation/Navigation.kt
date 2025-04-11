@@ -56,6 +56,7 @@ import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material3.MaterialTheme
 import androidx.navigation.NavHostController
+import com.example.tesy2.viewmodel.ClothingViewModel
 
 sealed class Screen(val route: String, val icon: Any,val title:String) {
     object MyCloset : Screen("my_closet", Icons.Filled.Home,"My Closet")
@@ -237,6 +238,16 @@ fun MainScreenWithBottomNav(rootNavController: NavHostController) {
                 composable("removeOutfit") {
                     RemoveOutfitScreen(navController = navController)
                 }
+                composable("edit_clothing/{itemId}") { backStackEntry ->
+                    val itemId = backStackEntry.arguments?.getString("itemId") ?: return@composable
+                    val clothingViewModel = viewModel<ClothingViewModel>()
+                    EditClothingScreen(
+                        itemId = itemId,
+                        navController = navController,
+                        viewModel = clothingViewModel
+                    )
+                }
+
 
 
 
