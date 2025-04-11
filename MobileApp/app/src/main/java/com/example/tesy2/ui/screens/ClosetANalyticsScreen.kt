@@ -211,7 +211,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                     userScrollEnabled = false,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height((calendarDays.size / 7 * 48).dp) // Calculate height based on number of rows
+                        .height(320.dp) // Fixed height to show all days in month
                 ) {
                     items(calendarDays) { date ->
                         val today = LocalDate.now()
