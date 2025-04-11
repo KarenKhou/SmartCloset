@@ -34,8 +34,8 @@ fun ClothingCard(
         )
     ) {
         Column(modifier = Modifier
-                .padding(12.dp)
-                .fillMaxWidth(),
+            .padding(12.dp)
+            .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {

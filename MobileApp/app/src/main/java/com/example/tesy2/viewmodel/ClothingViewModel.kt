@@ -37,11 +37,26 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import androidx.compose.runtime.State
 import com.example.tesy2.data.models.Closet
+import io.ktor.client.request.forms.submitForm
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.formUrlEncode
 //import com.example.tesy2.data.repository.createUnsafeKtorClient
 //import io.ktor.websocket.WebSocketDeflateExtension.Companion.install
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
+import io.ktor.http.Parameters
+import io.ktor.http.parametersOf
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+
+
+val ngrok: String ="https://b3ab-94-187-1-238.ngrok-free.app/compare"
+val ngrokk: String ="https://7bf9-94-187-11-180.ngrok-free.app/get_recommendations"
 
 class ClothingViewModel : ViewModel() {
 
@@ -81,6 +96,143 @@ class ClothingViewModel : ViewModel() {
             }
         }
     }
+
+    fun getRecommendations() {
+        viewModelScope.launch {
+            try {
+                val client = HttpClient {
+                    install(ContentNegotiation) {
+                        json(Json {
+                            ignoreUnknownKeys = true
+                            prettyPrint = true
+                        })
+                    }
+                }
+
+                println("📡 Sending request to /get_recommendations")
+
+                val response: HttpResponse = client.post(ngrok) {
+                    contentType(ContentType.Application.FormUrlEncoded)
+                    setBody(
+                        listOf(
+                            "outfit_type" to "top+bottom",
+                            "gender" to "female",
+                            "season" to "summer",
+                            "occasion" to "casual",
+                            "style" to "casual",
+                            "randomize" to "false"
+                        ).formUrlEncode()
+                    )
+                }
+
+                println("✅ Reco API success: ${response.status}")
+                // 💡 Tu peux relancer ici un .loadSuggestion() avec un ID si besoin
+
+            } catch (e: Exception) {
+                println("❌ Reco API failed: ${e.message}")
+            }
+        }
+    }
+
+    fun sendRecommendationRequest(
+        outfitType: String,
+        gender: String,
+        season: String,
+        occasion: String,
+        style: String,
+        randomize: Boolean = false
+    ) {
+        viewModelScope.launch {
+            try {
+                val client = HttpClient {
+                    install(ContentNegotiation) {
+                        json(Json {
+                            ignoreUnknownKeys = true
+                            prettyPrint = true
+                        })
+                    }
+                }
+
+                val response = client.submitForm(
+                    url = ngrokk,
+                    formParameters = Parameters.build {
+                        append("outfit_type", outfitType)
+                        append("gender", gender)
+                        append("season", season)
+                        append("occasion", occasion)
+                        append("style", style)
+                        append("randomize", randomize.toString())
+                    }
+                )
+
+                println("✅ Reco API success: ${response.status}")
+
+            } catch (e: Exception) {
+                println("❌ API error: ${e.message}")
+            }
+        }
+    }
+
+    fun generateRecommendation(
+        outfitType: String,
+        gender: String,
+        season: String,
+        occasion: String,
+        //style: String,
+        randomize: Boolean
+    ) {
+        viewModelScope.launch {
+            try {
+                val client = HttpClient {
+                    install(ContentNegotiation) {
+                        json(Json { ignoreUnknownKeys = true })
+                    }
+                }
+
+                val response: HttpResponse = client.submitForm(
+                    url = ngrokk,
+                    formParameters = Parameters.build {
+                        append("outfit_type", outfitType)
+                        append("gender", gender)
+                        append("season", season)
+                        append("occasion", occasion)
+                        //append("style", style)
+                        append("randomize", randomize.toString())
+                    }
+                )
+
+                val json = response.bodyAsText()
+                println("✅ Reco API success: ${response.status.value} → $json")
+
+                // Parse les item_id depuis la réponse
+                val jsonObject = Json.parseToJsonElement(json).jsonObject
+                val tops = jsonObject["results"]?.jsonObject?.get("tops")?.jsonArray ?: JsonArray(emptyList())
+                val bottoms = jsonObject["results"]?.jsonObject?.get("bottoms")?.jsonArray ?: JsonArray(emptyList())
+                val dresses = jsonObject["results"]?.jsonObject?.get("dresses")?.jsonArray ?: JsonArray(emptyList())
+
+                val allIds = (tops + bottoms + dresses).mapNotNull {
+                    it.jsonObject["item_id"]?.jsonPrimitive?.intOrNull
+                }
+
+                println("🆔 Recommended IDs: $allIds")
+
+                // Fetch clothingitems depuis Supabase avec les IDs
+                val result = supabase.from("clothingitem").select {
+                    filter {
+                        isIn("item_id", allIds)
+                    }
+                }.decodeList<ClothingItem>()
+
+                println("🧥 Loaded items: ${result.map { it.name }}")
+
+                _suggestions.value = result
+
+            } catch (e: Exception) {
+                println("❌ Error generating recommendation: ${e.message}")
+            }
+        }
+    }
+
 
 
 
@@ -157,7 +309,7 @@ class ClothingViewModel : ViewModel() {
                 val request = CompareRequest(image_url = imageUrl)
                 //ktor tunnel
                 println("hi1")
-                val response: CompareResponse = client.post("https://b3ab-94-187-1-238.ngrok-free.app/compare") {
+                val response: CompareResponse = client.post(ngrokk) {
                     contentType(ContentType.Application.Json)
                     setBody(request)
                 }.body()

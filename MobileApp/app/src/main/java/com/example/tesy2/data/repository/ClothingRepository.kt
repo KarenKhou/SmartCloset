@@ -30,7 +30,7 @@ class ClothingRepository {
                 filter {
                     eq("recommendation_id", outfitRecommendation)
                     //eq("clothingitem.closet_id", closetId)
-                eq("user_id", userID)}
+                }
             }
 
             .decodeList<ClothingPreview>()
@@ -44,7 +44,7 @@ class ClothingRepository {
         return raw.mapNotNull { preview ->
             preview.clothingitem?.let {
                 ClothingItem(
-                    closet_id = null,
+
                     name = it.name,
                     category = null,
                     color = null,
