@@ -125,7 +125,7 @@ fun SignInScreen(
 //                color = surfaceColor,
 //                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
 //            ) {
-            val image = painterResource(id = R.drawable.auth_background1)
+            val image = painterResource(id = R.drawable.bgkaren)
 
             Surface(
                 modifier = Modifier
