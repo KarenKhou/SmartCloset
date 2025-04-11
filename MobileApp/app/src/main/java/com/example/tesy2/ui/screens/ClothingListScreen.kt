@@ -279,38 +279,6 @@ fun ClothingScreen(
 }
 
 
-
-//private fun ClothingViewModel.getCurrentUserClosetId(): Int? {
-//    val user = supabase.auth.currentUserOrNull() ?: return null
-//    val userId = user.id
-//    println("test1")
-//
-//    val userData = runBlocking {
-//        try {
-//            supabase
-//                .from("closet")
-//                .select(columns = Columns.list("closet_id")) {
-//                    filter {
-//                        eq("user_id", userId)
-//                    }
-//                }.decodeSingle<UserData>() // ✅ on récupère un UserData
-//        } catch (e: Exception) {
-//            println("❌ Supabase error: ${e.message}")
-//            null
-//        }
-//    }
-//
-//    val closetId = userData?.closet_id // ✅ on récupère l'int depuis l'objet
-//
-//    if (closetId != null) {
-//        println("✅ closet_id: $closetId")
-//    } else {
-//        println("❌ Aucun utilisateur trouvé ou closet_id manquant")
-//    }
-//
-//    return closetId
-//}
-
 suspend fun getCurrentUserClosetIdSuspend(): Int? {
     val user = supabase.auth.currentUserOrNull() ?: return null
     val userId = user.id

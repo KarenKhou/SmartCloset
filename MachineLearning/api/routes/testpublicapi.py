@@ -14,6 +14,11 @@ from pydantic import BaseModel
 from MachineLearning.core.config import supabase ,url ,bucket
 from MachineLearning.imageSimilarity import compdeshabits
 from MachineLearning.colors import color
+from MachineLearning.recom.FashionAI.main import get_outfit_recommendations
+from fastapi import Form
+
+
+
 
 
 
@@ -152,6 +157,17 @@ def detect_color(file: UploadFile = File(...)):
         return {"dominant_color": dominant_color}
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+    
+@app.post('/get_recommendations')
+async def recommendation_endpoint(
+    outfit_type: str = Form(...),
+    gender: str = Form(...),
+    season: str = Form(...),
+    occasion: str = Form(...),
+    randomize: bool = Form(False)
+):
+    return await get_outfit_recommendations(outfit_type, gender, season, occasion, randomize)
+
 
 
 #cd C:\Users\User\Downloads\

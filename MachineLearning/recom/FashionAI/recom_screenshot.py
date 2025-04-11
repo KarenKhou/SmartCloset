@@ -2,7 +2,9 @@ import logging
 import os
 import pandas as pd
 import json
-from color_utils import get_color_combinations  # Import the color utility
+from .color_utils import get_color_combinations  # Import the color utility
+
+
 
 
 logging.basicConfig(
