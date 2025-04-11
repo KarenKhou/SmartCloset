@@ -30,6 +30,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.graphics.Color
+import com.example.tesy2.data.supabase.supabase
+import io.github.jan.supabase.auth.auth
 import java.time.YearMonth
 
 
@@ -39,6 +41,7 @@ fun WornCalendarScreen(viewModel: WornCalendarViewModel = viewModel()) {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     val daysInMonth = YearMonth.from(selectedDate).lengthOfMonth()
     val firstDayOfWeek = YearMonth.from(selectedDate).atDay(1).dayOfWeek.value % 7
+    val userId = supabase.auth.currentUserOrNull()?.id
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -70,7 +73,7 @@ fun WornCalendarScreen(viewModel: WornCalendarViewModel = viewModel()) {
                 Button(
                     onClick = {
                         selectedDate = date
-                        viewModel.loadItemsForDate(date.toString())
+                        viewModel.loadItemsForDate(date.toString(), userId!! )
                     },
                     modifier = Modifier
                         .padding(4.dp)

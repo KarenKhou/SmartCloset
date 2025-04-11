@@ -88,19 +88,19 @@ fun ClothingScreen(
             println("🔍 Attempting to fetch user info for ID: $userId")
             try {
                 val response = supabase
-                    .from("user")
+                    .from("User")
                     .select {
                         filter { eq("user_id", userId) }
                     }
 
                     .decodeSingle<AppUser>()
-                val raw = supabase
-                    .from("user")
-                    .select {
-                        filter { eq("user_id", userId) }
-                    }
-
-                println("📦 Raw response: ${raw.data}")
+//                val raw = supabase
+//                    .from("User")
+//                    .select {
+//                        filter { eq("user_id", userId) }
+//                    }
+//
+//                println("📦 Raw response: ${raw.data}")
 
 
                 println("✅ Successfully fetched user: ${response.name}")

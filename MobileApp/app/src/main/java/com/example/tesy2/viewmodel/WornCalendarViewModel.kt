@@ -20,13 +20,14 @@ class WornCalendarViewModel : ViewModel() {
     var wornItemsForDate by mutableStateOf<List<UsageWithItem>>(emptyList())
         private set
 
-    fun loadItemsForDate(date: String) {
+    fun loadItemsForDate(date: String,userId:String) {
         viewModelScope.launch {
             try {
                 val result = supabase.from("usage")
                     .select(columns = Columns.list("item_id", "worn_date", "clothingitem(*)")) {
                         filter {
                             eq("worn_date", date)
+                            eq("user_id", userId)
                         }
                     }.decodeList<UsageWithItem>()
                 wornItemsForDate = result

@@ -1,8 +1,6 @@
 package com.example.tesy2.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -10,37 +8,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.tesy2.data.models.UsagePreview
-import com.example.tesy2.data.models.UsageWithItem
 import com.example.tesy2.data.supabase.supabase
 
 import com.example.tesy2.viewmodel.getRecentUsage
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import com.example.tesy2.data.supabase.supabase
-import com.example.tesy2.viewmodel.getRecentUsage
-import com.example.tesy2.data.models.ClothingItemPreview
 import com.example.tesy2.viewmodel.WornCalendarViewModel
 import io.github.jan.supabase.auth.auth
-import kotlinx.datetime.LocalDate
 import java.time.YearMonth
 
 @Composable
@@ -147,7 +131,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                 Button(
                     onClick = {
                         selectedDate = date
-                        viewModel.loadItemsForDate(date.toString())
+                        viewModel.loadItemsForDate(date.toString(),userId!!)
                     },
                     modifier = Modifier
                         .padding(4.dp)

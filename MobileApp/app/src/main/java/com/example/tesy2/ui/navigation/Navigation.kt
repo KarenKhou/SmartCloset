@@ -214,10 +214,8 @@ fun MainScreenWithBottomNav(rootNavController: NavHostController) {
                     ClothingScreen(navController = navController)
                 }
 
-                composable(Screen.PastOutfits.route) {
-
+                composable(Screen.DataAnalysis.route) {
                     ClosetAnalyticsScreen()
-
                 }
                 composable(Screen.AddItem.route) {
                     AddClothingScreen()
