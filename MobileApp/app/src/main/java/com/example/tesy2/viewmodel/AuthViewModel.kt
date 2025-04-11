@@ -38,6 +38,9 @@ class AuthViewModel : ViewModel() {
     private val _signUpSuccess = MutableStateFlow(false)
     val signUpSuccess: StateFlow<Boolean> = _signUpSuccess
 
+    private val _completeProfileSuccess = MutableStateFlow(false)
+    val completeProfileSuccess: StateFlow<Boolean> = _completeProfileSuccess
+
     fun onEmailChange(value: String) {
         _email.value = value
     }
@@ -72,16 +75,37 @@ class AuthViewModel : ViewModel() {
             val user = AppUser(
                 user_id = "", // sera remplacé dans le repo
                 name = name.value,
-                gender = gender.value,
-                job = job.value,
-                home_location = location.value,
-                birth_date = birthDate.value
+//                gender = gender.value,
+//                job = job.value,
+//                home_location = location.value,
+//                birth_date = birthDate.value
             )
 
             val success = repository.signUp(email.value, password.value, user)
             _signUpSuccess.value = success
         }
     }
+
+
+    fun completeProfile() {
+        viewModelScope.launch {
+            println("📤 Appel de completeProfile()")
+            val currentUser = com.example.tesy2.data.supabase.supabase.auth.currentUserOrNull()
+            if (currentUser != null) {
+                val user = AppUser(
+                    name="-",
+                    user_id = currentUser.id,
+                    gender = gender.value,
+                    job = job.value,
+                    home_location = location.value,
+                    birth_date = birthDate.value
+                )
+                val success = repository.updateUserProfile(user)
+                _completeProfileSuccess.value = success
+            }
+        }
+    }
+
 
 
     private val _signInSuccess = MutableStateFlow<Boolean?>(null)

@@ -13,8 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 
-
-
 class AuthRepository {
     suspend fun signUp(email: String, password: String, user: AppUser): Boolean {
         println("📤 Appel de signUp() and authREpo")
@@ -35,6 +33,37 @@ class AuthRepository {
             false
         }
     }
+
+
+
+    suspend fun updateUserProfile(user: AppUser): Boolean {
+        println("📤 Appel de updateUserProfile() dans AuthRepository")
+        return try {
+            supabase.from("User")
+                .update(
+                    mapOf(
+                        "gender" to user.gender,
+                        "job" to user.job,
+                        "home_location" to user.home_location,
+                        "birth_date" to user.birth_date
+                    )
+                ) {
+                    filter {
+                        eq("user_id", user.user_id)
+                    }
+                }
+
+            println("✅ Profil utilisateur mis à jour avec succès !")
+            true
+        } catch (e: Exception) {
+            println("❌ Erreur lors de la mise à jour du profil: ${e.message}")
+            false
+        }
+    }
+
+
+
+
 
     suspend fun signIn(email: String, password: String): Boolean {
         println("📤 Appel de signIn() dans AuthRepository")

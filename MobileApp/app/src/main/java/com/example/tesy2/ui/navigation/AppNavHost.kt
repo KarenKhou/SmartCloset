@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tesy2.ui.screens.AlertScreen
+import com.example.tesy2.ui.screens.CompleteProfileScreen
 import com.example.tesy2.ui.screens.EditClothingScreen
 import com.example.tesy2.ui.screens.ProfileScreen
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
@@ -32,6 +33,9 @@ fun AppNavHost(navController: NavHostController) {
         }
         composable("profile") {
             ProfileScreen(navController = navController)
+        }
+        composable("complete_profile") {
+            CompleteProfileScreen(navController = navController)
         }
 
 

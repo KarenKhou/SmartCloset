@@ -17,7 +17,8 @@ sealed class AppThemeColor(
 ) {
     object Pink : AppThemeColor(
         name = "pink",
-        primary = Color(0xFFFF69B4),
+//        primary = Color(0xFFFF69B4),
+        primary = Color(0xFFE75480),
         primaryContainer = Color(0xFFE36991),
         secondary = Color(0xFFF06292),
         secondaryContainer = Color(0xFFFCE4EC)
