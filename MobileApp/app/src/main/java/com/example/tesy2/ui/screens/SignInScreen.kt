@@ -13,7 +13,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,6 +30,9 @@ import com.example.tesy2.viewmodel.AuthViewModel
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.result.PostgrestResult
+import androidx.compose.foundation.Image
+import com.example.tesy2.R
+
 
 
 val surfaceColor = Color.White
@@ -113,118 +118,148 @@ fun SignInScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
 
+//            Surface(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .weight(1f),
+//                color = surfaceColor,
+//                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+//            ) {
+            val image = painterResource(id = R.drawable.auth_background1)
+
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                color = surfaceColor,
-                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+                color = Color.Transparent
             ) {
-                Column(
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 24.dp, vertical = 32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        "Se connecter",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.DarkGray
-                        ),
-                        textAlign = TextAlign.Center
+                    Image(
+                        painter = image,
+                        contentDescription = "Smart Closet Background",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.matchParentSize()
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    OutlinedTextField(
-                        value = email,
-                        onValueChange = viewModel::onEmailChange,
-                        label = { Text("Email") },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.Black,
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            cursorColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = Color.LightGray
-                        ),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Outlined.Email,
-                                contentDescription = "Email",
-                                tint = Color.Gray
-                            )
-                        },
-                        shape = RoundedCornerShape(8.dp),
-                        singleLine = true
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-
-                    OutlinedTextField(
-                        value = password,
-                        onValueChange = viewModel::onPasswordChange,
-                        label = { Text("Password") },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.Black,
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            cursorColor =MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = Color.LightGray
-                        ),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Outlined.Lock,
-                                contentDescription = "Password",
-                                tint = Color.Gray
-                            )
-                        },
-                        shape = RoundedCornerShape(8.dp),
-                        singleLine = true
-                    )
-
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = { viewModel.signIn() },
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(48.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text("Connexion", color = Color.White)
-                    }
+                            .fillMaxSize()
+                            .background(Color.White.copy(alpha = 0.65f))
+                            .padding(horizontal = 24.dp, vertical = 32.dp),
 
-                    Spacer(modifier = Modifier.height(16.dp))
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                    horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            "Je n’ai pas de compte?",
-                            color = Color.Gray,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        TextButton(
-                            onClick = { navController.navigate("sign_up") },
-                            contentPadding = PaddingValues(start = 4.dp)
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 24.dp, vertical = 32.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                "S'enregistrer",
-                                color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.bodyMedium
+                                "Se connecter",
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color.DarkGray
+                                ),
+                                textAlign = TextAlign.Center
                             )
+
+                            Spacer(modifier = Modifier.height(24.dp))
+
+                            OutlinedTextField(
+                                value = email,
+                                onValueChange = viewModel::onEmailChange,
+                                label = { Text("Email") },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedTextColor = Color.Black,
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    cursorColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedBorderColor = Color.LightGray
+                                ),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Email,
+                                        contentDescription = "Email",
+                                        tint = Color.Gray
+                                    )
+                                },
+                                shape = RoundedCornerShape(8.dp),
+                                singleLine = true
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+
+                            OutlinedTextField(
+                                value = password,
+                                onValueChange = viewModel::onPasswordChange,
+                                label = { Text("Password") },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedTextColor = Color.Black,
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    cursorColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedBorderColor = Color.LightGray
+                                ),
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Lock,
+                                        contentDescription = "Password",
+                                        tint = Color.Gray
+                                    )
+                                },
+                                shape = RoundedCornerShape(8.dp),
+                                singleLine = true
+                            )
+
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Button(
+                                onClick = { viewModel.signIn() },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(48.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                Text("Connexion", color = Color.White)
+                            }
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    "Je n’ai pas de compte?",
+                                    color = Color.Gray,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                TextButton(
+                                    onClick = { navController.navigate("sign_up") },
+                                    contentPadding = PaddingValues(start = 4.dp)
+                                ) {
+                                    Text(
+                                        "S'enregistrer",
+                                        color = MaterialTheme.colorScheme.primary,
+                                        fontWeight = FontWeight.Bold,
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+                            }
                         }
                     }
                 }
             }
-        }
-    }
-}
+        }}}

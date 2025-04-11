@@ -35,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
+import com.example.tesy2.data.models.AppUser
 import com.example.tesy2.data.models.Closet
 import com.example.tesy2.data.models.UserData
 import com.example.tesy2.data.supabase.supabase
@@ -44,6 +45,8 @@ import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.runBlocking
 import com.example.tesy2.ui.composable.UserPreferences
+import com.example.tesy2.viewmodel.AuthViewModel
+
 
 
 @Composable
@@ -52,8 +55,67 @@ fun ClothingScreen(
     viewModel: ClothingViewModel = viewModel() ,
     navController: NavController
 ) {
+//    val user = supabase.auth.currentUserOrNull()
+//
+//    val email="\uD83D\uDC64"
+//    if (user != null) {
+//        val email = user.email
+//    }
+    val user = supabase.auth.currentUserOrNull()
+    val userId = user?.id
+
+    var userName by remember { mutableStateOf<String?>(null) }
+
+    // Load the user's name from the Supabase "users" table
+//    LaunchedEffect(userId) {
+//        if (userId != null) {
+//            try {
+//                val response = supabase
+//                    .from("users")
+//                    .select {
+//                        filter { eq("user_id", userId) }
+//                    }
+//                    .decodeSingle<AppUser>()
+//
+//                userName = response.name
+//            } catch (e: Exception) {
+//                println("❌ Failed to fetch user name: ${e.message}")
+//            }
+//        }
+//    }
+    LaunchedEffect(userId) {
+        if (userId != null) {
+            println("🔍 Attempting to fetch user info for ID: $userId")
+            try {
+                val response = supabase
+                    .from("user")
+                    .select {
+                        filter { eq("user_id", userId) }
+                    }
+
+                    .decodeSingle<AppUser>()
+                val raw = supabase
+                    .from("user")
+                    .select {
+                        filter { eq("user_id", userId) }
+                    }
+
+                println("📦 Raw response: ${raw.data}")
+
+
+                println("✅ Successfully fetched user: ${response.name}")
+                userName = response.name
+            } catch (e: Exception) {
+                println("❌ Failed to fetch user name: ${e.message}")
+            }
+        } else {
+            println("⚠️ userId is null")
+        }
+    }
+
+
     val context = LocalContext.current
-    val userName = UserPreferences.getUserInfo(context)["name"] ?: "👤"
+//    val userName = UserPreferences.getUserInfo(context)["name"] ?: "👤"
 
     val clothingList = viewModel.clothingItems.collectAsState().value
     var searchQuery by remember { mutableStateOf("") }
@@ -83,7 +145,7 @@ fun ClothingScreen(
             .padding(16.dp)
     ) {
         Text(
-            text = "Hi $userName 👋",
+            text = "Hi ${userName ?: "there"} 👋",
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary

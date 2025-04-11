@@ -18,6 +18,7 @@ object UserPreferences {
     }
     fun clear(context: Context) {
         val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+
         prefs.edit().clear().apply()
     }
 
