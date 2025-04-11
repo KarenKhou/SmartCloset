@@ -40,6 +40,24 @@ fun ProfileScreen(navController: NavController) {
         ) {
             Button(
                 onClick = {
+                    navController.navigate("complete_profile") {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                )
+            ) {
+                Text(text = "Complete Your Profile") // <- Button content goes here
+            }
+
+
+            Button(
+                onClick = {
                     coroutineScope.launch {
                         try {
                             supabase.auth.signOut()

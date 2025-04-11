@@ -48,10 +48,10 @@ fun SignUpScreen(
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
     val name by viewModel.name.collectAsState()
-    val gender by viewModel.gender.collectAsState()
-    val job by viewModel.job.collectAsState()
-    val location by viewModel.location.collectAsState()
-    val birthDate by viewModel.birthDate.collectAsState()
+//    val gender by viewModel.gender.collectAsState()
+//    val job by viewModel.job.collectAsState()
+//    val location by viewModel.location.collectAsState()
+//    val birthDate by viewModel.birthDate.collectAsState()
     val signUpSuccess by viewModel.signUpSuccess.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -120,7 +120,7 @@ fun SignUpScreen(
                     .fillMaxWidth()
                     .weight(1f),
                 shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-                color = Color.Transparent // Make background transparent
+                color = Color.Transparent
             ) {
                 Box(
                     modifier = Modifier
@@ -136,7 +136,7 @@ fun SignUpScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color.White.copy(alpha = 0.65f)) // Semi-transparent white overlay
+                            .background(Color.White.copy(alpha = 0.65f))
                             .padding(horizontal = 24.dp, vertical = 32.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -197,69 +197,69 @@ fun SignUpScreen(
                             shape = RoundedCornerShape(8.dp)
                         )
 
-                        Spacer(modifier = Modifier.height(12.dp))
+//                        Spacer(modifier = Modifier.height(12.dp))
 
-                        OutlinedTextField(
-                            value = gender,
-                            onValueChange = viewModel::onGenderChange,
-                            label = { Text("Genre") },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedTextColor = Color.Black,
-                                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                cursorColor = MaterialTheme.colorScheme.primary,
-                                unfocusedBorderColor = Color.LightGray
-                            ),
-                            shape = RoundedCornerShape(8.dp)
-                        )
+//                        OutlinedTextField(
+//                            value = gender,
+//                            onValueChange = viewModel::onGenderChange,
+//                            label = { Text("Genre") },
+//                            modifier = Modifier.fillMaxWidth(),
+//                            colors = OutlinedTextFieldDefaults.colors(
+//                                focusedTextColor = Color.Black,
+//                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+//                                cursorColor = MaterialTheme.colorScheme.primary,
+//                                unfocusedBorderColor = Color.LightGray
+//                            ),
+//                            shape = RoundedCornerShape(8.dp)
+//                        )
 
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        OutlinedTextField(
-                            value = job,
-                            onValueChange = viewModel::onJobChange,
-                            label = { Text("Profession") },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedTextColor = Color.Black,
-                                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                cursorColor = MaterialTheme.colorScheme.primary,
-                                unfocusedBorderColor = Color.LightGray
-                            ),
-                            shape = RoundedCornerShape(8.dp)
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        OutlinedTextField(
-                            value = location,
-                            onValueChange = viewModel::onLocationChange,
-                            label = { Text("Lieu de résidence") },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedTextColor = Color.Black,
-                                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                cursorColor = MaterialTheme.colorScheme.primary,
-                                unfocusedBorderColor = Color.LightGray
-                            ),
-                            shape = RoundedCornerShape(8.dp)
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        OutlinedTextField(
-                            value = birthDate,
-                            onValueChange = viewModel::onBirthDateChange,
-                            label = { Text("Date de naissance (YYYY-MM-DD)") },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedTextColor = Color.Black,
-                                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                cursorColor = MaterialTheme.colorScheme.primary,
-                                unfocusedBorderColor = Color.LightGray
-                            ),
-                            shape = RoundedCornerShape(8.dp)
-                        )
+//                        Spacer(modifier = Modifier.height(12.dp))
+//
+//                        OutlinedTextField(
+//                            value = job,
+//                            onValueChange = viewModel::onJobChange,
+//                            label = { Text("Profession") },
+//                            modifier = Modifier.fillMaxWidth(),
+//                            colors = OutlinedTextFieldDefaults.colors(
+//                                focusedTextColor = Color.Black,
+//                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+//                                cursorColor = MaterialTheme.colorScheme.primary,
+//                                unfocusedBorderColor = Color.LightGray
+//                            ),
+//                            shape = RoundedCornerShape(8.dp)
+//                        )
+//
+//                        Spacer(modifier = Modifier.height(12.dp))
+//
+//                        OutlinedTextField(
+//                            value = location,
+//                            onValueChange = viewModel::onLocationChange,
+//                            label = { Text("Lieu de résidence") },
+//                            modifier = Modifier.fillMaxWidth(),
+//                            colors = OutlinedTextFieldDefaults.colors(
+//                                focusedTextColor = Color.Black,
+//                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+//                                cursorColor = MaterialTheme.colorScheme.primary,
+//                                unfocusedBorderColor = Color.LightGray
+//                            ),
+//                            shape = RoundedCornerShape(8.dp)
+//                        )
+//
+//                        Spacer(modifier = Modifier.height(12.dp))
+//
+//                        OutlinedTextField(
+//                            value = birthDate,
+//                            onValueChange = viewModel::onBirthDateChange,
+//                            label = { Text("Date de naissance (YYYY-MM-DD)") },
+//                            modifier = Modifier.fillMaxWidth(),
+//                            colors = OutlinedTextFieldDefaults.colors(
+//                                focusedTextColor = Color.Black,
+//                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+//                                cursorColor = MaterialTheme.colorScheme.primary,
+//                                unfocusedBorderColor = Color.LightGray
+//                            ),
+//                            shape = RoundedCornerShape(8.dp)
+//                        )
 
                         Spacer(modifier = Modifier.height(16.dp))
 
@@ -315,16 +315,16 @@ fun SignUpScreen(
                                     Toast.makeText(context, "❗Choisis une couleur avant de t'inscrire", Toast.LENGTH_SHORT).show()
                                     return@Button
                                 }
-                                UserPreferences.saveUserInfo(
-                                    context = context,
-                                    name = name,
-                                    email = email,
-                                    theme = selectedTheme!!.name,
-                                    gender = gender,
-                                    job = job,
-                                    location = location,
-                                    birthDate = birthDate
-                                )
+//                                UserPreferences.saveUserInfo(
+//                                    context = context,
+//                                    name = name,
+//                                    email = email,
+//                                    theme = selectedTheme!!.name
+////                                    gender = gender,
+////                                    job = job,
+////                                    location = location,
+////                                    birthDate = birthDate
+//                                )
                                 val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
                                 prefs.edit().putString("userTheme", selectedTheme!!.name).apply()
                                 viewModel.signUp()
