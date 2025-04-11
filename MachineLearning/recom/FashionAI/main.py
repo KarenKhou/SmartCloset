@@ -4,6 +4,7 @@ from .recom_screenshot import RecOutfit
 import random
 
 import random
+import traceback
 app = FastAPI()
 
 
@@ -98,8 +99,7 @@ async def get_outfit_recommendations(
         input_tags = {
             'gender': gender.strip().lower(),
             'season': season.strip().lower(),
-            'occasion': occasion.strip().lower()
-        }
+            'occasion': occasion.strip().lower()        }
 
         recommender = RecOutfit(wardrobe_path='Wardrobe')
         matches = recommender.get_recommendation_by_metadata_only(input_tags)
@@ -110,11 +110,18 @@ async def get_outfit_recommendations(
                 content={"message": "No matches found", "results": {}}
             )
 
+        # categorized = {
+        #     'tops': [m for m in matches if m['metadata']['category'] == 'top'],
+        #     'bottoms': [m for m in matches if m['metadata']['category'] == 'bottom'],
+        #     'dresses': [m for m in matches if m['metadata']['category'] == 'dress']
+        # }
+
         categorized = {
-            'tops': [m for m in matches if m['metadata']['category'] == 'top'],
-            'bottoms': [m for m in matches if m['metadata']['category'] == 'bottom'],
-            'dresses': [m for m in matches if m['metadata']['category'] == 'dress']
+            'tops': [m for m in matches if m['category'] == 'top'],
+            'bottoms': [m for m in matches if m['category'] == 'bottom'],
+            'dresses': [m for m in matches if m['category'] == 'dress']
         }
+
 
         if randomize:
             random.shuffle(categorized['tops'])
@@ -135,4 +142,8 @@ async def get_outfit_recommendations(
                 }
             })
     except Exception as e:
-        return JSONResponse(status_code=400, content={"error": str(e)})
+        traceback.print_exc()  # affiche le vrai stack trace dans la console
+        return JSONResponse(
+            status_code=400,
+            content={"error": repr(e)}  # montre l’objet d’exception réel
+        )

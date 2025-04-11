@@ -23,13 +23,14 @@ class ClothingRepository {
             .decodeList<ClothingItem>()
     }
 
-    suspend fun getSuggestion(closetId: Int, outfitRecommendation: Int): List<ClothingItem> {
+    suspend fun getSuggestion(userID: String, outfitRecommendation: Int): List<ClothingItem> {
         val raw = supabase
             .from("outfitrecommendation_items")
             .select(Columns.raw("clothingitem(name, image_url)")){
                 filter {
                     eq("recommendation_id", outfitRecommendation)
-                    eq("clothingitem.closet_id", closetId) }
+                    //eq("clothingitem.closet_id", closetId)
+                eq("user_id", userID)}
             }
 
             .decodeList<ClothingPreview>()
@@ -43,7 +44,7 @@ class ClothingRepository {
         return raw.mapNotNull { preview ->
             preview.clothingitem?.let {
                 ClothingItem(
-                    closet_id = closetId,
+                    closet_id = null,
                     name = it.name,
                     category = null,
                     color = null,

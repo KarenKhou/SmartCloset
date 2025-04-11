@@ -70,11 +70,11 @@ class ClothingViewModel : ViewModel() {
     private val _suggestions = MutableStateFlow<List<ClothingItem>>(emptyList())
     val suggestions: StateFlow<List<ClothingItem>> = _suggestions
 
-    fun loadSuggestion(closetId: Int, recommendationId: Int) {
-        println("📡 loadSuggestion CALLED with closet=$closetId, rec=$recommendationId")
+    fun loadSuggestion(userId: String, recommendationId: Int) {
+        println("📡 loadSuggestion CALLED with user=$userId, rec=$recommendationId")
         viewModelScope.launch {
             try {
-                val result = repository.getSuggestion(closetId, recommendationId)
+                val result = repository.getSuggestion(userId, recommendationId)
                 _suggestions.value = result
             } catch (e: Exception) {
                 println("❌ Erreur de chargement de suggestion : ${e.message}")
