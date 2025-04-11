@@ -24,7 +24,6 @@ import androidx.navigation.NavController
 import com.example.tesy2.MainActivity
 import com.example.tesy2.R
 import com.example.tesy2.data.supabase.supabase
-import com.example.tesy2.ui.composable.UserPreferences
 import com.example.tesy2.viewmodel.AuthViewModel
 import com.example.tesy2.ui.theme.AppThemeColor
 import io.github.jan.supabase.auth.auth

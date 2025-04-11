@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.tesy2.data.supabase.supabase
-import com.example.tesy2.ui.composable.UserPreferences
 import com.example.tesy2.ui.theme.AppThemeColor
 import com.example.tesy2.ui.theme.LocalAppTheme
 import com.example.tesy2.viewmodel.AuthViewModel

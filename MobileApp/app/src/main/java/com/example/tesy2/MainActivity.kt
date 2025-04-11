@@ -21,7 +21,6 @@ import io.github.jan.supabase.postgrest.Postgrest
 import androidx.navigation.compose.rememberNavController
 import com.example.tesy2.data.supabase.supabase
 import com.example.tesy2.data.models.AppUser
-import com.example.tesy2.ui.composable.UserPreferences
 import com.example.tesy2.ui.navigation.AppNavHost
 import com.example.tesy2.ui.screens.AddClothingScreen
 import com.example.tesy2.ui.screens.AlertScreen

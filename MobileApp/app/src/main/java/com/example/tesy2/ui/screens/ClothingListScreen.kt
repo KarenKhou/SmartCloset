@@ -44,7 +44,6 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.runBlocking
-import com.example.tesy2.ui.composable.UserPreferences
 import com.example.tesy2.viewmodel.AuthViewModel
 
 

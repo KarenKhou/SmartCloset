@@ -1,5 +1,6 @@
 package com.example.tesy2.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -82,7 +83,7 @@ fun CompleteProfileScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            val image = painterResource(id = R.drawable.auth_background1)
+//            val image = painterResource(id = R.drawable.auth_background1)
 
             Surface(
                 modifier = Modifier
@@ -95,12 +96,12 @@ fun CompleteProfileScreen(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    Image(
-                        painter = image,
-                        contentDescription = "Smart Closet Background",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.matchParentSize()
-                    )
+//                    Image(
+//                        painter = image,
+//                        contentDescription = "Smart Closet Background",
+//                        contentScale = ContentScale.Crop,
+//                        modifier = Modifier.matchParentSize()
+//                    )
 
                     Column(
                         modifier = Modifier
@@ -209,8 +210,14 @@ fun CompleteProfileScreen(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         TextButton(
-                            onClick = { navController.navigate("home") },
-                            modifier = Modifier.fillMaxWidth()
+                            onClick = { navController.navigate("profile")
+                                Toast.makeText(context, "✅ Profile Completed", Toast.LENGTH_LONG).show()
+                                navController.navigate("sign_in") {
+                                    popUpTo(0) { inclusive = true }
+                                }
+                                },
+                            modifier = Modifier.fillMaxWidth(),
+
                         ) {
                             Text(
                                 "Compléter plus tard",
