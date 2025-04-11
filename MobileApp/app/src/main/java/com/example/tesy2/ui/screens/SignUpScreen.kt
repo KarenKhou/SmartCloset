@@ -95,7 +95,7 @@ fun SignUpScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    "Bonjour!",
+                    "Welcome!",
                     style = MaterialTheme.typography.headlineLarge.copy(
                         fontSize = 26.sp,
                         fontWeight = FontWeight.Bold,
@@ -103,7 +103,7 @@ fun SignUpScreen(
                     )
                 )
                 Text(
-                    "Bienvenue à SmartCloset",
+                    "Welcome to SmartCloset",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontSize = 16.sp,
                         color = Color.White
@@ -126,12 +126,12 @@ fun SignUpScreen(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    Image(
-                        painter = image,
-                        contentDescription = "Smart Closet Background",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.matchParentSize()
-                    )
+//                    Image(
+//                        painter = image,
+//                        contentDescription = "Smart Closet Background",
+//                        contentScale = ContentScale.Crop,
+//                        modifier = Modifier.matchParentSize()
+//                    )
 
                     Column(
                         modifier = Modifier

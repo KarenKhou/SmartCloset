@@ -99,7 +99,7 @@ fun SignInScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    "Bonjour!",
+                    "Hello!",
                     style = MaterialTheme.typography.headlineLarge.copy(
                         fontSize = 26.sp,
                         fontWeight = FontWeight.Bold,
@@ -107,7 +107,7 @@ fun SignInScreen(
                     )
                 )
                 Text(
-                    "Bienvenu à SmartCloset",
+                    "Welcome to SmartCloset",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontSize = 16.sp,
                         color = Color.White
@@ -162,7 +162,7 @@ fun SignInScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                "Se connecter",
+                                "Connect Now",
                                 style = MaterialTheme.typography.titleMedium.copy(
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Medium,
@@ -231,7 +231,7 @@ fun SignInScreen(
                                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                                 shape = RoundedCornerShape(8.dp)
                             ) {
-                                Text("Connexion", color = Color.White)
+                                Text("Sign In", color = Color.White)
                             }
 
                             Spacer(modifier = Modifier.height(16.dp))
