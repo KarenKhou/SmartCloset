@@ -113,7 +113,7 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            val image = painterResource(id = R.drawable.auth_background1)
+            //val image = painterResource(id = R.drawable.auth_background1)
 
             Surface(
                 modifier = Modifier
