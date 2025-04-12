@@ -26,29 +26,32 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
-    val scope = rememberCoroutineScope()
+
     val scrollState = rememberScrollState()
 
-    val userId = supabase.auth.currentUserOrNull()?.id
+    val scope = rememberCoroutineScope()
+    val userId = viewModel.currentUserId
 
     if (userId == null) {
-        Log.e("Auth", "❌ No user authenticated!")
-        return // ou afficher un message d'erreur à l'utilisateur
+        Log.e("Auth", "❌ User not ready yet")
+        // show loading or return
+        return
     }
+
 
     // Filter options
     val outfitTypes = listOf("top+bottom", "dress")
     val genders = listOf("male", "female")
-    val seasons = listOf("summer", "winter", "spring", "autumn")
-    val occasions = listOf("casual", "formal", "both")
-    val styles = listOf("casual", "sporty", "elegant", "girly", "minimal", "edgy", "boho", "classic")
+    val seasons = listOf("winter", "summer")
+    val occasions = listOf("casual", "formal")
+
 
     // Selected values
     var selectedOutfitType by remember { mutableStateOf(outfitTypes[0]) }
     var selectedGender by remember { mutableStateOf(genders[0]) }
     var selectedSeason by remember { mutableStateOf(seasons[0]) }
     var selectedOccasion by remember { mutableStateOf(occasions[0]) }
-    var selectedStyle by remember { mutableStateOf(styles[0]) }
+
 
 
 

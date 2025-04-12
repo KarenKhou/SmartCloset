@@ -10,6 +10,9 @@ import coil.compose.AsyncImage
 import com.example.tesy2.data.models.UsagePreview
 import com.example.tesy2.data.supabase.supabase
 import com.example.tesy2.viewmodel.getRecentUsage
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -37,6 +40,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tesy2.data.models.ClothingUsageStat
 import com.example.tesy2.viewmodel.WornCalendarViewModel
 import io.github.jan.supabase.auth.auth
 import java.time.DayOfWeek
@@ -85,9 +89,17 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
     val dayBackgroundColor = Color.White
     val headerColor = Color(0xFFFF80AB)
 
+
+
+
+    val topItems by viewModel.topItems.collectAsState()
     LaunchedEffect(userId) {
         try {
             recentItems = getRecentUsage(userId!!)
+            viewModel.getTop3Items(userId)
+            viewModel.loadForgottenItems(userId)
+
+
         } catch (e: Exception) {
             errorMessage = "Erreur Supabase : ${e.message}"
         } finally {
@@ -505,6 +517,93 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                 containerColor = Color(0xFFFFF5F8)
             )
         ) {
+
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+// Podium des vêtements les plus portés
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(4.dp, RoundedCornerShape(20.dp)),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF0FA))
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = "Podium",
+                            tint = Color(0xFFFF4081),
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Podium 🏆",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF424242)
+                        )
+                    }
+
+                    topItems.forEach { item ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(Color(0xFFF5F5F5))
+                            ) {
+                                AsyncImage(
+                                    model = item.image_url,
+                                    contentDescription = item.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(16.dp))
+
+                            Column {
+                                Text(
+                                    text = "${rankToEmoji(item.rank)} ${item.name}",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF424242)
+                                )
+                                Text(
+                                    text = "Porté ${item.count} fois",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color.Gray
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(4.dp, RoundedCornerShape(20.dp)),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEDF7))
+        ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -512,60 +611,48 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                 ) {
                     Icon(
                         imageVector = Icons.Default.Star,
-                        contentDescription = "Stats",
+                        contentDescription = "Oubliés",
                         tint = Color(0xFFFF4081),
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Tes stats fashion",
+                        text = "Vêtements oubliés 👻",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF424242)
                     )
                 }
 
-                // Stat 1 – Vêtement le plus porté
-                StatCard(
-                    icon = "👑",
-                    title = "Vêtement favori",
-                    value = "Robe rose à paillettes (7 fois)",
-                    color = Color(0xFFFFE0F0)
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // Stat 2 – Couleurs et styles
-                StatCard(
-                    icon = "🎨",
-                    title = "Style",
-                    value = "Couleur: Rose • Style: Kawaii",
-                    color = Color(0xFFFFF0FA)
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // Stat 3 – Habits oubliés
-                StatCard(
-                    icon = "❌",
-                    title = "Vêtements oubliés",
-                    value = "• Jean flare\n• Pull fluffy blanc\n• Boots plateforme",
-                    color = Color(0xFFFFEDF7)
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // Stat 4 – Répétitions
-                StatCard(
-                    icon = "🔁",
-                    title = "Portés plusieurs jours",
-                    value = "• Hoodie noir (3 jours d'affilée 🖤)",
-                    color = Color(0xFFFFEDF7)
-                )
+                if (viewModel.forgottenItems.isEmpty()) {
+                    Text("Aucun vêtement oublié 💫", color = Color.Gray)
+                } else {
+                    viewModel.forgottenItems.forEach { item ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(Color(0xFFF5F5F5))
+                            ) {
+                                AsyncImage(
+                                    model = item.image_url,
+                                    contentDescription = item.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(item.name, style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                }
             }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
@@ -612,4 +699,10 @@ fun StatCard(
             }
         }
     }
+}
+fun rankToEmoji(rank: Int): String = when(rank) {
+    1 -> "🥇"
+    2 -> "🥈"
+    3 -> "🥉"
+    else -> "$rank."
 }

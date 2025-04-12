@@ -36,6 +36,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import com.example.tesy2.data.models.Closet
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.statement.HttpResponse
@@ -443,6 +445,18 @@ class ClothingViewModel : ViewModel() {
                 println("❌ Erreur chargement closets: ${e.message}")
             }
         }
+    }
+
+
+    var currentUserId by mutableStateOf<String?>(null)
+        private set
+
+    init {
+        loadCurrentUser()
+    }
+
+    fun loadCurrentUser() {
+        currentUserId = supabase.auth.currentUserOrNull()?.id
     }
 
 }

@@ -9,18 +9,18 @@ def get_color_combinations(top_color):
     """
     # Define color groups and their relationships
     color_groups = {
-        'red': ['black', 'white', 'blue', 'beige'],
-        'blue': ['white', 'beige', 'black', 'red', 'purple', 'brown'],
-        'black': ['white', 'beige', 'red', 'blue', 'pink', 'purple', 'brown','black'],
-        'white': ['black', 'blue', 'red', 'pink', 'beige', 'purple', 'brown'],
-        'beige': ['black', 'blue', 'red', 'white', 'purple', 'brown'],
-        'pink': ['black', 'white', 'beige', 'blue', 'purple', 'brown'],
-        'orange': ['black', 'white', 'blue', 'brown'],
-        'yellow': ['black', 'white', 'blue', 'brown'],
-        'green': ['black', 'white', 'beige', 'brown'],
-        'purple': ['white', 'black', 'beige', 'gray', 'pink', 'light blue', 'brown'],
-        'brown': ['beige', 'white', 'black', 'blue', 'green', 'orange', 'yellow'],
-        'multi': ['black', 'white', 'beige', 'brown']
+        'red': ['black', 'white', 'blue', 'beige','gray'],
+        'blue': ['white', 'beige', 'black', 'red', 'purple', 'brown','gray'],
+        'black': ['white', 'beige', 'red', 'blue', 'pink', 'purple', 'brown','black','gray'],
+        'white': ['black', 'blue', 'red', 'pink', 'beige', 'purple', 'brown','gray'],
+        'beige': ['black', 'blue', 'red', 'white', 'purple', 'brown','gray'],
+        'pink': ['black', 'white', 'beige', 'blue', 'purple', 'brown','gray'],
+        'orange': ['black', 'white', 'blue', 'brown','gray'],
+        'yellow': ['black', 'white', 'blue', 'brown','gray'],
+        'green': ['black', 'white', 'beige', 'brown','gray'],
+        'purple': ['white', 'black', 'beige', 'gray', 'pink', 'light blue', 'brown','gray'],
+        'brown': ['beige', 'white', 'black', 'blue', 'green', 'orange', 'yellow','gray'],
+        'multi': ['black', 'white', 'beige', 'brown','gray']
     }
 
     # Find the base color (simplified matching)
