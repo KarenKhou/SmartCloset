@@ -69,7 +69,7 @@ fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFFEE6F1)
+                containerColor = MaterialTheme.colorScheme.primary
             ),
             elevation = CardDefaults.cardElevation(4.dp)
         ) {
@@ -81,12 +81,12 @@ fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
                     text = "Outfit Suggestions",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFF69B4)
+                    color = Color.White
                 )
                 Text(
                     text = "Find your perfect look",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color.White
                 )
             }
         }
@@ -158,7 +158,7 @@ fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF69B4))
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
                     if (isLoading) {
                         CircularProgressIndicator(
@@ -225,7 +225,7 @@ fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
                     .height(200.dp),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(color = Color(0xFFFF69B4))
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         } else {
             Box(

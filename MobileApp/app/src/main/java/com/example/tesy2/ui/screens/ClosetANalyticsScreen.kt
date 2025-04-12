@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
@@ -45,6 +46,8 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
+import com.example.tesy2.ui.theme.LocalAppTheme
+
 
 @Composable
 fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
@@ -77,13 +80,15 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
         result
     }
 
+
+
     // UI Colors
-    val gradientColors = listOf(Color(0xFFFF80AB), Color(0xFFFF4081))
-    val calendarBackgroundColor = Color(0xFFFFF5F8)
-    val todayHighlightColor = Color(0xFFFF4081)
-    val selectedDayColor = Color(0xFFFF80AB)
-    val dayBackgroundColor = Color.White
-    val headerColor = Color(0xFFFF80AB)
+    val gradientColors = LocalAppTheme.current.value.gradientColors
+    val calendarBackgroundColor = LocalAppTheme.current.value.calendarBackgroundColor
+    val todayHighlightColor = LocalAppTheme.current.value.todayHighlightColor
+    val selectedDayColor = LocalAppTheme.current.value.selectedDayColor
+    val dayBackgroundColor = LocalAppTheme.current.value.dayBackgroundColor
+    val headerColor = LocalAppTheme.current.value.headerColor
 
     LaunchedEffect(userId) {
         try {
@@ -197,7 +202,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY)
-                                    Color(0xFFFF4081) else Color(0xFF424242)
+                                    todayHighlightColor else Color(0xFF424242)
                             )
                         }
                     }
@@ -256,7 +261,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                                         color = when {
                                             isSelected -> Color.White
                                             date.dayOfWeek == DayOfWeek.SATURDAY || date.dayOfWeek == DayOfWeek.SUNDAY ->
-                                                Color(0xFFFF4081)
+                                                todayHighlightColor
                                             else -> Color(0xFF424242)
                                         }
                                     )
@@ -269,7 +274,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                                             modifier = Modifier
                                                 .size(4.dp)
                                                 .background(
-                                                    if (isSelected) Color.White else Color(0xFFFF4081),
+                                                    if (isSelected) Color.White else todayHighlightColor,
                                                     RoundedCornerShape(2.dp)
                                                 )
                                         )
@@ -300,7 +305,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                     Icon(
                         imageVector = Icons.Outlined.CalendarMonth,
                         contentDescription = "Calendar",
-                        tint = Color(0xFFFF4081),
+                        tint =todayHighlightColor,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -350,7 +355,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                                 } ?: Icon(
                                     Icons.Default.Favorite,
                                     contentDescription = null,
-                                    tint = Color(0xFFFF80AB),
+                                    tint =selectedDayColor,
                                     modifier = Modifier
                                         .size(24.dp)
                                         .align(Alignment.Center)
@@ -388,7 +393,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                     Icon(
                         imageVector = Icons.Outlined.Favorite,
                         contentDescription = "Recent",
-                        tint = Color(0xFFFF4081),
+                        tint =todayHighlightColor,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -408,7 +413,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                                 .padding(vertical = 32.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            CircularProgressIndicator(color = Color(0xFFFF4081))
+                            CircularProgressIndicator(color = todayHighlightColor)
                         }
                     }
                     errorMessage != null -> {
@@ -502,7 +507,8 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                 .shadow(4.dp, RoundedCornerShape(20.dp)),
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFFFF5F8)
+//                containerColor = Color(0xFFFFF5F8)
+                containerColor =Color(0xFFF5F5F5)
             )
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
@@ -513,7 +519,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = "Stats",
-                        tint = Color(0xFFFF4081),
+                        tint = todayHighlightColor,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -530,7 +536,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                     icon = "👑",
                     title = "Vêtement favori",
                     value = "Robe rose à paillettes (7 fois)",
-                    color = Color(0xFFFFE0F0)
+                    color = LocalAppTheme.current.value.favitem
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -540,7 +546,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                     icon = "🎨",
                     title = "Style",
                     value = "Couleur: Rose • Style: Kawaii",
-                    color = Color(0xFFFFF0FA)
+                    color=LocalAppTheme.current.value.style
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -550,7 +556,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                     icon = "❌",
                     title = "Vêtements oubliés",
                     value = "• Jean flare\n• Pull fluffy blanc\n• Boots plateforme",
-                    color = Color(0xFFFFEDF7)
+                    color = LocalAppTheme.current.value.stats
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -560,7 +566,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                     icon = "🔁",
                     title = "Portés plusieurs jours",
                     value = "• Hoodie noir (3 jours d'affilée 🖤)",
-                    color = Color(0xFFFFEDF7)
+                    color = LocalAppTheme.current.value.stats
                 )
             }
         }
