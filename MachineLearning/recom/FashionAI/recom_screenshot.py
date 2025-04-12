@@ -22,14 +22,14 @@ class RecOutfit:
         self.dress_categories = ['dress']
 
 
-    def load_wardrobe_tags(self):
+    def load_wardrobe_tags(self,userid):
+        print(f"loadinf karen for {userid}")
         
-        user = supabase.auth.get_user()
-        userid = user.id if user else "b5d6de82-e003-4748-b1d4-b826d658761b"
-
         closetsid=supabase.table("closet").select("closet_id").eq("user_id",userid).execute()
+        print(f"closets:{closetsid}")
         closet_ids = [row["closet_id"] for row in closetsid.data]
         response = supabase.table("clothingitem").select("item_id","category","season","style","color").eq("availability",1).in_("closet_id",closet_ids).execute()
+        
         
         data = response.data
         df = pd.DataFrame(data)
@@ -74,10 +74,11 @@ class RecOutfit:
         return "other"
 
 
-    def get_recommendation_by_metadata_only(self, input_tags):
+    def get_recommendation_by_metadata_only(self, input_tags,userid):
         try:
             print(f"Filtering for: {input_tags}")
-            tags_df = self.load_wardrobe_tags()
+            
+            tags_df = self.load_wardrobe_tags(userid)
 
 
             top_mask = pd.Series(True, index=tags_df.index)

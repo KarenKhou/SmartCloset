@@ -120,7 +120,7 @@ class ClothingViewModel : ViewModel() {
                             "season" to "summer",
                             "occasion" to "casual",
                             "style" to "casual",
-                            "randomize" to "false"
+                            "randomize" to "true"
                         ).formUrlEncode()
                     )
                 }
@@ -130,45 +130,6 @@ class ClothingViewModel : ViewModel() {
 
             } catch (e: Exception) {
                 println("❌ Reco API failed: ${e.message}")
-            }
-        }
-    }
-
-    fun sendRecommendationRequest(
-        outfitType: String,
-        gender: String,
-        season: String,
-        occasion: String,
-        style: String,
-        randomize: Boolean = false
-    ) {
-        viewModelScope.launch {
-            try {
-                val client = HttpClient {
-                    install(ContentNegotiation) {
-                        json(Json {
-                            ignoreUnknownKeys = true
-                            prettyPrint = true
-                        })
-                    }
-                }
-
-                val response = client.submitForm(
-                    url = ngrokk,
-                    formParameters = Parameters.build {
-                        append("outfit_type", outfitType)
-                        append("gender", gender)
-                        append("season", season)
-                        append("occasion", occasion)
-                        append("style", style)
-                        append("randomize", randomize.toString())
-                    }
-                )
-
-                println("✅ Reco API success: ${response.status}")
-
-            } catch (e: Exception) {
-                println("❌ API error: ${e.message}")
             }
         }
     }

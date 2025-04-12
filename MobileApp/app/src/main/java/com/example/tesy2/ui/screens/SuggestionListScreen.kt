@@ -29,6 +29,13 @@ fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
 
+    val userId = supabase.auth.currentUserOrNull()?.id
+
+    if (userId == null) {
+        Log.e("Auth", "❌ No user authenticated!")
+        return // ou afficher un message d'erreur à l'utilisateur
+    }
+
     // Filter options
     val outfitTypes = listOf("top+bottom", "dress")
     val genders = listOf("male", "female")
@@ -43,12 +50,7 @@ fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
     var selectedOccasion by remember { mutableStateOf(occasions[0]) }
     var selectedStyle by remember { mutableStateOf(styles[0]) }
 
-    val userId = supabase.auth.currentUserOrNull()?.id
 
-    if (userId == null) {
-        Log.e("Auth", "❌ No user authenticated!")
-        return // ou afficher un message d'erreur à l'utilisateur
-    }
 
     // Loading state
     var isLoading by remember { mutableStateOf(false) }
@@ -119,12 +121,7 @@ fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
                             onSelected = { selectedSeason = it }
                         )
 
-                        FilterDropdown(
-                            label = "Style",
-                            options = styles,
-                            selected = selectedStyle,
-                            onSelected = { selectedStyle = it }
-                        )
+
                     }
 
                     Spacer(modifier = Modifier.width(12.dp))

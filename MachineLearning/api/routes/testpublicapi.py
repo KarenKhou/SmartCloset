@@ -166,13 +166,13 @@ def detect_color(file: UploadFile = File(...)):
     
 @app.post('/get_recommendations')
 async def recommendation_endpoint(
+    userid: str = Form(...),
     outfit_type: str = Form(...),
-    gender: str = Form(...),
     season: str = Form(...),
     occasion: str = Form(...),
     randomize: bool = Form(False)
 ):
-    return await get_outfit_recommendations(outfit_type, gender, season, occasion, randomize)
+    return await get_outfit_recommendations(userid, outfit_type ,season, occasion, randomize)
 
 
 
