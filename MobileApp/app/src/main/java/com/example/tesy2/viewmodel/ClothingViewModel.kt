@@ -174,8 +174,9 @@ class ClothingViewModel : ViewModel() {
     }
 
     fun generateRecommendation(
+        userId : String,
         outfitType: String,
-        gender: String,
+        //gender: String,
         season: String,
         occasion: String,
         //style: String,
@@ -192,8 +193,9 @@ class ClothingViewModel : ViewModel() {
                 val response: HttpResponse = client.submitForm(
                     url = ngrokk,
                     formParameters = Parameters.build {
+                        append("userid",userId)
                         append("outfit_type", outfitType)
-                        append("gender", gender)
+                        //append("gender", gender)
                         append("season", season)
                         append("occasion", occasion)
                         //append("style", style)

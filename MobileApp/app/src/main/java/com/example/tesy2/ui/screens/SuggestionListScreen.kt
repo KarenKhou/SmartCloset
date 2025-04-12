@@ -1,5 +1,6 @@
 package com.example.tesy2.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -16,8 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tesy2.supabase
 import com.example.tesy2.ui.composable.ClothingCard
 import com.example.tesy2.viewmodel.ClothingViewModel
+import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,6 +42,13 @@ fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
     var selectedSeason by remember { mutableStateOf(seasons[0]) }
     var selectedOccasion by remember { mutableStateOf(occasions[0]) }
     var selectedStyle by remember { mutableStateOf(styles[0]) }
+
+    val userId = supabase.auth.currentUserOrNull()?.id
+
+    if (userId == null) {
+        Log.e("Auth", "❌ No user authenticated!")
+        return // ou afficher un message d'erreur à l'utilisateur
+    }
 
     // Loading state
     var isLoading by remember { mutableStateOf(false) }
@@ -101,12 +111,6 @@ fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
                 // Two-column layout for filters
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.weight(1f)) {
-                        FilterDropdown(
-                            label = "Outfit Type",
-                            options = outfitTypes,
-                            selected = selectedOutfitType,
-                            onSelected = { selectedOutfitType = it }
-                        )
 
                         FilterDropdown(
                             label = "Season",
@@ -126,12 +130,7 @@ fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
                     Spacer(modifier = Modifier.width(12.dp))
 
                     Column(modifier = Modifier.weight(1f)) {
-                        FilterDropdown(
-                            label = "Gender",
-                            options = genders,
-                            selected = selectedGender,
-                            onSelected = { selectedGender = it }
-                        )
+
 
                         FilterDropdown(
                             label = "Occasion",
@@ -150,8 +149,9 @@ fun SuggScreen(viewModel: ClothingViewModel = viewModel()) {
                         isLoading = true
                         scope.launch {
                             viewModel.generateRecommendation(
-                                outfitType = selectedOutfitType,
-                                gender = selectedGender,
+                                userId=userId!!,
+                                outfitType = "top+bottom",
+                                //gender = selectedGender,
                                 season = selectedSeason,
                                 occasion = selectedOccasion,
                                 //style = selectedStyle,
