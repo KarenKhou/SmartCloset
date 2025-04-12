@@ -5,6 +5,7 @@ import random
 
 import random
 import traceback
+from MachineLearning.core.config import supabase
 app = FastAPI()
 
 
@@ -129,18 +130,62 @@ async def get_outfit_recommendations(
             random.shuffle(categorized['dresses'])
 
         if outfit_type == "top+bottom":
+
+            resu = categorized['tops'][:1] + categorized['bottoms'][:1]
+            print("✅ Top selected:", categorized['tops'][:1])
+            print("✅ Bottom selected:", categorized['bottoms'][:1])
+
+
+            
+                
+            user = supabase.auth.get_user()
+            userid = user.id if user else "b5d6de82-e003-4748-b1d4-b826d658761b"
+
+
+            reco_resp = supabase.table("outfitrecommendation").insert({
+                "user_id": userid,
+                
+                # "weather_condition_id": weather_condition_id,
+                "style": input_tags.get('occasion')
+            }).execute()
+            print("Reco response:", reco_resp.data)
+
+            recommendation_id = reco_resp.data[0]["recommendation_id"]
+
+            # 🔍 DEBUG : check for duplicates
+            unique_items = {item['item_id']: item for item in resu}.values()
+            to_insert = [
+                {
+                "recommendation_id": int(recommendation_id),
+                "item_id": int(item["item_id"]),
+            }
+            for item in unique_items
+            ]
+            print(f"📦 [DEBUG] Final unique items: {to_insert}")
+
+            
+            print("📦 [DEBUG] To insert in outfitrecommendation_item:", to_insert)
+
+
+
+            supabase.table("outfitrecommendation_items").insert(to_insert).execute()
             return JSONResponse(content={
                 "results": {
                     'tops': categorized['tops'][:1],
                     'bottoms': categorized['bottoms'][:1]
                 }
             })
+        
+
         elif outfit_type == "dress":
             return JSONResponse(content={
                 "results": {
                     'dresses': categorized['dresses'][:1]
                 }
             })
+        
+
+
     except Exception as e:
         traceback.print_exc()  # affiche le vrai stack trace dans la console
         return JSONResponse(

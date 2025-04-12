@@ -17,21 +17,12 @@ class RecOutfit:
     def __init__(self, wardrobe_path):
         self.wardrobe_path = wardrobe_path
         self.wardrobe_tagfile_path = 'clothing_data.json'
-        self.top_categories = ['shirt', 'tshirt', 'sweater', 'jacket']
+        self.top_categories = ['shirt', 'Tshirt', 'sweater', 'jacket']
         self.bottom_categories = ['pants', 'skirt', 'short']
         self.dress_categories = ['dress']
 
 
     def load_wardrobe_tags(self):
-        # """Load and clean wardrobe tags"""
-        # with open(self.wardrobe_tagfile_path) as f:
-        #     data = json.load(f)
-
-        # df = pd.DataFrame(data)
-
-        # # Normalize column names to lowercase
-        # df.columns = df.columns.str.lower()
-
         
         user = supabase.auth.get_user()
         userid = user.id if user else "b5d6de82-e003-4748-b1d4-b826d658761b"
@@ -39,9 +30,12 @@ class RecOutfit:
         closetsid=supabase.table("closet").select("closet_id").eq("user_id",userid).execute()
         closet_ids = [row["closet_id"] for row in closetsid.data]
         response = supabase.table("clothingitem").select("item_id","category","season","style","color").eq("availability",1).in_("closet_id",closet_ids).execute()
+        
         data = response.data
-
         df = pd.DataFrame(data)
+       
+
+        
 
         if df.empty:
             logging.warning("No data returned from Supabase.")
@@ -50,7 +44,11 @@ class RecOutfit:
         # Clean data values
         string_cols = df.select_dtypes(include=['object']).columns
         df[string_cols] = df[string_cols].apply(lambda x: x.str.lower().str.strip())
+        df["category"] = df["category"].apply(self.normalize_category)
+        print("🧵 [DEBUG] Final category value counts:\n", df["category"].value_counts())
+        print("👕 Tops preview:\n", df[df["category"] == "top"][["item_id", "season", "style"]])
 
+        
         return df
 
     def classify_item(self, image_id):
@@ -63,17 +61,23 @@ class RecOutfit:
         elif 'dress' in image_id:
             return 'dress'
         return 'other'
+    
+
+    def normalize_category(self, raw_category: str):
+        cat = raw_category.lower()
+        if cat in [c.lower() for c in self.top_categories]:
+            return "top"
+        elif cat in [c.lower() for c in self.bottom_categories]:
+            return "bottom"
+        elif cat in [c.lower() for c in self.dress_categories]:
+            return "dress"
+        return "other"
+
 
     def get_recommendation_by_metadata_only(self, input_tags):
         try:
             print(f"Filtering for: {input_tags}")
             tags_df = self.load_wardrobe_tags()
-
-            # First filter for tops that match the criteria
-            # top_mask = pd.Series(True, index=tags_df.index)
-            # for col, value in input_tags.items():
-            #     if col in tags_df.columns:
-            #         top_mask &= (tags_df[col] == value.strip().lower())
 
 
             top_mask = pd.Series(True, index=tags_df.index)
@@ -102,10 +106,8 @@ class RecOutfit:
 
             print(f"🔍 [DEBUG] Top mask: {top_mask.sum()} matches")
 
-            # Get matching tops
-            top_matches = tags_df[top_mask & tags_df['category'].apply(
-                lambda x: self.classify_item(x) == 'top'
-            )]
+            top_matches = tags_df[top_mask & (tags_df["category"] == "top")]
+
 
             if top_matches.empty:
                 print("🚫 [DEBUG] No top matches found.")
@@ -119,17 +121,10 @@ class RecOutfit:
             compatible_bottom_colors = get_color_combinations(top_color)
             print(f"Top color: {top_color}, Compatible bottom colors: {compatible_bottom_colors}")
 
-            # Filter bottoms that match criteria AND color
-            # bottom_mask = pd.Series(True, index=tags_df.index)
-            # for col, value in input_tags.items():
-            #     if col in tags_df.columns:
-            #         bottom_mask &= (tags_df[col] == value.strip().lower())
-
-            # bottom_mask &= tags_df['category'].apply(
-            #     lambda x: self.classify_item(x) == 'bottom'
-            # )
 
             bottom_mask = pd.Series(True, index=tags_df.index)
+            bottom_mask &= tags_df["category"] == "bottom"
+
 
             for col, value in input_tags.items():
                 if col not in tags_df.columns:
@@ -180,50 +175,8 @@ class RecOutfit:
             })
 
 
-            
-
-        user = supabase.auth.get_user()
-        userid = user.id if user else "b5d6de82-e003-4748-b1d4-b826d658761b"
-
-
-        reco_resp = supabase.table("outfitrecommendation").insert({
-        "user_id": userid,
-        
-        # "weather_condition_id": weather_condition_id,
-        "style": input_tags.get('occasion')
-        }).execute()
-        print("Reco response:", reco_resp.data)
-
-        recommendation_id = reco_resp.data[0]["recommendation_id"]
-
-        # 🔍 DEBUG : check for duplicates
-        unique_items = {item['item_id']: item for item in results}.values()
-        to_insert = [
-            {
-            "recommendation_id": int(recommendation_id),
-            "item_id": int(item["item_id"]),
-        }
-        for item in unique_items
-        ]
-        logging.debug(f"📦 [DEBUG] Final unique items: {to_insert}")
-
-
-
-    #     to_insert = [
-    # {
-    #     "recommendation_id": int(recommendation_id),  # au cas où
-    #     "item_id": int(item["item_id"]),  # conversion nécessaire ici
-    # }
-    # for item in results]
-        
-        print("📦 [DEBUG] To insert in outfitrecommendation_item:", to_insert)
-
-
-
-        supabase.table("outfitrecommendation_items").insert(to_insert).execute()
-
-        # Convert all item_id to native Python int
         for item in results:
             item["item_id"] = int(item["item_id"])
+        print("coucou")
 
         return results

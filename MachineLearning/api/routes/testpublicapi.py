@@ -17,6 +17,11 @@ from MachineLearning.colors import color
 from MachineLearning.recom.FashionAI.main import get_outfit_recommendations
 from fastapi import Form
 
+from fastapi import FastAPI, UploadFile, File
+import shutil
+import os
+from MachineLearning.api.routes.colorslea import extract_colors, find_closest_color
+
 
 
 
@@ -70,7 +75,8 @@ def process_image(image_url: str, item_id: int):
             category = model.names[int(result.boxes.cls[0])]
             print("category:" , category)
 
-            colorr = color.detect_dominant_color(image_data.getvalue())
+            colorr_dict =predict_color_from_bytes(image_data.getvalue())
+            colorr = colorr_dict["closest_color_name"]
             print("color: ", colorr)
             
 
@@ -169,6 +175,51 @@ async def recommendation_endpoint(
     return await get_outfit_recommendations(outfit_type, gender, season, occasion, randomize)
 
 
+
+
+
+@app.post("/predict_color")
+def predict_color(file: UploadFile = File(...)):
+    file_location = f"temp_{file.filename}"
+    with open(file_location, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    try:
+        colors, counts = extract_colors(file_location)
+        most_frequent_color = colors[counts.argmax()]
+        closest = find_closest_color(most_frequent_color)
+        return {
+            "rgb": most_frequent_color.tolist(),
+            "closest_color_name": closest["name"],
+            "closest_color_hex": closest["hex"]
+        }
+    finally:
+        os.remove(file_location)
+
+
+
+
+# 👉 color_utils.py ou colorslea.py
+
+import tempfile
+import os
+
+def predict_color_from_bytes(image_bytes: bytes):
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
+        tmp.write(image_bytes)
+        tmp_path = tmp.name
+
+    try:
+        colors, counts = extract_colors(tmp_path)
+        most_frequent_color = colors[counts.argmax()]
+        closest = find_closest_color(most_frequent_color)
+        return {
+            "rgb": most_frequent_color.tolist(),
+            "closest_color_name": closest["name"],
+            "closest_color_hex": closest["hex"]
+        }
+    finally:
+        os.remove(tmp_path)
 
 #cd C:\Users\User\Downloads\
 #ngrok http 8000
