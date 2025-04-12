@@ -20,6 +20,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
@@ -28,12 +30,16 @@ import com.example.tesy2.viewmodel.ClothingViewModel
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.IconButton
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.example.tesy2.data.models.AppUser
 import com.example.tesy2.data.models.Closet
@@ -45,16 +51,16 @@ import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.runBlocking
 import com.example.tesy2.viewmodel.AuthViewModel
-
-
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.min
 
 @Composable
 fun ClothingScreen(
     modifier: Modifier = Modifier,
-    viewModel: ClothingViewModel = viewModel() ,
+    viewModel: ClothingViewModel = viewModel(),
     navController: NavController
 ) {
-
     val user = supabase.auth.currentUserOrNull()
     val userId = user?.id
 
@@ -69,7 +75,6 @@ fun ClothingScreen(
                     .select {
                         filter { eq("user_id", userId) }
                     }
-
                     .decodeSingle<AppUser>()
                 println("✅ Successfully fetched user: ${response.name}")
                 userName = response.name
@@ -81,19 +86,41 @@ fun ClothingScreen(
         }
     }
 
-
     val context = LocalContext.current
 
     val clothingList = viewModel.clothingItems.collectAsState().value
     var searchQuery by remember { mutableStateOf("") }
     var isSearchFocused by remember { mutableStateOf(false) }
 
+    var selectedCategory by remember { mutableStateOf<String?>(null) }
+    var selectedStyle by remember { mutableStateOf<String?>(null) }
+
     val filteredClothingList = clothingList.filter { item ->
-        item.name?.contains(searchQuery, ignoreCase = true) == true ||
+        val matchesSearch = item.name?.contains(searchQuery, ignoreCase = true) == true ||
                 item.category?.contains(searchQuery, ignoreCase = true) == true ||
                 item.color?.contains(searchQuery, ignoreCase = true) == true ||
                 item.style?.contains(searchQuery, ignoreCase = true) == true
+
+        val matchesCategory = selectedCategory == null || item.category?.equals(selectedCategory, ignoreCase = true) == true
+        val matchesStyle = selectedStyle == null || item.style?.equals(selectedStyle, ignoreCase = true) == true
+
+        matchesSearch && matchesCategory && matchesStyle
     }
+
+
+    val itemsPerPage = 4
+    val totalPages = max(1, ceil(filteredClothingList.size.toDouble() / itemsPerPage).toInt())
+    var currentPage by remember { mutableStateOf(1) }
+
+    LaunchedEffect(filteredClothingList) {
+        if (currentPage > totalPages) {
+            currentPage = min(currentPage, totalPages)
+        }
+    }
+
+    val startIndex = (currentPage - 1) * itemsPerPage
+    val endIndex = min(startIndex + itemsPerPage, filteredClothingList.size)
+    val currentPageItems = filteredClothingList.subList(startIndex, endIndex)
 
     // Load the clothes (for example from closet 1)
     LaunchedEffect(Unit) {
@@ -118,9 +145,13 @@ fun ClothingScreen(
             ),
             modifier = Modifier.padding(bottom = 16.dp)
         )
+
         TextField(
             value = searchQuery,
-            onValueChange = { query -> searchQuery = query },
+            onValueChange = { query ->
+                searchQuery = query
+                currentPage = 1
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .animateContentSize(
@@ -167,10 +198,7 @@ fun ClothingScreen(
             singleLine = true
         )
 
-
-
         Spacer(modifier = Modifier.height(24.dp))
-
 
         if (filteredClothingList.isEmpty() && searchQuery.isNotEmpty()) {
             Box(
@@ -180,7 +208,6 @@ fun ClothingScreen(
                 Text("No items found matching \"$searchQuery\"")
             }
         } else {
-
             val closetList by viewModel.closets
             var expanded by remember { mutableStateOf(false) }
             var selectedCloset by remember { mutableStateOf<Closet?>(null) }
@@ -189,61 +216,214 @@ fun ClothingScreen(
                 viewModel.loadUserClosets()
             }
 
-
             Spacer(modifier = Modifier.height(8.dp))
 
-            Box {
-                Button(onClick = { expanded = true }) {
-                    Text(selectedCloset?.closet_name ?: "Your Closet")
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // All
+                Button(onClick = {
+                    selectedCategory = null
+                    selectedStyle = null
+                    currentPage = 1 // Reset to first page when filters change
+                }) {
+                    Text("All")
                 }
 
-                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    closetList.forEach { closet ->
-                        DropdownMenuItem(
-                            text = { Text(closet.closet_name) },
-                            onClick = {
-                                selectedCloset = closet
-                                expanded = false
-                                viewModel.loadClothes(closet.closet_id!!)
-                            }
-                        )
+                Spacer(modifier = Modifier.width(8.dp))
+
+                // Category
+                var expandedCategory by remember { mutableStateOf(false) }
+                Box {
+                    Button(onClick = { expandedCategory = true }) {
+                        Text(selectedCategory ?: "Category")
+                    }
+
+                    DropdownMenu(expanded = expandedCategory, onDismissRequest = { expandedCategory = false }) {
+                        listOf("Tshirt", "Dress", "Jacket", "Pants", "Sweater", "Shirt", "Short", "Skirt").forEach { category ->
+                            DropdownMenuItem(
+                                text = { Text(category) },
+                                onClick = {
+                                    selectedCategory = category
+                                    expandedCategory = false
+                                    currentPage = 1 // Reset to first page when filters change
+                                }
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                // Style
+                var expandedStyle by remember { mutableStateOf(false) }
+                Box {
+                    Button(onClick = { expandedStyle = true }) {
+                        Text(selectedStyle ?: "Style")
+                    }
+
+                    DropdownMenu(expanded = expandedStyle, onDismissRequest = { expandedStyle = false }) {
+                        listOf("Formal", "Casual", "Both").forEach { style ->
+                            DropdownMenuItem(
+                                text = { Text(style) },
+                                onClick = {
+                                    selectedStyle = style
+                                    expandedStyle = false
+                                    currentPage = 1 // Reset to first page when filters change
+                                }
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                var expandedCloset by remember { mutableStateOf(false) }
+                Box {
+                    Button(onClick = { expandedCloset = true }) {
+                        Text(selectedCloset?.closet_name ?: "Your Closet")
+                    }
+
+                    DropdownMenu(expanded = expandedCloset, onDismissRequest = { expandedCloset = false }) {
+                        closetList.forEach { closet ->
+                            DropdownMenuItem(
+                                text = { Text(closet.closet_name) },
+                                onClick = {
+                                    selectedCloset = closet
+                                    expandedCloset = false
+                                    currentPage = 1 // Reset to first page when closet changes
+                                    viewModel.loadClothes(closet.closet_id!!)
+                                }
+                            )
+                        }
                     }
                 }
             }
 
-//            LazyColumn(
-//                modifier = Modifier.fillMaxSize(),
-//                verticalArrangement = Arrangement.spacedBy(16.dp)
-//            ) {
-//                items(filteredClothingList) { item ->
-//                    ClothingCard(item)
-//                }
-//            }
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 2.dp),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                items(filteredClothingList) { item ->
-                    ClothingCard(item, onEditClick = { selectedItem ->
-                        // 👉 Navigue vers un écran d'édition ou ouvre un Dialog
-                        navController.navigate("edit_clothing/${selectedItem.item_id}")
+            Spacer(modifier = Modifier.height(8.dp))
 
-                    })
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                // Items Grid
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(horizontal = 2.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    items(currentPageItems) { item ->
+                        ClothingCard(item, onEditClick = { selectedItem ->
+                            // 👉 Navigue vers un écran d'édition ou ouvre un Dialog
+                            navController.navigate("edit_clothing/${selectedItem.item_id}")
+                        })
+                    }
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(
+                        onClick = {
+                            if (currentPage > 1) currentPage--
+                        },
+                        enabled = currentPage > 1
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowLeft,
+                            contentDescription = "Previous Page",
+                            tint = if (currentPage > 1) MaterialTheme.colorScheme.primary else Color.Gray
+                        )
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    ) {
+                        val pageRange = calculateVisiblePageRange(currentPage, totalPages, 5)
+
+                        for (pageNum in pageRange) {
+                            val isCurrentPage = pageNum == currentPage
+                            Button(
+                                onClick = { currentPage = pageNum },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (isCurrentPage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+                                    contentColor = if (isCurrentPage) Color.White else MaterialTheme.colorScheme.primary
+                                ),
+                                modifier = Modifier.size(40.dp),
+                                contentPadding = PaddingValues(0.dp)
+                            ) {
+                                Text(
+                                    text = pageNum.toString(),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    }
+
+                    IconButton(
+                        onClick = {
+                            if (currentPage < totalPages) currentPage++
+                        },
+                        enabled = currentPage < totalPages
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowRight,
+                            contentDescription = "Next Page",
+                            tint = if (currentPage < totalPages) MaterialTheme.colorScheme.primary else Color.Gray
+                        )
+                    }
                 }
 
 
+                Text(
+                    text = "Page $currentPage of $totalPages (${filteredClothingList.size} items)",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, bottom = 16.dp),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }
-
-
-
 }
 
+
+private fun calculateVisiblePageRange(currentPage: Int, totalPages: Int, maxVisible: Int): IntRange {
+    if (totalPages <= maxVisible) {
+        return 1..totalPages
+    }
+
+    val halfVisible = maxVisible / 2
+    var start = currentPage - halfVisible
+    var end = currentPage + halfVisible
+
+
+    if (start < 1) {
+        end = end + (1 - start)
+        start = 1
+    }
+
+    if (end > totalPages) {
+        start = start - (end - totalPages)
+        end = totalPages
+    }
+
+    start = max(1, start)
+
+    return start..end
+}
 
 suspend fun getCurrentUserClosetIdSuspend(): Int? {
     val user = supabase.auth.currentUserOrNull() ?: return null
@@ -257,7 +437,7 @@ suspend fun getCurrentUserClosetIdSuspend(): Int? {
                 .from("closet")
                 .select(columns = Columns.list("closet_id")) {
                     filter {
-                        eq("user_id", userId )
+                        eq("user_id", userId)
                     }
                 }
             println("📥 RAW JSON: ${raw.data}") // ajoute ça temporairement pour debug
@@ -273,7 +453,4 @@ suspend fun getCurrentUserClosetIdSuspend(): Int? {
     val closetId = response.firstOrNull()?.closet_id
     println("📦 Final closet_id: $closetId")
     return closetId
-
 }
-
-
