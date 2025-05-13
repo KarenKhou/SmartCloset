@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.tesy2.data.models.AppUser
 import com.example.tesy2.data.repository.AuthRepository
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.result.PostgrestResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,6 +45,10 @@ class AuthViewModel : ViewModel() {
 
     private val _completeProfileSuccess = MutableStateFlow(false)
     val completeProfileSuccess: StateFlow<Boolean> = _completeProfileSuccess
+
+    private val _isProfileAlreadyComplete = MutableStateFlow(false)
+    val isProfileAlreadyComplete: StateFlow<Boolean> = _isProfileAlreadyComplete
+
 
     fun onEmailChange(value: String) {
         _email.value = value
@@ -113,6 +119,55 @@ class AuthViewModel : ViewModel() {
             }
         }
     }
+
+    fun fetchUserProfile() {
+        viewModelScope.launch {
+            println("📤 Appel de fetchUserProfile()")
+            val currentUser = com.example.tesy2.data.supabase.supabase.auth.currentUserOrNull()
+            if (currentUser != null) {
+                try {
+                    val response = com.example.tesy2.data.supabase.supabase
+                        .from("User")
+                        .select()
+
+                    val users = response.decodeList<AppUser>()
+
+                    val user = users.firstOrNull { it.user_id == currentUser.id }
+
+                    if (user != null) {
+                        _gender.value = user.gender ?: ""
+                        _job.value = user.job ?: ""
+                        _location.value = user.home_location ?: ""
+                        _birthDate.value = user.birth_date ?: ""
+                        _name.value = user.name ?: ""
+                        _theme.value = user.theme ?: ""
+
+                        println("✅ Profil utilisateur trouvé: $user")
+
+                        // ✅ Check if basic fields are already filled
+                        _isProfileAlreadyComplete.value =
+                            !user.gender.isNullOrBlank() &&
+                                    !user.job.isNullOrBlank() &&
+                                    !user.home_location.isNullOrBlank() &&
+                                    !user.birth_date.isNullOrBlank()
+
+                    } else {
+                        println("⚠️ Aucun profil utilisateur correspondant trouvé")
+                        _isProfileAlreadyComplete.value = false
+                    }
+
+                } catch (e: Exception) {
+                    println("❌ Erreur lors du chargement du profil: ${e.message}")
+                    _isProfileAlreadyComplete.value = false
+                }
+            } else {
+                println("⚠️ Aucun utilisateur connecté")
+                _isProfileAlreadyComplete.value = false
+            }
+        }
+    }
+
+
 
 
 

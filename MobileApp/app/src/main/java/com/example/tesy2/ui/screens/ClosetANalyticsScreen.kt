@@ -136,7 +136,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                 .padding(16.dp)
         ) {
             Text(
-                text = "✨ Mon Dressing Analytics ✨",
+                text = "✨ My Dressing Analytics ✨",
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
@@ -322,7 +322,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Tenue du " + selectedDate.format(DateTimeFormatter.ofPattern("dd MMMM yyyy")),
+                        text = "Outfit of " + selectedDate.format(DateTimeFormatter.ofPattern("dd MMMM yyyy")),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF424242)
@@ -337,7 +337,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "Aucun vêtement porté ce jour",
+                            text = "No Clothing worn this day",
                             style = MaterialTheme.typography.bodyLarge,
                             color = Color.Gray
                         )
@@ -410,7 +410,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Récemment portés",
+                        text = "Recently Worn",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF424242)
@@ -436,7 +436,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = errorMessage ?: "Une erreur inconnue est survenue",
+                                text = errorMessage ?: "Unknown Error",
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -449,7 +449,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Aucun vêtement récemment porté",
+                                text = "No Clothes Recently Worn",
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = Color.Gray
                             )
@@ -486,7 +486,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
 
                                     Column {
                                         Text(
-                                            text = usage.clothingitem?.name ?: "Nom inconnu",
+                                            text = usage.clothingitem?.name ?: "Unknown Name",
                                             style = MaterialTheme.typography.titleMedium,
                                             fontWeight = FontWeight.SemiBold,
                                             maxLines = 1,
@@ -497,7 +497,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                                         Spacer(modifier = Modifier.height(4.dp))
 
                                         Text(
-                                            text = "🗓️ Porté le ${usage.worn_date}",
+                                            text = "🗓️ Worn On ${usage.worn_date}",
                                             style = MaterialTheme.typography.bodySmall,
                                             color = Color(0xFF757575)
                                         )
@@ -543,7 +543,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = "Podium",
-                            tint = Color(0xFFFF4081),
+                            tint = todayHighlightColor,
                             modifier = Modifier.size(24.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -586,7 +586,7 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                                     color = Color(0xFF424242)
                                 )
                                 Text(
-                                    text = "Porté ${item.count} fois",
+                                    text = "Worn ${item.count} times",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = Color.Gray
                                 )

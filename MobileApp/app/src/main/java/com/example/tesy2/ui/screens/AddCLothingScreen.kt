@@ -5,48 +5,44 @@ import android.util.Base64
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-//import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tesy2.data.models.Closet
 import com.example.tesy2.data.models.ClothingItem
-import com.example.tesy2.data.models.UserData
-import com.example.tesy2.ui.theme.lightPink
-import com.example.tesy2.ui.theme.pinkColor
+import com.example.tesy2.ui.composable.ClosetDropdown
 import com.example.tesy2.viewmodel.ClothingViewModel
-import java.io.ByteArrayOutputStream
 import com.example.tesy2.ui.composable.SeasonDropdown
 import com.example.tesy2.ui.composable.StyleDropdown
-
+import java.io.ByteArrayOutputStream
 
 @Composable
 fun AddClothingScreen(
     viewModel: ClothingViewModel = viewModel()
 ) {
     var closetId by remember { mutableStateOf<Int?>(null) }
-
-
     var name by remember { mutableStateOf("") }
     var material by remember { mutableStateOf("") }
-    var  season by remember { mutableStateOf("")}
-    var stylee by remember { mutableStateOf("")}
+    var season by remember { mutableStateOf("") }
+    var stylee by remember { mutableStateOf("") }
     var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     var nameError by remember { mutableStateOf(false) }
@@ -54,6 +50,8 @@ fun AddClothingScreen(
     var seasonError by remember { mutableStateOf(false) }
     var styleeError by remember { mutableStateOf(false) }
     var photoError by remember { mutableStateOf(false) }
+    var closetError by remember { mutableStateOf(false) }
+
 
     val context = LocalContext.current
 
@@ -68,45 +66,63 @@ fun AddClothingScreen(
             it.compress(Bitmap.CompressFormat.PNG, 100, stream)
             val byteArray = stream.toByteArray()
 
-            viewModel.uploadImageToSupabase(byteArray, "photo_${System.currentTimeMillis()}.png","picture-clothes")
+            viewModel.uploadImageToSupabase(byteArray, "photo_${System.currentTimeMillis()}.png", "picture-clothes")
         }
     }
-    //ghayart methode
-//    LaunchedEffect(Unit) {
-//        closetId = getCurrentUserClosetIdSuspend()
-//        if (closetId != null) {
-//            println("closetid = ${closetId}")
-//        } else {
-//            println("❌ Aucun closet_id trouvé pour l'utilisateur")
-//        }
-//    }
-    Column ( modifier = Modifier
-        .fillMaxSize()
-        .verticalScroll(rememberScrollState()) // ✅ Ajoute ça ici
-        .background(lightPink)
-        .padding(24.dp)) {
+
+    val closetList by viewModel.closets
+    var selectedCloset by remember { mutableStateOf<Closet?>(null) }
+    val publicUrl by viewModel.publicUrl.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadUserClosets()
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Background
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(lightPink)
-                .padding(24.dp),
-            contentAlignment = Alignment.Center
+                .background(MaterialTheme.colorScheme.primary)
+        )
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Top
         ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                shape = RoundedCornerShape(16.dp)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Title
+            Text(
+                "Add A Clothing Item",
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    fontSize = 26.sp,
+                    color = Color.White
+                ),
+                modifier = Modifier.padding(start = 24.dp)
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Content Surface
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+                color = Color.White.copy(alpha = 0.95f)
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 24.dp, vertical = 32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Text(
+                        "Clothing Information",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
 
                     OutlinedTextField(
                         value = name,
@@ -114,14 +130,13 @@ fun AddClothingScreen(
                             name = it
                             nameError = false
                         },
-                        label = { Text("Nom du vêtement") },
+                        label = { Text("Clothing Item Name") },
                         modifier = Modifier.fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.primary,
-                            focusedBorderColor = MaterialTheme.colorScheme.primary
-                        ),
-                        isError = nameError
+                        isError = nameError,
+                        shape = RoundedCornerShape(8.dp)
                     )
+
+                    Spacer(modifier = Modifier.height(12.dp))
 
                     OutlinedTextField(
                         value = material,
@@ -129,31 +144,14 @@ fun AddClothingScreen(
                             material = it
                             materialError = false
                         },
-                        label = { Text("Materiel") },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.primary,
-                            focusedBorderColor = MaterialTheme.colorScheme.primary
-                        ),
-                        isError = materialError
+                        label = { Text("Material") },
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = materialError,
+                        shape = RoundedCornerShape(8.dp)
                     )
 
-//                    OutlinedTextField(
-//                        value = season,
-//                        onValueChange = {
-//                            season = it
-//                            seasonError = false
-//                        },
-//                        label = { Text("Season : Winter - Spring - Summer") }, //iza fina naamela drop down
-//                        modifier = Modifier
-//                            .fillMaxWidth(),
-//                        colors = OutlinedTextFieldDefaults.colors(
-//                            focusedTextColor = MaterialTheme.colorScheme.primary,
-//                            focusedBorderColor = MaterialTheme.colorScheme.primary
-//                        ),
-//                        isError = seasonError
-//                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+
                     SeasonDropdown(
                         season = season,
                         onSeasonSelected = {
@@ -163,22 +161,8 @@ fun AddClothingScreen(
                         seasonError = seasonError
                     )
 
+                    Spacer(modifier = Modifier.height(12.dp))
 
-//                    OutlinedTextField(
-//                        value = stylee,
-//                        onValueChange = {
-//                            stylee = it
-//                            styleeError = false
-//                        },
-//                        label = { Text("Style : Formal - Casual - Both") }, //drop down
-//                        modifier = Modifier
-//                            .fillMaxWidth(),
-//                        colors = OutlinedTextFieldDefaults.colors(
-//                            focusedTextColor = MaterialTheme.colorScheme.primary,
-//                            focusedBorderColor = MaterialTheme.colorScheme.primary
-//                        ),
-//                        isError = styleeError
-//                    )
                     StyleDropdown(
                         style = stylee,
                         onStyleSelected = {
@@ -188,20 +172,33 @@ fun AddClothingScreen(
                         styleError = styleeError
                     )
 
+                    Spacer(modifier = Modifier.height(24.dp))
 
+                    // Choose closet dropdown
+
+                    ClosetDropdown(
+                            closetList = closetList,
+                            selectedCloset = selectedCloset,
+                            onClosetSelected = { closet ->
+                                selectedCloset = closet
+                            },
+                            closetError = closetError
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    // Photo button
                     Button(
                         onClick = { cameraLauncher.launch(null) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        )
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text("📷 Prendre une photo")
+                        Text("📷 Take A Picture", color = Color.White)
                     }
 
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Photo preview
                     photoBitmap?.let {
                         Image(
                             bitmap = it.asImageBitmap(),
@@ -217,49 +214,9 @@ fun AddClothingScreen(
                         )
                     }
 
-                    val viewModel: ClothingViewModel = viewModel()
-                    val publicUrl by viewModel.publicUrl.collectAsState()
+                    Spacer(modifier = Modifier.height(24.dp))
 
-
-                    val closetList by viewModel.closets
-                    var expanded by remember { mutableStateOf(false) }
-                    var selectedCloset by remember { mutableStateOf<Closet?>(null) }
-
-                    LaunchedEffect(Unit) {
-                        viewModel.loadUserClosets()
-                    }
-
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Box {
-                        Button(onClick = { expanded = true },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp),
-                            shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary
-                            )
-                        ) {
-                            Text(selectedCloset?.closet_name ?: "Your Closet")
-                        }
-
-                        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                            closetList.forEach { closet ->
-                                DropdownMenuItem(
-                                    text = { Text(closet.closet_name) },
-                                    onClick = {
-                                        selectedCloset = closet
-                                        expanded = false
-                                        viewModel.loadClothes(closet.closet_id!!)
-                                    }
-                                )
-                            }
-                        }
-                    }
-
-
+                    // Save button
                     Button(
                         onClick = {
                             nameError = name.isBlank()
@@ -269,41 +226,53 @@ fun AddClothingScreen(
                             if (nameError || materialError || photoError) {
                                 Toast.makeText(
                                     context,
-                                    "Veuillez remplir tous les champs et prendre une photo.",
+                                    "Please fill all the fields and take a picture",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
                                 val newItem = ClothingItem(
-                                    // id item sera auto-généré
-
-                                    closet_id = selectedCloset!!.closet_id, // à adapter
+                                    closet_id = selectedCloset!!.closet_id,
                                     name = name,
-                                    category = null, //hole l AI MODEL B HOTON
-                                    color = null, //ai
+                                    category = null,
+                                    color = null,
                                     material = material,
                                     season = season,
-                                    last_worn = null, // a changer lors de remove item
+                                    last_worn = null,
                                     image_url = publicUrl ?: "",
                                     style = stylee,
                                     availability = 1
                                 )
 
                                 viewModel.addClothingItem(newItem)
-
                             }
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer
-                        )
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text("✅ Enregistrer le vêtement")
+                        Text("✅ Save", color = Color.White)
                     }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Cancel",
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.clickable {
+                            // ✨ Reset all your fields to blank
+                            name = ""
+                            material = ""
+                            season = ""
+                            stylee = ""
+                            photoBitmap = null
+                            selectedCloset = null
+                        }
+                    )
+
                 }
             }
         }
     }
+
 }
+
