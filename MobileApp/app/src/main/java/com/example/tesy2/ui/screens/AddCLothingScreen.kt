@@ -97,7 +97,8 @@ fun AddClothingScreen(
                 "Add A Clothing Item",
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontSize = 26.sp,
-                    color = Color.White
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
                 ),
                 modifier = Modifier.padding(start = 24.dp)
             )

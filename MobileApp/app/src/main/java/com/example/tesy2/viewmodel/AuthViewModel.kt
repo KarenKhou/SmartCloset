@@ -50,6 +50,7 @@ class AuthViewModel : ViewModel() {
     val isProfileAlreadyComplete: StateFlow<Boolean> = _isProfileAlreadyComplete
 
 
+
     fun onEmailChange(value: String) {
         _email.value = value
     }
@@ -80,6 +81,10 @@ class AuthViewModel : ViewModel() {
     fun onthemeChange(value: String) {
         _theme.value = value
     }
+    fun setCompleteProfileSuccess(value: Boolean) {
+        _completeProfileSuccess.value = value
+    }
+
 
     fun signUp() {
         viewModelScope.launch {
