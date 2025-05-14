@@ -30,12 +30,21 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.result.PostgrestResult
 import androidx.compose.foundation.Image
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import com.example.tesy2.R
 import com.example.tesy2.data.models.AppUser
+import com.example.tesy2.ui.theme.surfaceColor
+import com.example.tesy2.ui.theme.darkGray
+import com.example.tesy2.ui.theme.mediumGray
+import com.example.tesy2.ui.theme.lightGray
+import com.example.tesy2.ui.theme.subtleGray
+import com.example.tesy2.ui.theme.accentGray
 
 
-val surfaceColor = Color.White
 
 @Composable
 fun SignInScreen(
@@ -53,32 +62,18 @@ fun SignInScreen(
         }
     }
 
+    var passwordVisible by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
     val signInSuccess by viewModel.signInSuccess.collectAsState()
     val themeState = LocalAppTheme.current
-//    LaunchedEffect(signInSuccess) {
-//        if (signInSuccess != null) {
-//            if (signInSuccess == true) {
-//                Toast.makeText(context, "✅ Connexion réussie", Toast.LENGTH_LONG).show()
-//
-//
-////                val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-////                val savedTheme = prefs.getString("userTheme", "pink") ?: "pink"
-////                themeState.value = AppThemeColor.fromName(savedTheme)
-////                val savedTheme = UserPreferences.getUserInfo(context)["theme"] ?: "pink"
-////                themeState.value = AppThemeColor.fromName(savedTheme)
-//                println("🌈 Current App Theme: ${themeState.value}")
-//
-//                navController.navigate("main") {
-//                    popUpTo("sign_in") { inclusive = true }
-//                }
-//
-//            } else {
-//                Toast.makeText(context, "❌ Connexion échouée", Toast.LENGTH_LONG).show()
-//            }
-//        }
+
+    // Check if both fields are filled
+    val isFormFilled = email.isNotEmpty() && password.isNotEmpty()
+    val buttonColor = if (isFormFilled) darkGray else lightGray
+
     LaunchedEffect(signInSuccess) {
         if (signInSuccess != null) {
             if (signInSuccess == true) {
@@ -115,8 +110,6 @@ fun SignInScreen(
                 Toast.makeText(context, "❌ Connexion échouée", Toast.LENGTH_LONG).show()
             }
         }
-
-
     }
 
     Box(
@@ -125,7 +118,7 @@ fun SignInScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.primary)
+                .background(accentGray)
         )
 
         Column(
@@ -150,21 +143,13 @@ fun SignInScreen(
                     "Welcome to SmartCloset",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontSize = 16.sp,
-                        color = Color.White
+                        color = subtleGray
                     )
                 )
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-
-//            Surface(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .weight(1f),
-//                color = surfaceColor,
-//                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-//            ) {
             val image = painterResource(id = R.drawable.bgkaren)
 
             Surface(
@@ -183,8 +168,7 @@ fun SignInScreen(
                         painter = image,
                         contentDescription = "Smart Closet Background",
                         contentScale = ContentScale.Crop,
-
-                        modifier = Modifier
+                                modifier = Modifier
                             .matchParentSize()
                             .offset(y = (-100).dp)
                     )
@@ -192,13 +176,10 @@ fun SignInScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color.White.copy(alpha = 0.65f))
+                            .background(Color.White.copy(alpha = 0.8f))
                             .padding(horizontal = 24.dp, vertical = 32.dp),
-
-
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -210,7 +191,7 @@ fun SignInScreen(
                                 style = MaterialTheme.typography.titleMedium.copy(
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Medium,
-                                    color = Color.DarkGray
+                                    color = darkGray
                                 ),
                                 textAlign = TextAlign.Center
                             )
@@ -220,19 +201,20 @@ fun SignInScreen(
                             OutlinedTextField(
                                 value = email,
                                 onValueChange = viewModel::onEmailChange,
-                                label = { Text("Email") },
+                                label = { Text("Email", color = mediumGray) },
                                 modifier = Modifier.fillMaxWidth(),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedTextColor = Color.Black,
-                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                    cursorColor = MaterialTheme.colorScheme.primary,
-                                    unfocusedBorderColor = Color.LightGray
+                                    focusedTextColor = darkGray,
+                                    focusedBorderColor = darkGray,
+                                    cursorColor = darkGray,
+                                    unfocusedBorderColor = lightGray,
+                                    unfocusedLabelColor = mediumGray
                                 ),
                                 leadingIcon = {
                                     Icon(
                                         imageVector = Icons.Outlined.Email,
                                         contentDescription = "Email",
-                                        tint = Color.Gray
+                                        tint = mediumGray
                                     )
                                 },
                                 shape = RoundedCornerShape(8.dp),
@@ -241,29 +223,41 @@ fun SignInScreen(
 
                             Spacer(modifier = Modifier.height(16.dp))
 
-
                             OutlinedTextField(
                                 value = password,
                                 onValueChange = viewModel::onPasswordChange,
-                                label = { Text("Password") },
+                                label = { Text("Password", color = mediumGray) },
                                 modifier = Modifier.fillMaxWidth(),
+                                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedTextColor = Color.Black,
-                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                                    cursorColor = MaterialTheme.colorScheme.primary,
-                                    unfocusedBorderColor = Color.LightGray
+                                    focusedTextColor = darkGray,
+                                    focusedBorderColor = darkGray,
+                                    cursorColor = darkGray,
+                                    unfocusedBorderColor = lightGray,
+                                    unfocusedLabelColor = mediumGray
                                 ),
                                 leadingIcon = {
                                     Icon(
                                         imageVector = Icons.Outlined.Lock,
                                         contentDescription = "Password",
-                                        tint = Color.Gray
+                                        tint = mediumGray
                                     )
+                                },
+                                trailingIcon = {
+                                    val visibilityIcon = if (passwordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility
+                                    val description = if (passwordVisible) "Hide password" else "Show password"
+
+                                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                        Icon(
+                                            imageVector = visibilityIcon,
+                                            contentDescription = description,
+                                            tint = mediumGray
+                                        )
+                                    }
                                 },
                                 shape = RoundedCornerShape(8.dp),
                                 singleLine = true
                             )
-
 
                             Spacer(modifier = Modifier.height(16.dp))
 
@@ -272,8 +266,9 @@ fun SignInScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(48.dp),
-                                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                                shape = RoundedCornerShape(8.dp)
+                                colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
+                                shape = RoundedCornerShape(8.dp),
+                                enabled = true
                             ) {
                                 Text("Sign In", color = Color.White)
                             }
@@ -287,7 +282,7 @@ fun SignInScreen(
                             ) {
                                 Text(
                                     "Don't have an account?",
-                                    color = Color.Gray,
+                                    color = mediumGray,
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                                 TextButton(
@@ -296,7 +291,7 @@ fun SignInScreen(
                                 ) {
                                     Text(
                                         "Sign up",
-                                        color = MaterialTheme.colorScheme.primary,
+                                        color = darkGray,
                                         fontWeight = FontWeight.Bold,
                                         style = MaterialTheme.typography.bodyMedium
                                     )
@@ -306,4 +301,6 @@ fun SignInScreen(
                     }
                 }
             }
-        }}}
+        }
+    }
+}

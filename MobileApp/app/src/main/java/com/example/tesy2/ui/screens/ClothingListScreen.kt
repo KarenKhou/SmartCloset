@@ -94,7 +94,20 @@ fun ClothingScreen(
 
     var selectedCategory by remember { mutableStateOf<String?>(null) }
     var selectedStyle by remember { mutableStateOf<String?>(null) }
+    var selectedAvailability by remember { mutableStateOf<Boolean?>(null) }
 
+
+//    val filteredClothingList = clothingList.filter { item ->
+//        val matchesSearch = item.name?.contains(searchQuery, ignoreCase = true) == true ||
+//                item.category?.contains(searchQuery, ignoreCase = true) == true ||
+//                item.color?.contains(searchQuery, ignoreCase = true) == true ||
+//                item.style?.contains(searchQuery, ignoreCase = true) == true
+//
+//        val matchesCategory = selectedCategory == null || item.category?.equals(selectedCategory, ignoreCase = true) == true
+//        val matchesStyle = selectedStyle == null || item.style?.equals(selectedStyle, ignoreCase = true) == true
+//
+//        matchesSearch && matchesCategory && matchesStyle
+//    }
     val filteredClothingList = clothingList.filter { item ->
         val matchesSearch = item.name?.contains(searchQuery, ignoreCase = true) == true ||
                 item.category?.contains(searchQuery, ignoreCase = true) == true ||
@@ -103,9 +116,11 @@ fun ClothingScreen(
 
         val matchesCategory = selectedCategory == null || item.category?.equals(selectedCategory, ignoreCase = true) == true
         val matchesStyle = selectedStyle == null || item.style?.equals(selectedStyle, ignoreCase = true) == true
+        val matchesAvailability = selectedAvailability == null || (item.availability == if (selectedAvailability == true) 1 else 0)
 
-        matchesSearch && matchesCategory && matchesStyle
+        matchesSearch && matchesCategory && matchesStyle && matchesAvailability
     }
+
 
 
     val itemsPerPage = 4
@@ -278,6 +293,48 @@ fun ClothingScreen(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.width(8.dp))
+                // Availability
+                var expandedAvailability by remember { mutableStateOf(false) }
+                Box {
+                    Button(onClick = { expandedAvailability = true }) {
+                        Text(
+                            when (selectedAvailability) {
+                                null -> "Availability"
+                                true -> "Available"
+                                false -> "Not Available"
+                            }
+                        )
+                    }
+
+                    DropdownMenu(expanded = expandedAvailability, onDismissRequest = { expandedAvailability = false }) {
+                        DropdownMenuItem(
+                            text = { Text("Available") },
+                            onClick = {
+                                selectedAvailability = true
+                                expandedAvailability = false
+                                currentPage = 1
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Not Available") },
+                            onClick = {
+                                selectedAvailability = false
+                                expandedAvailability = false
+                                currentPage = 1
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("All") },
+                            onClick = {
+                                selectedAvailability = null
+                                expandedAvailability = false
+                                currentPage = 1
+                            }
+                        )
+                    }
+                }
+
 
                 Spacer(modifier = Modifier.weight(1f))
 

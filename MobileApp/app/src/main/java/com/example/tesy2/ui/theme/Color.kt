@@ -17,3 +17,10 @@ val pinkColor = Color(0xFFFF69B4)
 val lightPink = Color(0xFFFFB6C1)
 
 val containerPink=Color(0xFFEFDBDE)
+
+val surfaceColor = Color.White
+val darkGray = Color(0xFF757575)  // Lighter dark gray
+val mediumGray = Color(0xFF9E9E9E) // Medium gray
+val lightGray = Color(0xFFBDBDBD)  // Lighter gray
+val subtleGray = Color(0xFFF5F5F5) // Very light gray
+val accentGray = Color(0xFFAAAAAA) // Silver gray for accents

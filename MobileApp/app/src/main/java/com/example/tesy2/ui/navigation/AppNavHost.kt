@@ -9,6 +9,7 @@ import com.example.tesy2.ui.screens.AlertScreen
 import com.example.tesy2.ui.screens.CompleteProfileScreen
 import com.example.tesy2.ui.screens.EditClothingScreen
 import com.example.tesy2.ui.screens.ProfileScreen
+import com.example.tesy2.ui.screens.AddClosetScreen
 import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SignInScreen
 import com.example.tesy2.ui.screens.SignUpScreen
@@ -28,14 +29,21 @@ fun AppNavHost(navController: NavHostController) {
             SignUpScreen(navController = navController)
         }
         composable("main") {
-            MainScreenWithBottomNav(rootNavController =navController)
+            MainScreenWithBottomNav(rootNavController =navController, startTab = "my_closet")
 //            MainScreenWithBottomNav()
+        }
+        composable("main/{startTab}") { backStackEntry ->
+            val startTab = backStackEntry.arguments?.getString("startTab") ?: "my_closet"
+            MainScreenWithBottomNav(rootNavController = navController, startTab = startTab)
         }
         composable("profile") {
             ProfileScreen(navController = navController)
         }
         composable("complete_profile") {
             CompleteProfileScreen(navController = navController)
+        }
+        composable("add_Closet") {
+            AddClosetScreen(navController = navController)
         }
 
 

@@ -178,13 +178,23 @@ fun isTablet(): Boolean {
 }
 
 @Composable
-fun MainScreenWithBottomNav(rootNavController: NavHostController) {
+fun MainScreenWithBottomNav(rootNavController: NavHostController, startTab: String = "my_closet") {
     val navController = rememberNavController()
     //val bottomNavController = navController
     val viewModel: com.example.tesy2.viewmodel.MainViewModel = viewModel()
     val alertText by viewModel.alertText.collectAsState()
 
     val context = LocalContext.current  // Get the context
+
+//    LaunchedEffect(Unit) {
+//        if (navController.currentDestination == null) {
+//            navController.navigate(startTab) {
+//                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+//                launchSingleTop = true
+//            }
+//        }
+//    }
+
 
     RequestBluetoothPermissions(context) {
 
@@ -209,7 +219,8 @@ fun MainScreenWithBottomNav(rootNavController: NavHostController) {
         Box(modifier = Modifier.padding(paddingValues)) {
             NavHost(
                 navController,
-                startDestination = Screen.MyCloset.route
+//                startDestination = Screen.MyCloset.route
+                startDestination =startTab
             ) {
                 composable(Screen.MyCloset.route) {
                     ClothingScreen(navController = navController)
@@ -220,6 +231,7 @@ fun MainScreenWithBottomNav(rootNavController: NavHostController) {
                 }
                 composable(Screen.AddItem.route) {
                     AddClothingScreen()
+
                 }
                 composable(Screen.Suggestion.route) {
                     SuggScreen()
