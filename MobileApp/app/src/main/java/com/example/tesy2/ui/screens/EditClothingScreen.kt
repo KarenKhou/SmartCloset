@@ -30,6 +30,7 @@ fun EditClothingScreen(
     var category by remember { mutableStateOf("") }
     var color by remember { mutableStateOf("") }
     var style by remember { mutableStateOf("") }
+    var availability by remember { mutableStateOf("") }
 
     // Fetch item data
     LaunchedEffect(Unit) {
@@ -43,6 +44,9 @@ fun EditClothingScreen(
             category = it.category ?: ""
             color = it.color ?: ""
             style = it.style ?: ""
+            availability = (it.availability ).toString()
+
+
         }
     }
 
@@ -126,6 +130,14 @@ fun EditClothingScreen(
                             onValueChange = { style = it },
                             label = { Text("Style") },
                             modifier = Modifier.fillMaxWidth()
+                        )
+                        OutlinedTextField(
+                            value = availability,
+                            onValueChange = { availability = it },
+                            label = { Text("Availability") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 12.dp)
                         )
                     }
                 }
