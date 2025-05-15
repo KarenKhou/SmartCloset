@@ -17,7 +17,7 @@ class ClothingRepository {
             .select {
                 filter {
                     eq("closet_id", closetId)
-                    eq("availability", 1)
+
                 }
             }
             .decodeList<ClothingItem>()
