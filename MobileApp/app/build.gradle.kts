@@ -77,6 +77,10 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
     implementation("io.github.jan-tennert.supabase:storage-kt")
 
+//    implementation("io.github.jan-tennert.supabase:supabase-kt-android:1.3.1")
+
+
+
     // CameraX core library
     implementation ("androidx.camera:camera-core:1.4.2")
     // CameraX Camera2 implementation

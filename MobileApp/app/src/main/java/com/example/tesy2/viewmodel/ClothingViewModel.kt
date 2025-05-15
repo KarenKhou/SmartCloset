@@ -261,9 +261,9 @@ class ClothingViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val client = HttpClient() {
-                //val client = createUnsafeKtorClient()
+                    //val client = createUnsafeKtorClient()
 
-                install(ContentNegotiation) {
+                    install(ContentNegotiation) {
                         json(Json {
                             ignoreUnknownKeys = true
                             prettyPrint = true
@@ -364,22 +364,25 @@ class ClothingViewModel : ViewModel() {
         name: String,
         category: String,
         color: String,
-        style: String
+        style: String,
+        availability: String
     ) {
+        var av = availability.toInt()
         viewModelScope.launch {
             supabase.from("clothingitem").update(
                 mapOf(
                     "name" to name,
                     "category" to category,
                     "color" to color,
-                    "style" to style
+                    "style" to style,
+                    "availability" to availability
                 )){filter {
-                        eq("item_id", itemId)
-                    }
-                }
+                eq("item_id", itemId)
+            }
+            }
         }
 
-        }
+    }
 
 
     private val _selectedItem = mutableStateOf<ClothingItem?>(null)
@@ -389,10 +392,10 @@ class ClothingViewModel : ViewModel() {
         viewModelScope.launch {
             val response = supabase
                 .from("clothingitem").select(){
-                        filter{
-                            eq("item_id", itemId)
-                        }
-                    }.decodeSingle<ClothingItem>()
+                    filter{
+                        eq("item_id", itemId)
+                    }
+                }.decodeSingle<ClothingItem>()
 
 
             try {
@@ -418,7 +421,7 @@ class ClothingViewModel : ViewModel() {
                     }
 
 
-                    println("✅ Item supprimé")
+                println("✅ Item supprimé")
 
 
             } catch (e: Exception) {
@@ -460,5 +463,3 @@ class ClothingViewModel : ViewModel() {
     }
 
 }
-
-
