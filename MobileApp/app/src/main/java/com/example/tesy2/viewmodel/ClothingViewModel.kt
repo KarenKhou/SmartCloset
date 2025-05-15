@@ -364,15 +364,18 @@ class ClothingViewModel : ViewModel() {
         name: String,
         category: String,
         color: String,
-        style: String
+        style: String,
+        availability: String
     ) {
+        var av = availability.toInt()
         viewModelScope.launch {
             supabase.from("clothingitem").update(
                 mapOf(
                     "name" to name,
                     "category" to category,
                     "color" to color,
-                    "style" to style
+                    "style" to style,
+                    "availability" to availability
                 )){filter {
                         eq("item_id", itemId)
                     }
