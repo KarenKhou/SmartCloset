@@ -602,3 +602,5 @@
 2025-04-12 22:01:05,057 [INFO] - HTTP Request: GET https://rnjccfpgdpzkoptzvcgr.supabase.co/rest/v1/clothingitem?select=item_id%2Ccategory%2Cseason%2Cstyle%2Ccolor&availability=eq.1&closet_id=in.%281%2C3%2C4%2C5%2C7%2C9%2C11%29 "HTTP/2 200 OK"
 2025-04-12 22:01:05,209 [INFO] - HTTP Request: POST https://rnjccfpgdpzkoptzvcgr.supabase.co/rest/v1/outfitrecommendation "HTTP/2 201 Created"
 2025-04-12 22:01:05,387 [INFO] - HTTP Request: POST https://rnjccfpgdpzkoptzvcgr.supabase.co/rest/v1/outfitrecommendation_items?columns=%22item_id%22%2C%22recommendation_id%22 "HTTP/2 201 Created"
+2025-05-15 15:34:48,861 [INFO] - HTTP Request: POST https://rnjccfpgdpzkoptzvcgr.supabase.co/storage/v1/object/picture-clothes/rembg_e01b551b-86df-4581-aa84-b19ba9a3f2a0.png "HTTP/2 200 OK"
+2025-05-15 15:34:49,084 [INFO] - HTTP Request: PATCH https://rnjccfpgdpzkoptzvcgr.supabase.co/rest/v1/clothingitem?item_id=eq.175 "HTTP/2 200 OK"
