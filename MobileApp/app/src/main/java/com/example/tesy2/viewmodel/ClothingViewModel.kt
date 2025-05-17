@@ -74,6 +74,9 @@ class ClothingViewModel : ViewModel() {
     val matchedItem: State<ClothingItem?> = _matchedItem
 
 
+
+
+
     fun loadClothes(closetId: Int) {
         viewModelScope.launch {
             try {
