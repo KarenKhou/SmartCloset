@@ -176,7 +176,7 @@ fun ClothingScreen(
             )
 
             Button(onClick = { alertViewModel.triggerFakeAlert() }) {
-                Text("Remove/Add Item")
+                Text("Add/Remove Item")
             }
         }
 
