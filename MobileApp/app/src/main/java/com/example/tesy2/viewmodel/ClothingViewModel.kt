@@ -57,8 +57,8 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
 
-val ngrok: String ="https://b7a3-94-187-10-182.ngrok-free.app/compare"
-val ngrokk: String ="https://b7a3-94-187-10-182.ngrok-free.app/get_recommendations"
+val ngrok: String ="https://9ebf-94-187-11-201.ngrok-free.app/compare"
+val ngrokk: String ="https://9ebf-94-187-11-201.ngrok-free.app/get_recommendations"
 
 class ClothingViewModel : ViewModel() {
 

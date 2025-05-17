@@ -154,8 +154,11 @@ class RecOutfit:
             print(f"🩳 [DEBUG] Found {len(bottom_matches)} bottom matches")
 
             results = [{"item_id": top_row["item_id"], "category": "top"}]
-            for _, row in bottom_matches.iterrows():
-                results.append({"item_id": row["item_id"], "category": "bottom"})
+            if not bottom_matches.empty:
+                bottom_row = bottom_matches.sample(1).iloc[0]
+                results.append({"item_id": bottom_row["item_id"], "category": "bottom"})
+            else:
+                print("⚠️ [DEBUG] No compatible bottom found.")
 
             print(f"✅ [DEBUG] Final results: {results}")
         except Exception as e:
