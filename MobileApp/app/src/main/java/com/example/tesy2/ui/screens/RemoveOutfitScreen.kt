@@ -90,7 +90,7 @@ fun RemoveOutfitScreen(
     ) {
         if (photoBitmap != null) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Photo capturée :", style = MaterialTheme.typography.titleMedium)
+                Text("Picture taken :", style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(16.dp))
                 Image(
                     bitmap = photoBitmap!!.asImageBitmap(),
@@ -98,20 +98,20 @@ fun RemoveOutfitScreen(
                     modifier = Modifier.size(250.dp)
                 )
                 Button(onClick = { navController.navigate("my_closet") }) {
-                    Text("Retour au closet")
+                    Text("Back to my closet")
                 }
                 Button(onClick = {
 
                     cameraLauncher.launch(null)
                 }) {
-                    Text("Ajouter une autre photo")
+                    Text("Add Another Photo")
                 }
             }
         } else {
             Column {
-                Text("Ouverture de la caméra...", style = MaterialTheme.typography.bodyLarge)
+                Text("Opening camera...", style = MaterialTheme.typography.bodyLarge)
                 Button(onClick = { navController.navigate("my_closet") }) {
-                    Text("Retour au closet")
+                    Text("Back to my closet")
                 }
 
             }
@@ -124,24 +124,24 @@ fun RemoveOutfitScreen(
                     viewModel.dismissDialog()
                 },
                 title = {
-                    Text("Changer disponibilité ?")
+                    Text("Change the availability ?")
                 },
                 text = {
-                    Text("Souhaites-tu vraiment changer la disponibilité de l’item  ${matchedItem!!.name}?")
+                    Text("Are you sure you are changing the availability of  ${matchedItem!!.name}?")
                 },
                 confirmButton = {
                     TextButton(onClick = {
                         viewModel.toggleAvailability(matchItemId!!)
                         viewModel.dismissDialog()
                     }) {
-                        Text("Oui")
+                        Text("Yes")
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = {
                         viewModel.dismissDialog()
                     }) {
-                        Text("Annuler")
+                        Text("Cancel")
                     }
                 }
             )

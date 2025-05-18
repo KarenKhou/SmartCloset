@@ -57,8 +57,8 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
 
-val ngrok: String ="https://b7a3-94-187-10-182.ngrok-free.app/compare"
-val ngrokk: String ="https://b7a3-94-187-10-182.ngrok-free.app/get_recommendations"
+val ngrok: String ="https://9ebf-94-187-11-201.ngrok-free.app/compare"
+val ngrokk: String ="https://9ebf-94-187-11-201.ngrok-free.app/get_recommendations"
 
 class ClothingViewModel : ViewModel() {
 
@@ -72,6 +72,9 @@ class ClothingViewModel : ViewModel() {
     val publicUrl: StateFlow<String?> = _publicUrl
     private val _matchedItem = mutableStateOf<ClothingItem?>(null)
     val matchedItem: State<ClothingItem?> = _matchedItem
+
+
+
 
 
     fun loadClothes(closetId: Int) {
@@ -113,7 +116,7 @@ class ClothingViewModel : ViewModel() {
 
                 println("📡 Sending request to /get_recommendations")
 
-                val response: HttpResponse = client.post(ngrok) {
+                val response: HttpResponse = client.post(ngrokk) {
                     contentType(ContentType.Application.FormUrlEncoded)
                     setBody(
                         listOf(
@@ -258,6 +261,7 @@ class ClothingViewModel : ViewModel() {
 
 
     fun sendToBackend(imageUrl: String) {
+        val userId = supabase.auth.currentUserOrNull()?.id ?: return
         viewModelScope.launch {
             try {
                 val client = HttpClient() {
@@ -271,10 +275,11 @@ class ClothingViewModel : ViewModel() {
                     }
                 }
 
-                val request = CompareRequest(image_url = imageUrl)
+
+                val request = CompareRequest(image_url = imageUrl, userid=userId)
                 //ktor tunnel
                 println("hi1")
-                val response: CompareResponse = client.post(ngrokk) {
+                val response: CompareResponse = client.post(ngrok) {
                     contentType(ContentType.Application.Json)
                     setBody(request)
                 }.body()

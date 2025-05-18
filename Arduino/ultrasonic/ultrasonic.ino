@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 SoftwareSerial BTSerial(3, 2); //tx rx
 
-const int trigPin = 9;
+const int trigPin = 8;
 const int echoPin = 7;
 long duration;
 int distance;

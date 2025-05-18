@@ -36,6 +36,12 @@ class AlertViewModel : ViewModel() {
     fun connectBluetooth() {
         repository.connectToHC05()
     }
+    fun triggerFakeAlert() {
+        (alertText as MutableStateFlow).value = "ALERT"
+        println("fake alert")
+    }
+
+
 
 
 

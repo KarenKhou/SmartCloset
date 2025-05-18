@@ -46,6 +46,7 @@ import com.example.tesy2.data.models.Closet
 import com.example.tesy2.data.models.UserData
 import com.example.tesy2.data.supabase.supabase
 import com.example.tesy2.ui.screens.getCurrentUserClosetIdSuspend
+import com.example.tesy2.viewmodel.AlertViewModel
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
@@ -137,6 +138,9 @@ fun ClothingScreen(
     val endIndex = min(startIndex + itemsPerPage, filteredClothingList.size)
     val currentPageItems = filteredClothingList.subList(startIndex, endIndex)
 
+    val alertViewModel: AlertViewModel = viewModel()
+    val alertText by alertViewModel.alertText.collectAsState()
+
     // Load the clothes (for example from closet 1)
     LaunchedEffect(Unit) {
         val closetId = getCurrentUserClosetIdSuspend()
@@ -146,20 +150,37 @@ fun ClothingScreen(
             println("❌ Aucun closet_id trouvé pour l'utilisateur")
         }
     }
+    LaunchedEffect(alertText) {
+        if (alertText == "ALERT") {
+            println("⚠️ Fake alert triggered, navigating...")
+            navController.navigate("removeOutfit")
+
+        }
+    }
+
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "Hi ${userName ?: "there"} 👋",
-            style = MaterialTheme.typography.titleLarge.copy(
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            ),
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+        Row{
+
+            Text(
+                text = "Hi ${userName ?: "there"} 👋",
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                ),
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            Button(onClick = { alertViewModel.triggerFakeAlert() }) {
+                Text("Add/Remove Item")
+            }
+        }
+
+
 
         TextField(
             value = searchQuery,

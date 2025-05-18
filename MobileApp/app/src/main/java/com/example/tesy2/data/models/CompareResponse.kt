@@ -15,6 +15,7 @@ data class CompareResponse(
 @Serializable
 data class CompareRequest(
     val image_url: String,
+    val userid : String,
     val threshold: Float = 0.3f
 )
 

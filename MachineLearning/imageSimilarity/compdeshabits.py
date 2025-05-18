@@ -39,12 +39,29 @@ def orb_sim(img1, img2):
     return len(similar) / len(matches)
 
 # Main function
-def find_similar_clothing(input_image_url, threshold=0.3):
+def find_similar_clothing(input_image_url,userid,threshold=0.3): #change
+    print("function called2")
     input_img = download_image(input_image_url)
     if input_img is None:
         raise Exception("Image de départ non chargée.")
+    
 
-    clothing_items = supabase.table("clothingitem").select("item_id, image_url").execute().data
+    # Étape 1 : récupérer tous les closet_id du user
+    closets = supabase.table("closet").select("closet_id").eq("user_id", userid).execute()
+    closet_ids = [closet["closet_id"] for closet in closets.data]
+
+    print(f"Closet IDs for user {userid}: {closet_ids}")
+
+    if not closet_ids:
+        return []
+
+    # Étape 2 : récupérer tous les vêtements dont le closet_id est dans cette liste
+    clothing_items = supabase.table("clothingitem") \
+        .select("item_id, image_url") \
+        .in_("closet_id", closet_ids) \
+        .execute().data
+
+    #clothing_items = supabase.table("clothingitem").select("item_id, image_url").eq("userid", userid).execute().data
     best_similarity=0.0
     best_match_id = None
 

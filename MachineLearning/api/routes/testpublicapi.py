@@ -134,13 +134,14 @@ async def handle_insert_webhook(request: Request, background_tasks: BackgroundTa
 
 class CompareRequest(BaseModel):
     image_url: str
+    userid : str
     threshold: float = 0.3
 
 @app.post("/compare")
 def compare_image(req: CompareRequest):
     try:
         print("received")
-        result = compdeshabits.find_similar_clothing(req.image_url, threshold=req.threshold)
+        result = compdeshabits.find_similar_clothing(req.image_url,req.userid, threshold=req.threshold)
         match_id, similarity = result
 
         return {
@@ -150,10 +151,17 @@ def compare_image(req: CompareRequest):
     "match_found": True
         }
     except Exception as e:
+        print(e)
+    
         return {
             "status": "error",
-            "message": str(e)
+            "match_id": None,
+            "match_found": False,
+            "similarity": 0.0,
+            
+            
         }
+
 
 @app.post("/detect-dominant-color")
 def detect_color(file: UploadFile = File(...)):
