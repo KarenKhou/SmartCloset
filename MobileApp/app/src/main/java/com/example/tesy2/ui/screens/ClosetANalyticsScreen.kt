@@ -228,7 +228,9 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                     userScrollEnabled = false,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(320.dp) // Fixed height to show all days in month
+                        //.height(320.dp) // Fixed height to show all days in month
+                        .aspectRatio(7f / 6f) // 7 columns, 6 rows
+
                 ) {
                     items(calendarDays) { date ->
                         val today = LocalDate.now()
@@ -278,19 +280,17 @@ fun ClosetAnalyticsScreen(viewModel: WornCalendarViewModel = viewModel()) {
                                         }
                                     )
 
-                                    // Add a small dot indicator for days with worn items
-                                    // This is just a placeholder - you would need to implement logic
-                                    // to check if items were worn on specific dates
-                                    if (date.dayOfMonth % 3 == 0) { // Placeholder logic
-                                        Box(
-                                            modifier = Modifier
-                                                .size(4.dp)
-                                                .background(
-                                                    if (isSelected) Color.White else todayHighlightColor,
-                                                    RoundedCornerShape(2.dp)
-                                                )
-                                        )
-                                    }
+
+//                                    if (date.dayOfMonth % 3 == 0) { // Placeholder logic
+//                                        Box(
+//                                            modifier = Modifier
+//                                                .size(4.dp)
+//                                                .background(
+//                                                    if (isSelected) Color.White else todayHighlightColor,
+//                                                    RoundedCornerShape(2.dp)
+//                                                )
+//                                        )
+//                                    }
                                 }
                             }
                         }
