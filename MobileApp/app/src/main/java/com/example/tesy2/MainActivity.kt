@@ -48,7 +48,6 @@ import com.example.tesy2.viewmodel.AuthViewModel
 import com.example.tesy2.ui.theme.AppThemeColor
 import com.example.tesy2.ui.theme.LocalAppTheme
 import com.example.tesy2.ui.theme.MyAppTheme
-
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
@@ -59,8 +58,12 @@ val supabase = createSupabaseClient(
     supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuamNjZnBnZHB6a29wdHp2Y2dyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI1NzkwMTIsImV4cCI6MjA1ODE1NTAxMn0.rFKKVLNDuDNocuKy_6i4qZijmOdgBl0bAwnecvqslu0"
 ) {
     install(Postgrest)
-    install(Auth)
+    install(Auth) {
+        alwaysAutoRefresh = true
+        autoLoadFromStorage = true
+    }
 }
+
 
 
 //class MainActivity : ComponentActivity() {
@@ -188,15 +191,17 @@ class MainActivity : ComponentActivity() {
         val defaultTheme = AppThemeColor.Pink
         val themeState = mutableStateOf<AppThemeColor>(defaultTheme)
 
+
         setContent {
             CompositionLocalProvider(LocalAppTheme provides themeState) {
                 MyAppTheme(selectedTheme = themeState.value) {
                     val navController = rememberNavController()
                     AppNavHost(navController = navController)
+
+
                 }
             }
         }
     }
 }
-
 

@@ -11,7 +11,10 @@ val supabase = createSupabaseClient(
 
 ) {
     install(Postgrest)
-    install(Auth)
+    install(Auth) {
+        alwaysAutoRefresh = true
+        autoLoadFromStorage = true // ✅ required to restore session after app restart
+    }
     install(Storage)
 
 }

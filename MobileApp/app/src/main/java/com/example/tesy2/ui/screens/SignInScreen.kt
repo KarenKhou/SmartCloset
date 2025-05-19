@@ -77,7 +77,7 @@ fun SignInScreen(
     LaunchedEffect(signInSuccess) {
         if (signInSuccess != null) {
             if (signInSuccess == true) {
-                Toast.makeText(context, "✅ Connexion réussie", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "✅ Connection successful", Toast.LENGTH_LONG).show()
 
                 val user = supabase.auth.currentUserOrNull()
                 val userId = user?.id
@@ -107,7 +107,7 @@ fun SignInScreen(
                     popUpTo("sign_in") { inclusive = true }
                 }
             } else {
-                Toast.makeText(context, "❌ Connexion échouée", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "❌ Connection failed", Toast.LENGTH_LONG).show()
             }
         }
     }

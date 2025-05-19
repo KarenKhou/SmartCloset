@@ -96,6 +96,7 @@ fun ClothingScreen(
     var selectedCategory by remember { mutableStateOf<String?>(null) }
     var selectedStyle by remember { mutableStateOf<String?>(null) }
     var selectedAvailability by remember { mutableStateOf<Boolean?>(null) }
+    var selectedSeason by remember { mutableStateOf<String?>(null) }
 
 
 //    val filteredClothingList = clothingList.filter { item ->
@@ -118,8 +119,8 @@ fun ClothingScreen(
         val matchesCategory = selectedCategory == null || item.category?.equals(selectedCategory, ignoreCase = true) == true
         val matchesStyle = selectedStyle == null || item.style?.equals(selectedStyle, ignoreCase = true) == true
         val matchesAvailability = selectedAvailability == null || (item.availability == if (selectedAvailability == true) 1 else 0)
-
-        matchesSearch && matchesCategory && matchesStyle && matchesAvailability
+        val matchesSeason = selectedSeason == null || item.season?.equals(selectedSeason, ignoreCase = true) == true
+        matchesSearch && matchesCategory && matchesStyle && matchesAvailability  && matchesSeason
     }
 
 
@@ -175,8 +176,30 @@ fun ClothingScreen(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            Button(onClick = { alertViewModel.triggerFakeAlert() }) {
-                Text("Add/Remove Item")
+            Spacer(modifier = Modifier.weight(1f))
+            val closetList by viewModel.closets
+            var expanded by remember { mutableStateOf(false) }
+            var selectedCloset by remember { mutableStateOf<Closet?>(null) }
+
+            var expandedCloset by remember { mutableStateOf(false) }
+            Box {
+                Button(onClick = { expandedCloset = true }) {
+                    Text(selectedCloset?.closet_name ?: "Your Closet")
+                }
+
+                DropdownMenu(expanded = expandedCloset, onDismissRequest = { expandedCloset = false }) {
+                    closetList.forEach { closet ->
+                        DropdownMenuItem(
+                            text = { Text(closet.closet_name) },
+                            onClick = {
+                                selectedCloset = closet
+                                expandedCloset = false
+                                currentPage = 1 // Reset to first page when closet changes
+                                viewModel.loadClothes(closet.closet_id!!)
+                            }
+                        )
+                    }
+                }
             }
         }
 
@@ -244,9 +267,6 @@ fun ClothingScreen(
                 Text("No items found matching \"$searchQuery\"")
             }
         } else {
-            val closetList by viewModel.closets
-            var expanded by remember { mutableStateOf(false) }
-            var selectedCloset by remember { mutableStateOf<Closet?>(null) }
 
             LaunchedEffect(Unit) {
                 viewModel.loadUserClosets()
@@ -355,30 +375,42 @@ fun ClothingScreen(
                         )
                     }
                 }
-
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                var expandedCloset by remember { mutableStateOf(false) }
+                Spacer(modifier = Modifier.width(8.dp))
+                // Season Filter
+                var expandedSeason by remember { mutableStateOf(false) }
                 Box {
-                    Button(onClick = { expandedCloset = true }) {
-                        Text(selectedCloset?.closet_name ?: "Your Closet")
+                    Button(
+                        onClick = { expandedSeason = true },
+                    ) {
+                        Text(selectedSeason ?: "Season")
                     }
 
-                    DropdownMenu(expanded = expandedCloset, onDismissRequest = { expandedCloset = false }) {
-                        closetList.forEach { closet ->
+                    DropdownMenu(
+                        expanded = expandedSeason,
+                        onDismissRequest = { expandedSeason = false }
+                    ) {
+                        listOf("Summer", "Winter", "Spring", "Fall", "All").forEach { season ->
                             DropdownMenuItem(
-                                text = { Text(closet.closet_name) },
+                                text = { Text(season) },
                                 onClick = {
-                                    selectedCloset = closet
-                                    expandedCloset = false
-                                    currentPage = 1 // Reset to first page when closet changes
-                                    viewModel.loadClothes(closet.closet_id!!)
+                                    selectedSeason = if (season == "All") null else season
+                                    expandedSeason = false
+                                    currentPage = 1
                                 }
                             )
                         }
                     }
                 }
+
+
+
+
+                // add and remove items
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(onClick = { alertViewModel.triggerFakeAlert() }) {
+                    Text("Add/Remove Item")
+                }
+
             }
 
             Spacer(modifier = Modifier.height(8.dp))

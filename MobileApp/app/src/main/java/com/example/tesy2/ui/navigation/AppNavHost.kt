@@ -14,6 +14,9 @@ import com.example.tesy2.ui.screens.RemoveOutfitScreen
 import com.example.tesy2.ui.screens.SignInScreen
 import com.example.tesy2.ui.screens.SignUpScreen
 import com.example.tesy2.viewmodel.ClothingViewModel
+import com.example.tesy2.data.supabase.supabase
+import io.github.jan.supabase.auth.auth
+
 
 @Composable
 fun AppNavHost(navController: NavHostController) {

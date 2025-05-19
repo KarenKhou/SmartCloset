@@ -125,7 +125,7 @@ fun ClosetDropdown(
             value = selectedCloset?.closet_name ?: "Select a Dressing",
             onValueChange = {},
             readOnly = true,
-            label = { Text("Votre dressing") },
+            label = { Text("Closet") },
             isError = closetError,
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
